@@ -20,6 +20,7 @@ const formatRupiah = (num: number) => {
 export default function AdminApp() {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -162,7 +163,10 @@ export default function AdminApp() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!password) return;
+    if (!username || !password) {
+      setLoginError('Username dan password harus diisi.');
+      return;
+    }
 
     setIsLoggingIn(true);
     setLoginError('');
@@ -171,7 +175,7 @@ export default function AdminApp() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ username, password })
       });
 
       const data = await res.json();
@@ -180,7 +184,7 @@ export default function AdminApp() {
         localStorage.setItem('berdikari_admin_token', data.token);
         setIsAuthenticated(true);
       } else {
-        setLoginError(data.error || 'Autentikasi gagal.');
+        setLoginError(data.error || 'Username atau password salah.');
         triggerShake();
       }
     } catch (err) {
@@ -194,6 +198,7 @@ export default function AdminApp() {
   const handleLogout = () => {
     localStorage.removeItem('berdikari_admin_token');
     setIsAuthenticated(false);
+    setUsername('');
     setPassword('');
   };
 
@@ -809,10 +814,26 @@ export default function AdminApp() {
               <span>Berdikari<span className="text-red"> Digital Nusantara</span></span>
             </div>
             <h2>Akses Kontrol Admin</h2>
-            <p>Masukkan kata sandi untuk masuk ke panel manajemen</p>
+            <p>Masukkan username & kata sandi untuk masuk ke panel manajemen</p>
           </div>
 
           <form onSubmit={handleLogin} className="login-form">
+            <div className="form-group" style={{ marginBottom: '16px' }}>
+              <label htmlFor="username">Nama Pengguna (Username)</label>
+              <div className="password-input-wrapper">
+                <span className="input-icon"><Terminal size={18} /></span>
+                <input
+                  id="username"
+                  type="text"
+                  placeholder="Ketik username..."
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  style={{ paddingLeft: '40px' }}
+                  required
+                />
+              </div>
+            </div>
+
             <div className="form-group">
               <label htmlFor="password">Kata Sandi Rahasia</label>
               <div className="password-input-wrapper">

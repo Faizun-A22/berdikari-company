@@ -44,17 +44,46 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// 1. ROUTE AUTENTIKASI: Login Admin
-app.post('/api/auth/login', (req, res) => {
-  const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'berdikariadmin';
+// 1. ROUTE AUTENTIKASI: Login Admin (Database-Driven)
+app.post('/api/auth/login', async (req, res) => {
+  const { username, password } = req.body;
+  const defaultPassword = process.env.ADMIN_PASSWORD || 'berdikariadmin';
 
-  if (password === adminPassword) {
-    // Generate JWT Token valid untuk 24 jam
-    const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '24h' });
-    return res.json({ success: true, token });
-  } else {
-    return res.status(401).json({ error: 'Kata sandi salah.' });
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username dan kata sandi wajib diisi.' });
+  }
+
+  try {
+    // Cari user di database
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('username', username)
+      .single();
+
+    if (error || !user) {
+      // Fallback ke kredensial default jika user tidak ditemukan di DB
+      if (username === 'admin' && password === defaultPassword) {
+        const token = jwt.sign({ username: 'admin', role: 'admin' }, JWT_SECRET, { expiresIn: '24h' });
+        return res.json({ success: true, token });
+      }
+      return res.status(401).json({ error: 'Username atau kata sandi salah.' });
+    }
+
+    // Verifikasi kata sandi
+    if (user.password_hash === password) {
+      const token = jwt.sign({ username: user.username, role: user.role || 'admin' }, JWT_SECRET, { expiresIn: '24h' });
+      return res.json({ success: true, token });
+    } else {
+      return res.status(401).json({ error: 'Username atau kata sandi salah.' });
+    }
+  } catch (err) {
+    // Fallback darurat jika tabel belum dimigrasikan atau terjadi kendala DB
+    if (username === 'admin' && password === defaultPassword) {
+      const token = jwt.sign({ username: 'admin', role: 'admin' }, JWT_SECRET, { expiresIn: '24h' });
+      return res.json({ success: true, token });
+    }
+    return res.status(500).json({ error: 'Terjadi kegagalan verifikasi server: ' + err.message });
   }
 });
 

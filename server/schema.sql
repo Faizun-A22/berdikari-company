@@ -178,3 +178,16 @@ VALUES
 ('INV-2026-003', 'Rian Hidayat', 'rian@solaria.com', 'E-Commerce Website Revamp', 4500000, 'cancelled', '2026-07-10')
 ON CONFLICT (invoice_number) DO NOTHING;
 
+-- 7. Tabel Users (Kredensial Pengguna Admin)
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT DEFAULT 'admin',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Masukkan user default awal
+INSERT INTO users (username, password_hash, role)
+VALUES ('admin', 'berdikariadmin', 'admin')
+ON CONFLICT (username) DO NOTHING;
