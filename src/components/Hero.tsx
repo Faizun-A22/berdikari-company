@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { ArrowRight, Code, ShieldCheck, Zap, Award } from 'lucide-react';
 
 export default function Hero() {
-  const [heroBadge, setHeroBadge] = useState('Penyedia Jasa IT Terpercaya & Premium');
-  const [heroTitle, setHeroTitle] = useState('Transformasi Digital Bisnis Anda Bersama <span class="gradient-text-expert font-extra">Berdikari Tech</span>');
+  const [heroBadge, setHeroBadge] = useState('Penyedia Layanan IT & Solusi Digital Premium');
+  const [heroTitle, setHeroTitle] = useState('Transformasi Digital Bisnis Anda Bersama <span class="gradient-text-expert font-extra">Berdikari Digital Nusantara</span>');
   const [heroDesc, setHeroDesc] = useState(
-    'Kami merancang dan mengembangkan website premium, aplikasi mobile (iOS & Android), serta sistem custom berkinerja tinggi untuk membantu bisnis Anda berkembang lebih cepat, aman, dan profesional.'
+    'Kami merancang website premium, aplikasi mobile, sistem AI otomatisasi cerdas, serta produk digital siap pakai untuk mengakselerasi pertumbuhan bisnis Anda secara mandiri.'
   );
 
   useEffect(() => {

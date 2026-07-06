@@ -20,7 +20,7 @@ export default function ContactPage() {
       answer: 'Ya, 100% hak milik kode sumber diserahkan sepenuhnya kepada Anda setelah proyek selesai dan pelunasan dilakukan. Kami akan menyerahkan seluruh aset digital mulai dari repositori GitHub, kredensial hosting/server, hingga file desain Figma.',
     },
     {
-      question: 'Bagaimana metode pembayaran proyek di Berdikari Tech?',
+      question: 'Bagaimana metode pembayaran proyek di Berdikari Digital Nusantara?',
       answer: 'Metode pembayaran kami dibagi menjadi beberapa termin termin termin: Down Payment (DP) awal sebesar 40% untuk memulai tahap riset & desain, 30% setelah tahap prototipe disetujui untuk memulai pengkodean, dan pelunasan 30% setelah aplikasi siap dideploy ke server produksi pasca QA.',
     },
     {
@@ -28,7 +28,7 @@ export default function ContactPage() {
       answer: 'Kami memberikan garansi pemeliharaan dan perbaikan bug secara gratis selama 3 bulan pertama pasca peluncuran. Setelah periode garansi selesai, kami juga menyediakan opsi paket pemeliharaan rutin bulanan/tahunan untuk optimasi server, backup data, pembaruan keamanan, dan penambahan fitur minor.',
     },
     {
-      question: 'Apakah Berdikari Tech dapat membantu integrasi sistem dengan API pihak ketiga?',
+      question: 'Apakah Berdikari Digital Nusantara dapat membantu integrasi sistem dengan API pihak ketiga?',
       answer: 'Tentu saja. Kami berpengalaman mengintegrasikan berbagai sistem dengan API pihak ketiga seperti Payment Gateway (Midtrans, Stripe), API Logistik (RajaOngkir), WhatsApp Gateway, SMS Gateway, hingga sinkronisasi data ERP/CRM korporasi Anda.',
     },
   ];

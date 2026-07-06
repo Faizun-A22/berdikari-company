@@ -147,9 +147,8 @@ export default function Contact() {
     web: 'Website & Web App Development',
     mobile: 'Mobile App Development (Android/iOS)',
     uiux: 'UI/UX Design & Prototyping',
-    cloud: 'Cloud Management & DevOps',
-    custom: 'Sistem Custom / Integrasi API',
-    consulting: 'Konsultasi & Audit Teknologi',
+    ai_automation: 'AI Otomatisasi & Chatbot',
+    digital_product: 'Produk Digital (Undangan, E-Book, Berlangganan)',
   };
 
   return (
@@ -177,17 +176,17 @@ export default function Contact() {
             </p>
 
             <div className="info-cards-list">
-              <a href="mailto:hello@berdikaritech.com" className="card-glass info-item-card">
+              <a href="mailto:hello@berdikaridigital.com" className="card-glass info-item-card">
                 <div className="info-icon-wrapper">
                   <Mail size={20} />
                 </div>
                 <div className="info-item-details">
                   <span className="info-item-label">Kirim Email</span>
-                  <span className="info-item-value">hello@berdikaritech.com</span>
+                  <span className="info-item-value">hello@berdikaridigital.com</span>
                 </div>
               </a>
 
-              <a href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech%2C%20saya%20tertarik%20untuk%20berkonsultasi%20mengenai%20proyek%20IT." target="_blank" rel="noopener noreferrer" className="card-glass info-item-card">
+              <a href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Digital%20Nusantara%2C%20saya%20tertarik%20untuk%20berkonsultasi%20mengenai%20proyek%20IT." target="_blank" rel="noopener noreferrer" className="card-glass info-item-card">
                 <div className="info-icon-wrapper">
                   <Phone size={20} />
                 </div>
@@ -293,9 +292,8 @@ export default function Contact() {
                   <option value="web">{servicesMap.web}</option>
                   <option value="mobile">{servicesMap.mobile}</option>
                   <option value="uiux">{servicesMap.uiux}</option>
-                  <option value="cloud">{servicesMap.cloud}</option>
-                  <option value="custom">{servicesMap.custom}</option>
-                  <option value="consulting">{servicesMap.consulting}</option>
+                  <option value="ai_automation">{servicesMap.ai_automation}</option>
+                  <option value="digital_product">{servicesMap.digital_product}</option>
                 </select>
               </div>
 
@@ -344,8 +342,8 @@ export default function Contact() {
             </div>
             <h3>Pesan Terkirim!</h3>
             <p>
-              Terima kasih telah menghubungi Berdikari Tech. Konsultan IT kami akan meninjau kebutuhan 
-              proyek Anda dan menghubungi Anda via WhatsApp or Email dalam waktu 1x24 jam.
+              Terima kasih telah menghubungi Berdikari Digital Nusantara. Tim kami akan meninjau kebutuhan 
+              proyek Anda dan menghubungi Anda via WhatsApp atau Email dalam waktu 1x24 jam.
             </p>
             <button className="btn btn-primary" onClick={() => setShowSuccessModal(false)}>
               Tutup

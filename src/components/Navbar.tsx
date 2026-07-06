@@ -38,6 +38,7 @@ export default function Navbar() {
     { name: 'Beranda', to: '/index.html' },
     { name: 'Layanan', to: '/services.html' },
     { name: 'Portofolio', to: '/portfolio.html' },
+    { name: 'Berita', to: '/index.html#activities-section' },
     { name: 'Tentang Kami', to: '/about.html' },
     { name: 'Kontak', to: '/contact.html' },
   ];
@@ -45,9 +46,9 @@ export default function Navbar() {
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
-        <a href="/index.html" className="logo" onClick={() => setIsOpen(false)} aria-label="Berdikari Tech Home">
+        <a href="/index.html" className="logo" onClick={() => setIsOpen(false)} aria-label="Berdikari Digital Nusantara Home">
           <Terminal className="logo-icon" size={24} />
-          <span>Berdikari<span className="text-red">Tech</span></span>
+          <span>Berdikari<span className="text-red"> Digital Nusantara</span></span>
         </a>
 
         {/* Desktop Navigation */}
@@ -139,12 +140,20 @@ export default function Navbar() {
           color: var(--text-primary);
           font-family: var(--font-heading);
           font-weight: 800;
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           letter-spacing: -0.02em;
+          white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+          .logo {
+            font-size: 1.05rem;
+          }
         }
 
         .logo-icon {
           color: var(--primary);
+          flex-shrink: 0;
         }
 
         .text-red {

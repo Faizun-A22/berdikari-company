@@ -10,11 +10,11 @@ export default function Footer() {
         <div className="footer-brand-col">
           <a href="/index.html" className="footer-logo">
             <Terminal className="logo-icon" size={24} />
-            <span>Berdikari<span className="text-red">Tech</span></span>
+            <span>Berdikari<span className="text-red"> Digital Nusantara</span></span>
           </a>
           <p className="footer-about-text">
-            Berdikari Tech menyediakan layanan rekayasa perangkat lunak, pembuatan website premium, 
-            serta aplikasi mobile berkualitas tinggi dengan standar industri global.
+            Berdikari Digital Nusantara menyediakan layanan rekayasa perangkat lunak, pembuatan website premium, 
+            aplikasi mobile berkualitas tinggi, otomasi kecerdasan buatan (AI), serta berbagai produk digital siap guna.
           </p>
           <div className="social-links-grid">
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-circle-link" aria-label="GitHub">
@@ -39,7 +39,8 @@ export default function Footer() {
             <li><a href="/index.html">Beranda</a></li>
             <li><a href="/services.html">Layanan</a></li>
             <li><a href="/portfolio.html">Portofolio</a></li>
-            <li><a href="/about.html">Alur Kerja</a></li>
+            <li><a href="/index.html#activities-section">Berita &amp; Kegiatan</a></li>
+            <li><a href="/about.html">Tentang Kami</a></li>
             <li><a href="/contact.html">Kontak</a></li>
           </ul>
         </div>
@@ -51,8 +52,8 @@ export default function Footer() {
             <li><a href="/services.html">Website Development</a></li>
             <li><a href="/services.html">Mobile App Development</a></li>
             <li><a href="/services.html">UI/UX Design Prototipe</a></li>
-            <li><a href="/services.html">Sistem Custom &amp; API</a></li>
-            <li><a href="/services.html">Cloud &amp; DevOps Services</a></li>
+            <li><a href="/services.html">AI Otomatisasi &amp; Agen Pintar</a></li>
+            <li><a href="/services.html">Produk Digital Mandiri</a></li>
           </ul>
         </div>
       </div>
@@ -61,7 +62,7 @@ export default function Footer() {
       <div className="footer-bottom-bar">
         <div className="container bottom-container">
           <span className="copyright-text">
-            &copy; {currentYear} Berdikari Tech. Seluruh Hak Cipta Dilindungi.
+            &copy; {currentYear} Berdikari Digital Nusantara. Seluruh Hak Cipta Dilindungi.
           </span>
           <div className="bottom-links">
             <a href="#privacy" className="bottom-link">Kebijakan Privasi</a>

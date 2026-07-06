@@ -426,3 +426,95 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--border-active);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
 }
+
+/* ==========================================
+   Berdikari Digital Nusantara Custom Additions
+   Red & White Premium Gradients and Animations
+   ========================================== */
+
+.gradient-text-red-white {
+  background: linear-gradient(135deg, #be123c 15%, #e53e3e 50%, #f8fafc 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-white-red {
+  background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 70%, #ff8a8a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-red-white {
+  background: linear-gradient(135deg, #991b1b 0%, #be123c 40%, #e53e3e 75%, #ffffff 100%);
+}
+
+.gradient-border-red {
+  position: relative;
+  background: linear-gradient(var(--bg-surface), var(--bg-surface)) padding-box,
+              linear-gradient(135deg, #be123c, #e53e3e, #f1f5f9) border-box;
+  border: 1.5px solid transparent;
+}
+
+@keyframes floatElement {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: floatElement 6s ease-in-out infinite;
+}
+
+.animate-float-delay-1 {
+  animation: floatElement 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-float-delay-2 {
+  animation: floatElement 6s ease-in-out infinite;
+  animation-delay: 4s;
+}
+
+/* Pulse animation for CTA & important markers */
+@keyframes redPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(229, 62, 62, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(229, 62, 62, 0);
+  }
+}
+
+.pulse-badge {
+  animation: redPulse 2s infinite;
+  border-radius: 100px;
+}
+
+/* Custom interactive components (Calculator & Chat Assistant) */
+.custom-widget-card {
+  border: 1px solid var(--border-active);
+  background: linear-gradient(145deg, #ffffff 0%, #fdfbfb 100%);
+  box-shadow: 0 12px 40px rgba(229, 62, 62, 0.05);
+}
+
+.glow-glow-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-glow-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(229, 62, 62, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+

@@ -58,7 +58,7 @@ export default function AboutPage() {
         <div className="glow-orb vision-glow"></div>
         <div className="container">
           <div className="section-title">
-            <h2>Tentang Berdikari Tech</h2>
+            <h2>Tentang Berdikari Digital Nusantara</h2>
             <p>Berkomitmen menghadirkan rekayasa perangkat lunak berkelas dunia untuk bisnis lokal dan global.</p>
             <div className="accent-bar"></div>
           </div>

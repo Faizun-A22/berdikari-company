@@ -133,3 +133,48 @@ VALUES
   'Mencapai 200.000+ pengguna aktif bulanan dalam 90 hari pertama, dengan tingkat keberhasilan transaksi 99,99% dan rating 4.8 di Play Store.'
 )
 ON CONFLICT (slug) DO NOTHING;
+
+-- 5. Tabel Transaksi Keuangan (Ledger Keuangan)
+CREATE TABLE IF NOT EXISTS financial_transactions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
+    category TEXT NOT NULL,
+    amount NUMERIC NOT NULL,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Masukkan data transaksi simulasi awal
+INSERT INTO financial_transactions (date, type, category, amount, description)
+VALUES
+('2026-07-02', 'income', 'Proyek Web', 15000000, 'DP 50% Pembuatan E-Commerce PT Maju'),
+('2026-07-03', 'income', 'Produk Digital: Undangan', 297000, 'Penjualan 3 unit Undangan Pernikahan Gold'),
+('2026-07-04', 'expense', 'Gaji Karyawan', 7500000, 'Pembayaran gaji bulanan desainer UI/UX'),
+('2026-07-05', 'expense', 'Sewa Server', 850000, 'Biaya server AWS & GCP Hosting Utama'),
+('2026-07-05', 'income', 'Produk Digital: E-Book', 196000, 'Penjualan 4 unit E-Book Panduan AI Automasi'),
+('2026-07-06', 'expense', 'Pemasaran', 1200000, 'Iklan Instagram & Google Ads untuk Leads Campaign'),
+('2026-07-06', 'income', 'Proyek Mobile', 24500000, 'Pelunasan Aplikasi Klinik MedPlus Mobile')
+ON CONFLICT DO NOTHING;
+
+-- 6. Tabel Invoices (Penagihan Klien)
+CREATE TABLE IF NOT EXISTS invoices (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    invoice_number TEXT UNIQUE NOT NULL,
+    client_name TEXT NOT NULL,
+    client_email TEXT NOT NULL,
+    project_name TEXT NOT NULL,
+    amount NUMERIC NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'cancelled')),
+    due_date DATE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Masukkan data invoice awal
+INSERT INTO invoices (invoice_number, client_name, client_email, project_name, amount, status, due_date)
+VALUES
+('INV-2026-001', 'Budi Santoso', 'budi@majujaya.com', 'ERP Integration Phase 1', 12500000, 'paid', '2026-07-15'),
+('INV-2026-002', 'Dewi Lestari', 'dewi.l@medika.co.id', 'Mobile App Health Portal', 8000000, 'pending', '2026-07-20'),
+('INV-2026-003', 'Rian Hidayat', 'rian@solaria.com', 'E-Commerce Website Revamp', 4500000, 'cancelled', '2026-07-10')
+ON CONFLICT (invoice_number) DO NOTHING;
+

@@ -84,7 +84,7 @@ export default function NewsSection() {
       <div className="container">
         <div className="section-title">
           <h2>Portal Kegiatan &amp; Berita</h2>
-          <p>Ikuti perkembangan terbaru, rilis teknologi, dan berbagai aktivitas positif dari Berdikari Tech.</p>
+          <p>Ikuti perkembangan terbaru, rilis teknologi, dan berbagai aktivitas positif dari Berdikari Digital Nusantara.</p>
           <div className="accent-bar"></div>
         </div>
 

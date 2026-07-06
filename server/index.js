@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
 import { supabase } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -76,11 +77,11 @@ app.get('/api/config', async (req, res) => {
       if (error.code === 'PGRST116') {
         const defaultConfig = {
           id: 1,
-          hero_badge: 'Penyedia Jasa IT Terpercaya & Premium',
-          hero_title: 'Transformasi Digital Bisnis Anda Bersama Berdikari Tech',
-          hero_description: 'Kami merancang dan mengembangkan website premium, aplikasi mobile (iOS & Android), serta sistem custom berkinerja tinggi untuk membantu bisnis Anda berkembang lebih cepat, aman, dan profesional.',
+          hero_badge: 'Penyedia Layanan IT & Solusi Digital Premium',
+          hero_title: 'Transformasi Digital Bisnis Anda Bersama Berdikari Digital Nusantara',
+          hero_description: 'Kami merancang website premium, aplikasi mobile, sistem AI otomatisasi cerdas, serta produk digital siap pakai untuk mengakselerasi pertumbuhan bisnis Anda secara mandiri.',
           cta_title: 'Siap Memulai Transformasi Digital?',
-          cta_description: 'Konsultasikan ide aplikasi atau website Anda bersama tim konsultan ahli IT kami secara gratis. Dapatkan estimasi biaya dan rancangan proyek dalam waktu singkat.'
+          cta_description: 'Konsultasikan ide produk digital atau sistem Anda bersama tim ahli kami secara gratis. Dapatkan estimasi biaya dan rancangan proyek dalam waktu singkat.'
         };
 
         const { data: insertedData, error: insertError } = await supabase
@@ -390,6 +391,293 @@ app.delete('/api/portfolios/:id', authenticateToken, async (req, res) => {
   } catch (err) {
     console.error('Error deleting portfolio:', err.message);
     res.status(500).json({ error: 'Gagal menghapus portofolio: ' + err.message });
+// ==========================================
+// FINANCE & ACCOUNTING BACKEND CONTROLLER
+// ==========================================
+
+const financeStorePath = path.resolve(__dirname, 'finance_store.json');
+
+// Initialize mock finance store if not exists
+if (!fs.existsSync(financeStorePath)) {
+  const initialStore = {
+    transactions: [
+      { id: "t1", date: '2026-07-02', type: 'income', category: 'Proyek Web', amount: 15000000, description: 'DP 50% Pembuatan E-Commerce PT Maju' },
+      { id: "t2", date: '2026-07-03', type: 'income', category: 'Produk Digital: Undangan', amount: 297000, description: 'Penjualan 3 unit Undangan Pernikahan Gold' },
+      { id: "t3", date: '2026-07-04', type: 'expense', category: 'Gaji Karyawan', amount: 7500000, description: 'Pembayaran gaji bulanan desainer UI/UX' },
+      { id: "t4", date: '2026-07-05', type: 'expense', category: 'Sewa Server', amount: 850000, description: 'Biaya server AWS & GCP Hosting Utama' },
+      { id: "t5", date: '2026-07-05', type: 'income', category: 'Produk Digital: E-Book', amount: 196000, description: 'Penjualan 4 unit E-Book Panduan AI Automasi' },
+      { id: "t6", date: '2026-07-06', type: 'expense', category: 'Pemasaran', amount: 1200000, description: 'Iklan Instagram & Google Ads untuk Leads Campaign' },
+      { id: "t7", date: '2026-07-06', type: 'income', category: 'Proyek Mobile', amount: 24500000, description: 'Pelunasan Aplikasi Klinik MedPlus Mobile' }
+    ],
+    invoices: [
+      { id: "i1", invoice_number: 'INV-2026-001', client_name: 'Budi Santoso', client_email: 'budi@majujaya.com', project_name: 'ERP Integration Phase 1', amount: 12500000, status: 'paid', due_date: '2026-07-15' },
+      { id: "i2", invoice_number: 'INV-2026-002', client_name: 'Dewi Lestari', client_email: 'dewi.l@medika.co.id', project_name: 'Mobile App Health Portal', amount: 8000000, status: 'pending', due_date: '2026-07-20' },
+      { id: "i3", invoice_number: 'INV-2026-003', client_name: 'Rian Hidayat', client_email: 'rian@solaria.com', project_name: 'E-Commerce Website Revamp', amount: 4500000, status: 'cancelled', due_date: '2026-07-10' }
+    ]
+  };
+  fs.writeFileSync(financeStorePath, JSON.stringify(initialStore, null, 2));
+}
+
+function getLocalFinanceData() {
+  try {
+    return JSON.parse(fs.readFileSync(financeStorePath, 'utf8'));
+  } catch (err) {
+    return { transactions: [], invoices: [] };
+  }
+}
+
+function saveLocalFinanceData(data) {
+  fs.writeFileSync(financeStorePath, JSON.stringify(data, null, 2));
+}
+
+// 1. GET SUMMARY
+app.get('/api/finance/summary', authenticateToken, async (req, res) => {
+  try {
+    let txs = [];
+    try {
+      const { data, error } = await supabase.from('financial_transactions').select('*');
+      if (error) throw error;
+      txs = data;
+    } catch (dbErr) {
+      console.warn("Supabase query failed, using local json store:", dbErr.message);
+      txs = getLocalFinanceData().transactions;
+    }
+
+    const total_income = txs.filter(t => t.type === 'income').reduce((acc, t) => acc + Number(t.amount), 0);
+    const total_expense = txs.filter(t => t.type === 'expense').reduce((acc, t) => acc + Number(t.amount), 0);
+    const net_profit = total_income - total_expense;
+
+    const category_breakdown = {};
+    txs.forEach(t => {
+      category_breakdown[t.category] = (category_breakdown[t.category] || 0) + Number(t.amount);
+    });
+
+    res.json({
+      total_income,
+      total_expense,
+      net_profit,
+      transactions_count: txs.length,
+      category_breakdown,
+      transactions: txs
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Gagal memproses data keuangan: ' + err.message });
+  }
+});
+
+// 2. TRANSACTIONS CRUD
+app.get('/api/finance/transactions', authenticateToken, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('financial_transactions')
+      .select('*')
+      .order('date', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (dbErr) {
+    console.warn("Supabase error, using local json:", dbErr.message);
+    const txs = getLocalFinanceData().transactions;
+    // sort by date desc
+    txs.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    res.json(txs);
+  }
+});
+
+app.post('/api/finance/transactions', authenticateToken, async (req, res) => {
+  const { date, type, category, amount, description } = req.body;
+
+  if (!type || !category || !amount || !description) {
+    return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
+  }
+
+  const newTx = {
+    date: date || new Date().toISOString().split('T')[0],
+    type,
+    category,
+    amount: Number(amount),
+    description
+  };
+
+  try {
+    const { data, error } = await supabase
+      .from('financial_transactions')
+      .insert([newTx])
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.status(201).json({ success: true, data });
+  } catch (dbErr) {
+    console.warn("Supabase error, saving locally:", dbErr.message);
+    const store = getLocalFinanceData();
+    const createdTx = { ...newTx, id: 't_' + Date.now() };
+    store.transactions.push(createdTx);
+    saveLocalFinanceData(store);
+    res.status(201).json({ success: true, data: createdTx, note: 'Tersimpan lokal' });
+  }
+});
+
+app.put('/api/finance/transactions/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  const { date, type, category, amount, description } = req.body;
+
+  const updateData = { date, type, category, amount: Number(amount), description };
+
+  try {
+    const { data, error } = await supabase
+      .from('financial_transactions')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.json({ success: true, data });
+  } catch (dbErr) {
+    console.warn("Supabase error, updating locally:", dbErr.message);
+    const store = getLocalFinanceData();
+    const idx = store.transactions.findIndex(t => t.id === id);
+    if (idx !== -1) {
+      store.transactions[idx] = { ...store.transactions[idx], ...updateData };
+      saveLocalFinanceData(store);
+      res.json({ success: true, data: store.transactions[idx] });
+    } else {
+      res.status(404).json({ error: 'Transaksi tidak ditemukan' });
+    }
+  }
+});
+
+app.delete('/api/finance/transactions/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { error } = await supabase
+      .from('financial_transactions')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    res.json({ success: true, message: 'Transaksi berhasil dihapus.' });
+  } catch (dbErr) {
+    console.warn("Supabase error, deleting locally:", dbErr.message);
+    const store = getLocalFinanceData();
+    const newTxs = store.transactions.filter(t => t.id !== id);
+    if (newTxs.length !== store.transactions.length) {
+      store.transactions = newTxs;
+      saveLocalFinanceData(store);
+      res.json({ success: true, message: 'Transaksi lokal berhasil dihapus.' });
+    } else {
+      res.status(404).json({ error: 'Transaksi tidak ditemukan' });
+    }
+  }
+});
+
+// 3. INVOICES CRUD
+app.get('/api/finance/invoices', authenticateToken, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('invoices')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (dbErr) {
+    console.warn("Supabase error, using local invoices:", dbErr.message);
+    const invoices = getLocalFinanceData().invoices;
+    res.json(invoices);
+  }
+});
+
+app.post('/api/finance/invoices', authenticateToken, async (req, res) => {
+  const { invoice_number, client_name, client_email, project_name, amount, status, due_date } = req.body;
+
+  if (!invoice_number || !client_name || !client_email || !project_name || !amount || !due_date) {
+    return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
+  }
+
+  const newInvoice = {
+    invoice_number,
+    client_name,
+    client_email,
+    project_name,
+    amount: Number(amount),
+    status: status || 'pending',
+    due_date
+  };
+
+  try {
+    const { data, error } = await supabase
+      .from('invoices')
+      .insert([newInvoice])
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.status(201).json({ success: true, data });
+  } catch (dbErr) {
+    console.warn("Supabase error, saving invoice locally:", dbErr.message);
+    const store = getLocalFinanceData();
+    const createdInvoice = { ...newInvoice, id: 'i_' + Date.now() };
+    store.invoices.push(createdInvoice);
+    saveLocalFinanceData(store);
+    res.status(201).json({ success: true, data: createdInvoice });
+  }
+});
+
+app.put('/api/finance/invoices/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  const { invoice_number, client_name, client_email, project_name, amount, status, due_date } = req.body;
+
+  const updateData = { invoice_number, client_name, client_email, project_name, amount: Number(amount), status, due_date };
+
+  try {
+    const { data, error } = await supabase
+      .from('invoices')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.json({ success: true, data });
+  } catch (dbErr) {
+    console.warn("Supabase error, updating invoice locally:", dbErr.message);
+    const store = getLocalFinanceData();
+    const idx = store.invoices.findIndex(i => i.id === id);
+    if (idx !== -1) {
+      store.invoices[idx] = { ...store.invoices[idx], ...updateData };
+      saveLocalFinanceData(store);
+      res.json({ success: true, data: store.invoices[idx] });
+    } else {
+      res.status(404).json({ error: 'Invoice tidak ditemukan' });
+    }
+  }
+});
+
+app.delete('/api/finance/invoices/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { error } = await supabase
+      .from('invoices')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    res.json({ success: true, message: 'Invoice berhasil dihapus.' });
+  } catch (dbErr) {
+    console.warn("Supabase error, deleting invoice locally:", dbErr.message);
+    const store = getLocalFinanceData();
+    const newInvoices = store.invoices.filter(i => i.id !== id);
+    if (newInvoices.length !== store.invoices.length) {
+      store.invoices = newInvoices;
+      saveLocalFinanceData(store);
+      res.json({ success: true, message: 'Invoice lokal berhasil dihapus.' });
+    } else {
+      res.status(404).json({ error: 'Invoice tidak ditemukan' });
+    }
   }
 });
 

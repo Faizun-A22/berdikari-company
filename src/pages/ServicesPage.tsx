@@ -10,12 +10,12 @@ export default function ServicesPage() {
     {
       category: 'Frontend & Web',
       icon: <Code size={20} className="text-red" />,
-      items: ['React.js', 'Next.js', 'TypeScript', 'TailwindCSS', 'Redux / Zustand'],
+      items: ['React.js', 'Next.js', 'TypeScript', 'TailwindCSS', 'Zustand / Redux'],
     },
     {
       category: 'Backend & Database',
       icon: <Server size={20} className="text-red" />,
-      items: ['Node.js', 'NestJS', 'Express', 'PostgreSQL', 'MongoDB', 'Redis'],
+      items: ['Node.js', 'Express', 'Python (FastAPI)', 'PostgreSQL', 'MongoDB', 'Supabase'],
     },
     {
       category: 'Mobile Apps',
@@ -23,9 +23,9 @@ export default function ServicesPage() {
       items: ['Flutter', 'React Native', 'Kotlin (Native)', 'Swift (Native)'],
     },
     {
-      category: 'DevOps & Design',
+      category: 'AI & UI/UX Desain',
       icon: <Palette size={20} className="text-red" />,
-      items: ['AWS / GCP', 'Docker', 'CI/CD Pipelines', 'Figma', 'Adobe XD'],
+      items: ['OpenAI / Claude API', 'LangChain / Flowise', 'n8n Automasi', 'Figma Design', 'Adobe Suite'],
     },
   ];
 
