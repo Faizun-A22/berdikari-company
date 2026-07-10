@@ -41,7 +41,7 @@ export default function Navbar() {
     { name: 'Beranda', to: isHomePage ? '#home' : '/index.html' },
     { name: 'Layanan', to: '/services.html' },
     { name: 'Portofolio', to: '/portfolio.html' },
-    { name: 'Berita', to: isHomePage ? '#activities-section' : '/index.html#activities-section' },
+    { name: 'Berita', to: '/news.html' },
     { name: 'Tentang Kami', to: '/about.html' },
     { name: 'Kontak', to: '/contact.html' },
   ];

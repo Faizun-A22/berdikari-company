@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
 import { ArrowRight, Globe, Smartphone, FolderKanban, Brain, Calculator, ShieldCheck, Heart, ChevronDown, ChevronUp } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
-import NewsSection from '../components/NewsSection';
 
 export default function Home() {
   const [servicesRef, servicesVisible] = useScrollReveal();
@@ -392,8 +391,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* News & Activities Section */}
-      <NewsSection />
 
       {/* FAQ Accordion Section */}
       <section 
