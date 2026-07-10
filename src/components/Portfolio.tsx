@@ -8,6 +8,7 @@ interface Project {
   category: 'web' | 'mobile' | 'uiux';
   categoryLabel: string;
   image: string;
+  video?: string;
   shortDesc: string;
   client: string;
   year: string;
@@ -39,6 +40,7 @@ export default function Portfolio() {
           category: item.category,
           categoryLabel: item.category_label,
           image: item.image_url,
+          video: item.video_url || '',
           shortDesc: item.short_desc,
           client: item.client,
           year: item.year,
@@ -165,14 +167,40 @@ export default function Portfolio() {
             
             <div className="modal-grid">
               <div className="modal-visual">
-                <img 
-                  src={selectedProject.image} 
-                  alt={selectedProject.title} 
-                  className="modal-img" 
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80';
-                  }}
-                />
+                {selectedProject.video ? (
+                  selectedProject.video.includes('youtube.com') || selectedProject.video.includes('youtu.be') ? (
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={selectedProject.video.includes('embed') ? selectedProject.video : selectedProject.video.replace('watch?v=', 'embed/')}
+                      title="Demo Video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="modal-video-iframe"
+                      style={{ width: '100%', height: '100%', minHeight: '350px', border: 'none' }}
+                    ></iframe>
+                  ) : (
+                    <video
+                      src={selectedProject.video}
+                      controls
+                      autoPlay
+                      muted
+                      playsInline
+                      className="modal-video"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '350px' }}
+                    />
+                  )
+                ) : (
+                  <img 
+                    src={selectedProject.image} 
+                    alt={selectedProject.title} 
+                    className="modal-img" 
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80';
+                    }}
+                  />
+                )}
               </div>
               
               <div className="modal-details">

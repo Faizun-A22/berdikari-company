@@ -1,0 +1,22 @@
+[
+  {
+    "id": "c1a825f7-66a9-4b67-a9a3-5c023d8c11e1",
+    "name": "Ahmad Fauzi",
+    "company": "CV Maju Jaya",
+    "email": "ahmad.fauzi@gmail.com",
+    "phone": "081234567890",
+    "service": "web",
+    "message": "Halo Berdikari Tech, kami membutuhkan website e-commerce untuk toko retail kami. Mohon bantuannya.",
+    "created_at": "2026-07-06T03:03:15.000Z"
+  },
+  {
+    "id": "c1a825f7-66a9-4b67-a9a3-5c023d8c11e2",
+    "name": "Sarah Wijaya",
+    "company": "Medika Utama",
+    "email": "sarah.w@medikautama.co.id",
+    "phone": "085712345678",
+    "service": "mobile",
+    "message": "Kami ingin membuat aplikasi mobile konsultasi kesehatan serupa dengan MedPlus. Apakah bisa dibantu untuk estimasi biayanya?",
+    "created_at": "2026-07-06T03:04:00.000Z"
+  }
+]

@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
+import multer from 'multer';
 import { supabase } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,9 +17,49 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-berdikari-2026';
 
+// Fallback JSON stores setup
+const portfoliosStorePath = path.resolve(__dirname, 'portfolios_store.json');
+const contactStorePath = path.resolve(__dirname, 'contact_store.json');
+const uploadsDir = path.resolve(__dirname, 'uploads');
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+function getLocalPortfoliosData() {
+  try {
+    return JSON.parse(fs.readFileSync(portfoliosStorePath, 'utf8'));
+  } catch (err) {
+    return [];
+  }
+}
+
+function saveLocalPortfoliosData(data) {
+  fs.writeFileSync(portfoliosStorePath, JSON.stringify(data, null, 2));
+}
+
+function getLocalContactData() {
+  try {
+    return JSON.parse(fs.readFileSync(contactStorePath, 'utf8'));
+  } catch (err) {
+    return [];
+  }
+}
+
+function saveLocalContactData(data) {
+  fs.writeFileSync(contactStorePath, JSON.stringify(data, null, 2));
+}
+
+// Multer setup for memory storage
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/api/uploads', express.static(uploadsDir));
 
 // Logger Middleware
 app.use((req, res, next) => {
@@ -274,10 +315,20 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'Nama, Email, Telepon/WhatsApp, Layanan, dan Pesan wajib diisi.' });
   }
 
+  const newSubmission = {
+    name,
+    company,
+    email,
+    phone,
+    service,
+    message,
+    created_at: new Date().toISOString()
+  };
+
   try {
     const { data, error } = await supabase
       .from('contact_submissions')
-      .insert([{ name, company, email, phone, service, message }])
+      .insert([newSubmission])
       .select()
       .single();
 
@@ -285,8 +336,14 @@ app.post('/api/contact', async (req, res) => {
 
     res.status(201).json({ success: true, message: 'Pesan Anda berhasil terkirim. Tim kami akan segera menghubungi Anda.', data });
   } catch (err) {
-    console.error('Error saving contact submission:', err.message);
-    res.status(500).json({ error: 'Gagal mengirim pesan kontak: ' + err.message });
+    console.warn('Supabase error saving contact submission, using local fallback:', err.message);
+    
+    const store = getLocalContactData();
+    const createdSubmission = { ...newSubmission, id: 'c_' + Date.now() };
+    store.push(createdSubmission);
+    saveLocalContactData(store);
+    
+    res.status(201).json({ success: true, message: 'Pesan Anda berhasil terkirim (lokal). Tim kami akan segera menghubungi Anda.', data: createdSubmission });
   }
 });
 
@@ -302,8 +359,10 @@ app.get('/api/contact', authenticateToken, async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.error('Error fetching contact submissions:', err.message);
-    res.status(500).json({ error: 'Gagal memuat pesan kontak: ' + err.message });
+    console.warn('Supabase error fetching contact submissions, using local fallback:', err.message);
+    const contacts = getLocalContactData();
+    contacts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    res.json(contacts);
   }
 });
 
@@ -321,8 +380,15 @@ app.delete('/api/contact/:id', authenticateToken, async (req, res) => {
 
     res.json({ success: true, message: 'Data pesan pelanggan berhasil dihapus.' });
   } catch (err) {
-    console.error('Error deleting contact submission:', err.message);
-    res.status(500).json({ error: 'Gagal menghapus pesan pelanggan: ' + err.message });
+    console.warn('Supabase error deleting contact submission, using local fallback:', err.message);
+    const store = getLocalContactData();
+    const filtered = store.filter(c => c.id !== id);
+    if (filtered.length !== store.length) {
+      saveLocalContactData(filtered);
+      res.json({ success: true, message: 'Data pesan pelanggan berhasil dihapus secara lokal.' });
+    } else {
+      res.status(404).json({ error: 'Pesan pelanggan tidak ditemukan.' });
+    }
   }
 });
 
@@ -339,23 +405,41 @@ app.get('/api/portfolios', async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.error('Error fetching portfolios:', err.message);
-    res.status(500).json({ error: 'Gagal memuat data portofolio: ' + err.message });
+    console.warn('Supabase error fetching portfolios, using local fallback:', err.message);
+    const portfolios = getLocalPortfoliosData();
+    res.json(portfolios);
   }
 });
 
 // Buat Portofolio Baru (Protected)
 app.post('/api/portfolios', authenticateToken, async (req, res) => {
-  const { slug, title, category, category_label, image_url, short_desc, client, year, tags, challenge, solution, results } = req.body;
+  const { slug, title, category, category_label, image_url, video_url, short_desc, client, year, tags, challenge, solution, results } = req.body;
 
   if (!slug || !title || !category || !category_label || !image_url || !short_desc || !client || !year || !tags || !challenge || !solution || !results) {
     return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
   }
 
+  const newPortfolio = {
+    slug,
+    title,
+    category,
+    category_label,
+    image_url,
+    video_url: video_url || '',
+    short_desc,
+    client,
+    year,
+    tags,
+    challenge,
+    solution,
+    results,
+    created_at: new Date().toISOString()
+  };
+
   try {
     const { data, error } = await supabase
       .from('portfolios')
-      .insert([{ slug, title, category, category_label, image_url, short_desc, client, year, tags, challenge, solution, results }])
+      .insert([newPortfolio])
       .select()
       .single();
 
@@ -368,24 +452,50 @@ app.post('/api/portfolios', authenticateToken, async (req, res) => {
 
     res.status(201).json({ success: true, message: 'Portofolio berhasil ditambahkan.', data });
   } catch (err) {
-    console.error('Error creating portfolio:', err.message);
-    res.status(500).json({ error: 'Gagal menambahkan portofolio: ' + err.message });
+    console.warn('Supabase error creating portfolio, using local fallback:', err.message);
+    
+    const store = getLocalPortfoliosData();
+    if (store.some(p => p.slug === slug)) {
+      return res.status(400).json({ error: 'Slug portofolio sudah digunakan. Silakan buat slug yang berbeda.' });
+    }
+    
+    const createdPortfolio = { ...newPortfolio, id: 'p_' + Date.now() };
+    store.push(createdPortfolio);
+    saveLocalPortfoliosData(store);
+    
+    res.status(201).json({ success: true, message: 'Portofolio berhasil ditambahkan secara lokal.', data: createdPortfolio });
   }
 });
 
 // Perbarui Portofolio (Protected)
 app.put('/api/portfolios/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
-  const { slug, title, category, category_label, image_url, short_desc, client, year, tags, challenge, solution, results } = req.body;
+  const { slug, title, category, category_label, image_url, video_url, short_desc, client, year, tags, challenge, solution, results } = req.body;
 
   if (!slug || !title || !category || !category_label || !image_url || !short_desc || !client || !year || !tags || !challenge || !solution || !results) {
     return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
   }
 
+  const updatedFields = {
+    slug,
+    title,
+    category,
+    category_label,
+    image_url,
+    video_url: video_url || '',
+    short_desc,
+    client,
+    year,
+    tags,
+    challenge,
+    solution,
+    results
+  };
+
   try {
     const { data, error } = await supabase
       .from('portfolios')
-      .update({ slug, title, category, category_label, image_url, short_desc, client, year, tags, challenge, solution, results })
+      .update(updatedFields)
       .eq('id', id)
       .select()
       .single();
@@ -399,8 +509,20 @@ app.put('/api/portfolios/:id', authenticateToken, async (req, res) => {
 
     res.json({ success: true, message: 'Portofolio berhasil diperbarui.', data });
   } catch (err) {
-    console.error('Error updating portfolio:', err.message);
-    res.status(500).json({ error: 'Gagal memperbarui portofolio: ' + err.message });
+    console.warn('Supabase error updating portfolio, using local fallback:', err.message);
+    
+    const store = getLocalPortfoliosData();
+    const idx = store.findIndex(p => p.id === id || p.slug === slug);
+    if (idx !== -1) {
+      if (store.some((p, i) => p.slug === slug && i !== idx)) {
+        return res.status(400).json({ error: 'Slug portofolio sudah digunakan oleh proyek lain.' });
+      }
+      store[idx] = { ...store[idx], ...updatedFields };
+      saveLocalPortfoliosData(store);
+      res.json({ success: true, message: 'Portofolio berhasil diperbarui secara lokal.', data: store[idx] });
+    } else {
+      res.status(404).json({ error: 'Portofolio tidak ditemukan.' });
+    }
   }
 });
 
@@ -418,9 +540,18 @@ app.delete('/api/portfolios/:id', authenticateToken, async (req, res) => {
 
     res.json({ success: true, message: 'Portofolio berhasil dihapus.' });
   } catch (err) {
-    console.error('Error deleting portfolio:', err.message);
-    res.status(500).json({ error: 'Gagal menghapus portofolio: ' + err.message });
-// ==========================================
+    console.warn('Supabase error deleting portfolio, using local fallback:', err.message);
+    
+    const store = getLocalPortfoliosData();
+    const filtered = store.filter(p => p.id !== id);
+    if (filtered.length !== store.length) {
+      saveLocalPortfoliosData(filtered);
+      res.json({ success: true, message: 'Portofolio berhasil dihapus secara lokal.' });
+    } else {
+      res.status(404).json({ error: 'Portofolio tidak ditemukan.' });
+    }
+  }
+});// ==========================================
 // FINANCE & ACCOUNTING BACKEND CONTROLLER
 // ==========================================
 
@@ -706,6 +837,57 @@ app.delete('/api/finance/invoices/:id', authenticateToken, async (req, res) => {
       res.json({ success: true, message: 'Invoice lokal berhasil dihapus.' });
     } else {
       res.status(404).json({ error: 'Invoice tidak ditemukan' });
+    }
+  }
+});
+
+// File Upload Route (Image & Video)
+app.post('/api/upload', authenticateToken, upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'Tidak ada berkas yang diunggah.' });
+  }
+
+  const file = req.file;
+  const fileName = `${Date.now()}_${path.basename(file.originalname).replace(/\s+/g, '_')}`;
+  const contentType = file.mimetype;
+
+  try {
+    // Upload to Supabase Storage 'uploads' bucket
+    const { data, error } = await supabase.storage
+      .from('uploads')
+      .upload(fileName, file.buffer, {
+        contentType,
+        upsert: true
+      });
+
+    if (error) throw error;
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from('uploads')
+      .getPublicUrl(fileName);
+
+    res.json({
+      success: true,
+      message: 'Berkas berhasil diunggah ke cloud storage.',
+      url: urlData.publicUrl
+    });
+  } catch (err) {
+    console.warn('Supabase Storage upload failed, saving locally:', err.message);
+
+    try {
+      const localFilePath = path.join(uploadsDir, fileName);
+      fs.writeFileSync(localFilePath, file.buffer);
+      const localUrl = `/api/uploads/${fileName}`;
+
+      res.json({
+        success: true,
+        message: 'Berkas berhasil diunggah secara lokal.',
+        url: localUrl
+      });
+    } catch (writeErr) {
+      console.error('Local upload failed:', writeErr.message);
+      res.status(500).json({ error: 'Gagal mengunggah berkas: ' + writeErr.message });
     }
   }
 });

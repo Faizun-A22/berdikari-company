@@ -89,6 +89,59 @@ export default function AdminApp() {
   const [pImage, setPImage] = useState('/images/erp_dashboard.png');
   const [pCustomImage, setPCustomImage] = useState('');
   const [pUseCustomImage, setPUseCustomImage] = useState(false);
+  const [pVideoUrl, setPVideoUrl] = useState('');
+  const [isUploadingPImage, setIsUploadingPImage] = useState(false);
+  const [isUploadingPVideo, setIsUploadingPVideo] = useState(false);
+  const [isUploadingActImage, setIsUploadingActImage] = useState(false);
+
+  const handleFileUpload = async (file: File, type: 'portfolio_image' | 'portfolio_video' | 'activity_image') => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    if (type === 'portfolio_image') setIsUploadingPImage(true);
+    if (type === 'portfolio_video') setIsUploadingPVideo(true);
+    if (type === 'activity_image') setIsUploadingActImage(true);
+
+    const token = localStorage.getItem('berdikari_admin_token');
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Gagal mengunggah berkas.');
+      }
+
+      const data = await res.json();
+      if (type === 'portfolio_image') {
+        setPCustomImage(data.url);
+        setPUseCustomImage(true);
+      }
+      if (type === 'portfolio_video') {
+        setPVideoUrl(data.url);
+      }
+      if (type === 'activity_image') {
+        setCustomImage(data.url);
+        setUseCustomImage(true);
+      }
+      setSuccessMessage('Berkas berhasil diunggah.');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Gagal mengunggah berkas.');
+      setTimeout(() => setErrorMessage(''), 3000);
+    } finally {
+      setIsUploadingPImage(false);
+      setIsUploadingPVideo(false);
+      setIsUploadingActImage(false);
+    }
+  };
+
 
   // Landing Page Editor State
   const [config, setConfig] = useState({
@@ -529,6 +582,7 @@ export default function AdminApp() {
     setPImage('/images/erp_dashboard.png');
     setPCustomImage('');
     setPUseCustomImage(false);
+    setPVideoUrl('');
     setShowPortfolioModal(true);
   };
 
@@ -544,6 +598,7 @@ export default function AdminApp() {
     setPChallenge(port.challenge);
     setPSolution(port.solution);
     setPResults(port.results);
+    setPVideoUrl(port.video_url || '');
     
     const isPreset = PRESET_IMAGES.some(p => p.value === port.image_url);
     if (isPreset) {
@@ -584,6 +639,7 @@ export default function AdminApp() {
       category: pCategory,
       category_label: categoryLabels[pCategory] || 'Sistem Custom',
       image_url: imageUrl,
+      video_url: pVideoUrl,
       short_desc: pShortDesc,
       client: pClient,
       year: pYear,
@@ -1854,14 +1910,35 @@ export default function AdminApp() {
                     ))}
                   </select>
                 ) : (
-                  <input
-                    id="form_image_custom"
-                    type="text"
-                    value={customImage}
-                    onChange={(e) => setCustomImage(e.target.value)}
-                    placeholder="https://images.unsplash.com/photo-..."
-                    required={useCustomImage}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input
+                      id="form_image_custom"
+                      type="text"
+                      value={customImage}
+                      onChange={(e) => setCustomImage(e.target.value)}
+                      placeholder="https://images.unsplash.com/photo-..."
+                      required={useCustomImage}
+                    />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
+                      <span className="text-muted" style={{ fontSize: '0.85rem' }}>Atau unggah file:</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(file, 'activity_image');
+                        }}
+                        style={{ fontSize: '0.85rem' }}
+                      />
+                      {isUploadingActImage && <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Mengunggah...</span>}
+                    </div>
+                    {customImage && (
+                      <div style={{ marginTop: '8px' }}>
+                        <span style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Pratinjau:</span>
+                        <img src={customImage} alt="Preview" style={{ maxHeight: '100px', borderRadius: '6px', border: '1px solid var(--border)' }} />
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -2029,15 +2106,68 @@ export default function AdminApp() {
                     ))}
                   </select>
                 ) : (
-                  <input
-                    id="p_image_custom"
-                    type="text"
-                    value={pCustomImage}
-                    onChange={(e) => setPCustomImage(e.target.value)}
-                    placeholder="https://images.unsplash.com/photo-..."
-                    required={pUseCustomImage}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input
+                      id="p_image_custom"
+                      type="text"
+                      value={pCustomImage}
+                      onChange={(e) => setPCustomImage(e.target.value)}
+                      placeholder="https://images.unsplash.com/photo-..."
+                      required={pUseCustomImage}
+                    />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
+                      <span className="text-muted" style={{ fontSize: '0.85rem' }}>Atau unggah file:</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(file, 'portfolio_image');
+                        }}
+                        style={{ fontSize: '0.85rem' }}
+                      />
+                      {isUploadingPImage && <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Mengunggah...</span>}
+                    </div>
+                    {pCustomImage && (
+                      <div style={{ marginTop: '8px' }}>
+                        <span style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Pratinjau:</span>
+                        <img src={pCustomImage} alt="Preview" style={{ maxHeight: '100px', borderRadius: '6px', border: '1px solid var(--border)' }} />
+                      </div>
+                    )}
+                  </div>
                 )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="p_video_url">Video Demo Proyek (Opsional)</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <input
+                    id="p_video_url"
+                    type="text"
+                    value={pVideoUrl}
+                    onChange={(e) => setPVideoUrl(e.target.value)}
+                    placeholder="Contoh: https://example.com/demo.mp4 atau URL Youtube"
+                  />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
+                    <span className="text-muted" style={{ fontSize: '0.85rem' }}>Unggah file video:</span>
+                    <input 
+                      type="file" 
+                      accept="video/*" 
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleFileUpload(file, 'portfolio_video');
+                      }}
+                      style={{ fontSize: '0.85rem' }}
+                    />
+                    {isUploadingPVideo && <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Mengunggah...</span>}
+                  </div>
+                  {pVideoUrl && (
+                    <div style={{ marginTop: '8px' }}>
+                      <span style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Pratinjau Video:</span>
+                      <video src={pVideoUrl} controls muted style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '6px', border: '1px solid var(--border)' }} />
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="form-group">
