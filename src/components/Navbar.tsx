@@ -34,11 +34,14 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isHomePage = typeof window !== 'undefined' && 
+    (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/'));
+
   const navLinks = [
-    { name: 'Beranda', to: '/index.html' },
+    { name: 'Beranda', to: isHomePage ? '#home' : '/index.html' },
     { name: 'Layanan', to: '/services.html' },
     { name: 'Portofolio', to: '/portfolio.html' },
-    { name: 'Berita', to: '/index.html#activities-section' },
+    { name: 'Berita', to: isHomePage ? '#activities-section' : '/index.html#activities-section' },
     { name: 'Tentang Kami', to: '/about.html' },
     { name: 'Kontak', to: '/contact.html' },
   ];
