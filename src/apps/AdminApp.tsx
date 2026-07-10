@@ -86,21 +86,12 @@ export default function AdminApp() {
   const [pChallenge, setPChallenge] = useState('');
   const [pSolution, setPSolution] = useState('');
   const [pResults, setPResults] = useState('');
-  const [pImage, setPImage] = useState('/images/erp_dashboard.png');
-  const [pCustomImage, setPCustomImage] = useState('');
-  const [pUseCustomImage, setPUseCustomImage] = useState(false);
-  const [pVideoUrl, setPVideoUrl] = useState('');
-  const [isUploadingPImage, setIsUploadingPImage] = useState(false);
-  const [isUploadingPVideo, setIsUploadingPVideo] = useState(false);
   const [isUploadingActImage, setIsUploadingActImage] = useState(false);
+  const [pMedia, setPMedia] = useState<any[]>([]);
 
-  const handleFileUpload = async (file: File, type: 'portfolio_image' | 'portfolio_video' | 'activity_image') => {
+  const handleMediaFileUpload = async (file: File, index: number) => {
     const formData = new FormData();
     formData.append('file', file);
-
-    if (type === 'portfolio_image') setIsUploadingPImage(true);
-    if (type === 'portfolio_video') setIsUploadingPVideo(true);
-    if (type === 'activity_image') setIsUploadingActImage(true);
 
     const token = localStorage.getItem('berdikari_admin_token');
 
@@ -119,25 +110,57 @@ export default function AdminApp() {
       }
 
       const data = await res.json();
-      if (type === 'portfolio_image') {
-        setPCustomImage(data.url);
-        setPUseCustomImage(true);
+      
+      setPMedia(prev => {
+        const updated = [...prev];
+        const isVideo = file.type.startsWith('video/');
+        updated[index] = {
+          type: isVideo ? 'video' : 'image',
+          url: data.url
+        };
+        return updated;
+      });
+
+      setSuccessMessage('Berkas berhasil diunggah.');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Gagal mengunggah berkas.');
+      setTimeout(() => setErrorMessage(''), 3000);
+    }
+  };
+
+
+  const handleFileUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    setIsUploadingActImage(true);
+
+    const token = localStorage.getItem('berdikari_admin_token');
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Gagal mengunggah berkas.');
       }
-      if (type === 'portfolio_video') {
-        setPVideoUrl(data.url);
-      }
-      if (type === 'activity_image') {
-        setCustomImage(data.url);
-        setUseCustomImage(true);
-      }
+
+      const data = await res.json();
+      setCustomImage(data.url);
+      setUseCustomImage(true);
       setSuccessMessage('Berkas berhasil diunggah.');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (err: any) {
       setErrorMessage(err.message || 'Gagal mengunggah berkas.');
       setTimeout(() => setErrorMessage(''), 3000);
     } finally {
-      setIsUploadingPImage(false);
-      setIsUploadingPVideo(false);
       setIsUploadingActImage(false);
     }
   };
@@ -579,10 +602,7 @@ export default function AdminApp() {
     setPChallenge('');
     setPSolution('');
     setPResults('');
-    setPImage('/images/erp_dashboard.png');
-    setPCustomImage('');
-    setPUseCustomImage(false);
-    setPVideoUrl('');
+    setPMedia([{ type: 'image', url: '/images/erp_dashboard.png' }]);
     setShowPortfolioModal(true);
   };
 
@@ -598,26 +618,15 @@ export default function AdminApp() {
     setPChallenge(port.challenge);
     setPSolution(port.solution);
     setPResults(port.results);
-    setPVideoUrl(port.video_url || '');
-    
-    const isPreset = PRESET_IMAGES.some(p => p.value === port.image_url);
-    if (isPreset) {
-      setPImage(port.image_url);
-      setPUseCustomImage(false);
-    } else {
-      setPCustomImage(port.image_url);
-      setPUseCustomImage(true);
-    }
-    
+    setPMedia(port.media || (port.image_url ? [{ type: 'image', url: port.image_url }] : []));
     setShowPortfolioModal(true);
   };
 
   const handleSavePortfolio = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const imageUrl = pUseCustomImage ? pCustomImage : pImage;
-    if (!imageUrl) {
-      setErrorMessage('Pilih gambar atau ketik URL kustom.');
+
+    if (pMedia.length === 0 || pMedia.some(m => !m.url)) {
+      setErrorMessage('Harap tambahkan minimal 1 media dengan URL yang valid.');
       return;
     }
 
@@ -633,13 +642,17 @@ export default function AdminApp() {
       uiux: 'UI/UX Design'
     };
 
+    const firstImage = pMedia.find(m => m.type === 'image')?.url || pMedia[0]?.url || '/images/erp_dashboard.png';
+    const firstVideo = pMedia.find(m => m.type === 'video')?.url || '';
+
     const payload = {
       slug: pSlug,
       title: pTitle,
       category: pCategory,
       category_label: categoryLabels[pCategory] || 'Sistem Custom',
-      image_url: imageUrl,
-      video_url: pVideoUrl,
+      image_url: firstImage,
+      video_url: firstVideo,
+      media: pMedia,
       short_desc: pShortDesc,
       client: pClient,
       year: pYear,
@@ -866,7 +879,7 @@ export default function AdminApp() {
         <div className={`card-glass login-card ${shake ? 'shake-animation' : ''}`}>
           <div className="login-header">
             <div className="login-logo">
-              <Terminal size={32} className="logo-icon" />
+              <img src="/logo.png" alt="Logo" style={{ height: '48px', objectFit: 'contain', marginRight: '8px' }} />
               <span>Berdikari<span className="text-red"> Digital Nusantara</span></span>
             </div>
             <h2>Akses Kontrol Admin</h2>
@@ -974,6 +987,23 @@ export default function AdminApp() {
             color: #f8fafc;
             position: relative;
             z-index: 10;
+          }
+           .login-card .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #ef4444 100%) !important;
+            border: none !important;
+            color: white !important;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.25) !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+          }
+          .login-card .btn-primary:hover {
+            background: linear-gradient(135deg, #c53030 0%, #e53e3e 100%) !important;
+            box-shadow: 0 6px 22px rgba(229, 62, 62, 0.45) !important;
+            transform: translateY(-2px) !important;
           }
           .login-logo {
             display: flex;
@@ -1127,7 +1157,7 @@ export default function AdminApp() {
       {/* Sidebar Panel */}
       <aside className="dashboard-sidebar">
         <div className="sidebar-brand">
-          <Terminal size={24} className="logo-icon" />
+          <img src="/logo.png" alt="Logo" className="logo-img-sidebar" style={{ height: '28px', objectFit: 'contain', marginRight: '8px' }} />
           <span>Berdikari<span className="text-red"> Digital</span></span>
           <span className="admin-badge">Admin</span>
         </div>
@@ -1926,7 +1956,7 @@ export default function AdminApp() {
                         accept="image/*" 
                         onChange={(e) => {
                           const file = e.target.files?.[0];
-                          if (file) handleFileUpload(file, 'activity_image');
+                          if (file) handleFileUpload(file);
                         }}
                         style={{ fontSize: '0.85rem' }}
                       />
@@ -2076,97 +2106,90 @@ export default function AdminApp() {
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="p_image_select">Pilih Ilustrasi Gambar</label>
-                <div className="image-mode-tabs">
-                  <button 
-                    type="button" 
-                    className={`mode-tab-btn ${!pUseCustomImage ? 'active' : ''}`}
-                    onClick={() => setPUseCustomImage(false)}
+              <div className="form-group" style={{ border: '1px dashed rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', background: 'rgba(0,0,0,0.1)', marginBottom: '20px' }}>
+                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <span>Galeri Media Gambar &amp; Video (Urutan Tampilan)</span>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '6px' }}
+                    onClick={() => setPMedia(prev => [...prev, { type: 'image', url: '' }])}
                   >
-                    Preset Premium
+                    + Tambah Media
                   </button>
-                  <button 
-                    type="button" 
-                    className={`mode-tab-btn ${pUseCustomImage ? 'active' : ''}`}
-                    onClick={() => setPUseCustomImage(true)}
-                  >
-                    Ketik URL Custom
-                  </button>
-                </div>
-
-                {!pUseCustomImage ? (
-                  <select
-                    id="p_image_select"
-                    value={pImage}
-                    onChange={(e) => setPImage(e.target.value)}
-                  >
-                    {PRESET_IMAGES.map((p) => (
-                      <option key={p.value} value={p.value}>{p.label}</option>
-                    ))}
-                  </select>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <input
-                      id="p_image_custom"
-                      type="text"
-                      value={pCustomImage}
-                      onChange={(e) => setPCustomImage(e.target.value)}
-                      placeholder="https://images.unsplash.com/photo-..."
-                      required={pUseCustomImage}
-                    />
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
-                      <span className="text-muted" style={{ fontSize: '0.85rem' }}>Atau unggah file:</span>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileUpload(file, 'portfolio_image');
-                        }}
-                        style={{ fontSize: '0.85rem' }}
-                      />
-                      {isUploadingPImage && <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Mengunggah...</span>}
-                    </div>
-                    {pCustomImage && (
-                      <div style={{ marginTop: '8px' }}>
-                        <span style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Pratinjau:</span>
-                        <img src={pCustomImage} alt="Preview" style={{ maxHeight: '100px', borderRadius: '6px', border: '1px solid var(--border)' }} />
+                </label>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {pMedia.map((mediaItem, index) => (
+                    <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)' }}>Media #{index + 1}</span>
+                        {pMedia.length > 1 && (
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={() => setPMedia(prev => prev.filter((_, i) => i !== index))}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px', width: 'auto' }}
+                            title="Hapus Media"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="p_video_url">Video Demo Proyek (Opsional)</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <input
-                    id="p_video_url"
-                    type="text"
-                    value={pVideoUrl}
-                    onChange={(e) => setPVideoUrl(e.target.value)}
-                    placeholder="Contoh: https://example.com/demo.mp4 atau URL Youtube"
-                  />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
-                    <span className="text-muted" style={{ fontSize: '0.85rem' }}>Unggah file video:</span>
-                    <input 
-                      type="file" 
-                      accept="video/*" 
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleFileUpload(file, 'portfolio_video');
-                      }}
-                      style={{ fontSize: '0.85rem' }}
-                    />
-                    {isUploadingPVideo && <span style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Mengunggah...</span>}
-                  </div>
-                  {pVideoUrl && (
-                    <div style={{ marginTop: '8px' }}>
-                      <span style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Pratinjau Video:</span>
-                      <video src={pVideoUrl} controls muted style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '6px', border: '1px solid var(--border)' }} />
+                      
+                      <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: '12px', alignItems: 'center' }}>
+                        <select
+                          value={mediaItem.type}
+                          onChange={(e) => setPMedia(prev => {
+                            const updated = [...prev];
+                            updated[index] = { ...updated[index], type: e.target.value };
+                            return updated;
+                          })}
+                          style={{ padding: '8px', borderRadius: '6px', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                        >
+                          <option value="image">Gambar</option>
+                          <option value="video">Video</option>
+                        </select>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          <input
+                            type="text"
+                            value={mediaItem.url}
+                            onChange={(e) => setPMedia(prev => {
+                              const updated = [...prev];
+                              updated[index] = { ...updated[index], url: e.target.value };
+                              return updated;
+                            })}
+                            placeholder="Ketik URL gambar/video atau unggah di bawah..."
+                            style={{ padding: '8px', borderRadius: '6px', width: '100%', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                          />
+                          
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
+                            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Unggah file:</span>
+                            <input
+                              type="file"
+                              accept={mediaItem.type === 'image' ? 'image/*' : 'video/*'}
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleMediaFileUpload(file, index);
+                              }}
+                              style={{ fontSize: '0.75rem', width: 'auto' }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {mediaItem.url && (
+                        <div style={{ marginTop: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px' }}>
+                          {mediaItem.type === 'image' ? (
+                            <img src={mediaItem.url} alt="Pratinjau" style={{ maxHeight: '80px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }} />
+                          ) : (
+                            <video src={mediaItem.url} controls muted style={{ maxHeight: '80px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }} />
+                          )}
+                        </div>
+                      )}
                     </div>
-                  )}
+                  ))}
                 </div>
               </div>
 

@@ -9,6 +9,7 @@ interface Project {
   categoryLabel: string;
   image: string;
   video?: string;
+  media?: { type: 'image' | 'video'; url: string }[];
   shortDesc: string;
   client: string;
   year: string;
@@ -21,6 +22,7 @@ interface Project {
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'web' | 'mobile' | 'uiux'>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeMedia, setActiveMedia] = useState<{ type: 'image' | 'video'; url: string } | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -41,6 +43,7 @@ export default function Portfolio() {
           categoryLabel: item.category_label,
           image: item.image_url,
           video: item.video_url || '',
+          media: item.media || (item.image_url ? [{ type: 'image', url: item.image_url }] : []),
           shortDesc: item.short_desc,
           client: item.client,
           year: item.year,
@@ -121,7 +124,11 @@ export default function Portfolio() {
               <div 
                 key={project.id} 
                 className="portfolio-card"
-                onClick={() => setSelectedProject(project)}
+                onClick={() => {
+                  setSelectedProject(project);
+                  const mediaList = project.media || (project.image ? [{ type: 'image', url: project.image }] : []);
+                  setActiveMedia(mediaList[0] || null);
+                }}
               >
                 <div className="portfolio-img-box">
                   <img 
@@ -159,47 +166,86 @@ export default function Portfolio() {
 
       {/* Project Detail Modal */}
       {selectedProject && (
-        <div className="modal-backdrop" onClick={() => setSelectedProject(null)}>
+        <div className="modal-backdrop" onClick={() => { setSelectedProject(null); setActiveMedia(null); }}>
           <div className="modal-content card-glass" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={() => setSelectedProject(null)}>
+            <button className="modal-close-btn" onClick={() => { setSelectedProject(null); setActiveMedia(null); }}>
               <X size={24} />
             </button>
             
             <div className="modal-grid">
-              <div className="modal-visual">
-                {selectedProject.video ? (
-                  selectedProject.video.includes('youtube.com') || selectedProject.video.includes('youtu.be') ? (
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={selectedProject.video.includes('embed') ? selectedProject.video : selectedProject.video.replace('watch?v=', 'embed/')}
-                      title="Demo Video"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="modal-video-iframe"
-                      style={{ width: '100%', height: '100%', minHeight: '350px', border: 'none' }}
-                    ></iframe>
+              <div className="modal-visual" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div className="main-media-container" style={{ width: '100%', height: '350px', borderRadius: '12px', overflow: 'hidden', background: '#090d16', border: '1px solid rgba(255,255,255,0.08)', position: 'relative' }}>
+                  {activeMedia?.type === 'video' ? (
+                    activeMedia.url.includes('youtube.com') || activeMedia.url.includes('youtu.be') ? (
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        src={activeMedia.url.includes('embed') ? activeMedia.url : activeMedia.url.replace('watch?v=', 'embed/')}
+                        title="Demo Video"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{ width: '100%', height: '100%', border: 'none' }}
+                      ></iframe>
+                    ) : (
+                      <video
+                        src={activeMedia.url}
+                        controls
+                        autoPlay
+                        muted
+                        playsInline
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    )
                   ) : (
-                    <video
-                      src={selectedProject.video}
-                      controls
-                      autoPlay
-                      muted
-                      playsInline
-                      className="modal-video"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '350px' }}
+                    <img 
+                      src={activeMedia?.url || selectedProject.image} 
+                      alt={selectedProject.title} 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80';
+                      }}
                     />
-                  )
-                ) : (
-                  <img 
-                    src={selectedProject.image} 
-                    alt={selectedProject.title} 
-                    className="modal-img" 
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80';
-                    }}
-                  />
+                  )}
+                </div>
+                
+                {/* Thumbnails strip */}
+                {selectedProject.media && selectedProject.media.length > 1 && (
+                  <div className="media-thumbnails-strip" style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '4px 0', scrollbarWidth: 'thin' }}>
+                    {selectedProject.media.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={`media-thumb-card ${activeMedia?.url === item.url ? 'active' : ''}`}
+                        onClick={() => setActiveMedia(item)}
+                        style={{
+                          width: '70px',
+                          height: '50px',
+                          borderRadius: '8px',
+                          overflow: 'hidden',
+                          cursor: 'pointer',
+                          border: activeMedia?.url === item.url ? '2px solid var(--primary)' : '2px solid transparent',
+                          boxShadow: activeMedia?.url === item.url ? '0 0 10px rgba(229, 62, 62, 0.4)' : '0 2px 6px rgba(0,0,0,0.15)',
+                          background: 'rgba(30, 41, 59, 0.5)',
+                          position: 'relative',
+                          flexShrink: 0,
+                          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                        }}
+                      >
+                        {item.type === 'image' ? (
+                          <img src={item.url} alt={`Thumbnail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', position: 'relative' }}>
+                            <video src={item.url} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
+                          </div>
+                        )}
+                        {item.type === 'video' && (
+                          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ color: 'white' }}><path d="M8 5v14l11-7z"/></svg>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
               

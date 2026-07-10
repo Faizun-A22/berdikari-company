@@ -1,4 +1,3 @@
-import { Terminal } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -9,7 +8,7 @@ export default function Footer() {
         {/* Brand Info Column */}
         <div className="footer-brand-col">
           <a href="/index.html" className="footer-logo">
-            <Terminal className="logo-icon" size={24} />
+            <img src="/logo.png" alt="Logo" className="logo-img" style={{ height: '36px', objectFit: 'contain', marginRight: '8px' }} />
             <span>Berdikari<span className="text-red"> Digital Nusantara</span></span>
           </a>
           <p className="footer-about-text">

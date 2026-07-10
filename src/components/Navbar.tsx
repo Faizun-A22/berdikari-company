@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Terminal } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +47,7 @@ export default function Navbar() {
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
         <a href="/index.html" className="logo" onClick={() => setIsOpen(false)} aria-label="Berdikari Digital Nusantara Home">
-          <Terminal className="logo-icon" size={24} />
+          <img src="/logo.png" alt="Logo" className="logo-img" style={{ height: '36px', objectFit: 'contain', marginRight: '8px' }} />
           <span>Berdikari<span className="text-red"> Digital Nusantara</span></span>
         </a>
 
