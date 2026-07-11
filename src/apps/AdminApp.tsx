@@ -3178,6 +3178,29 @@ export default function AdminApp() {
           border: 1px solid var(--border);
           background: #ffffff;
           -webkit-overflow-scrolling: touch;
+          scrollbar-width: auto;
+          scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+
+        .table-responsive::-webkit-scrollbar {
+          height: 10px;
+          display: block !important;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+          background: #f1f5f9;
+          border-radius: 6px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 6px;
+          border: 2px solid #f1f5f9;
+          cursor: pointer;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+          background: var(--primary);
         }
 
         .admin-table {
