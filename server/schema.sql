@@ -265,7 +265,6 @@ VALUES
   '[{"type": "image", "url": "/images/ewallet_app.png"}]'::jsonb
 )
 ON CONFLICT (slug) DO NOTHING;
-ON CONFLICT (slug) DO NOTHING;
 
 -- 5. Tabel Transaksi Keuangan (Ledger Keuangan)
 CREATE TABLE IF NOT EXISTS financial_transactions (
