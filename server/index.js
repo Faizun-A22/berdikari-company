@@ -383,7 +383,7 @@ app.delete('/api/contact/:id', authenticateToken, async (req, res) => {
   } catch (err) {
     console.warn('Supabase error deleting contact submission, using local fallback:', err.message);
     const store = getLocalContactData();
-    const filtered = store.filter(c => c.id !== id);
+    const filtered = store.filter(c => String(c.id) !== String(id));
     if (filtered.length !== store.length) {
       saveLocalContactData(filtered);
       res.json({ success: true, message: 'Data pesan pelanggan berhasil dihapus secara lokal.' });
@@ -563,7 +563,7 @@ app.put('/api/portfolios/:id', authenticateToken, async (req, res) => {
     console.warn('Supabase error updating portfolio, using local fallback:', err.message);
     
     const store = getLocalPortfoliosData();
-    const idx = store.findIndex(p => p.id === id || p.slug === slug);
+    const idx = store.findIndex(p => String(p.id) === String(id) || p.slug === slug);
     if (idx !== -1) {
       if (store.some((p, i) => p.slug === slug && i !== idx)) {
         return res.status(400).json({ error: 'Slug portofolio sudah digunakan oleh proyek lain.' });
@@ -594,7 +594,7 @@ app.delete('/api/portfolios/:id', authenticateToken, async (req, res) => {
     console.warn('Supabase error deleting portfolio, using local fallback:', err.message);
     
     const store = getLocalPortfoliosData();
-    const filtered = store.filter(p => p.id !== id);
+    const filtered = store.filter(p => String(p.id) !== String(id));
     if (filtered.length !== store.length) {
       saveLocalPortfoliosData(filtered);
       res.json({ success: true, message: 'Portofolio berhasil dihapus secara lokal.' });
@@ -748,7 +748,7 @@ app.put('/api/finance/transactions/:id', authenticateToken, async (req, res) => 
   } catch (dbErr) {
     console.warn("Supabase error, updating locally:", dbErr.message);
     const store = getLocalFinanceData();
-    const idx = store.transactions.findIndex(t => t.id === id);
+    const idx = store.transactions.findIndex(t => String(t.id) === String(id));
     if (idx !== -1) {
       store.transactions[idx] = { ...store.transactions[idx], ...updateData };
       saveLocalFinanceData(store);
@@ -773,7 +773,7 @@ app.delete('/api/finance/transactions/:id', authenticateToken, async (req, res) 
   } catch (dbErr) {
     console.warn("Supabase error, deleting locally:", dbErr.message);
     const store = getLocalFinanceData();
-    const newTxs = store.transactions.filter(t => t.id !== id);
+    const newTxs = store.transactions.filter(t => String(t.id) !== String(id));
     if (newTxs.length !== store.transactions.length) {
       store.transactions = newTxs;
       saveLocalFinanceData(store);
@@ -856,7 +856,7 @@ app.put('/api/finance/invoices/:id', authenticateToken, async (req, res) => {
   } catch (dbErr) {
     console.warn("Supabase error, updating invoice locally:", dbErr.message);
     const store = getLocalFinanceData();
-    const idx = store.invoices.findIndex(i => i.id === id);
+    const idx = store.invoices.findIndex(i => String(i.id) === String(id));
     if (idx !== -1) {
       store.invoices[idx] = { ...store.invoices[idx], ...updateData };
       saveLocalFinanceData(store);
@@ -881,7 +881,7 @@ app.delete('/api/finance/invoices/:id', authenticateToken, async (req, res) => {
   } catch (dbErr) {
     console.warn("Supabase error, deleting invoice locally:", dbErr.message);
     const store = getLocalFinanceData();
-    const newInvoices = store.invoices.filter(i => i.id !== id);
+    const newInvoices = store.invoices.filter(i => String(i.id) !== String(id));
     if (newInvoices.length !== store.invoices.length) {
       store.invoices = newInvoices;
       saveLocalFinanceData(store);
