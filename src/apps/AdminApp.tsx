@@ -1698,7 +1698,7 @@ export default function AdminApp() {
                           <td style={{ fontWeight: '700', color: 'var(--text-primary)', maxWidth: '180px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
                             {port.title}
                           </td>
-                          <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                          <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)', maxWidth: '120px', whiteSpace: 'normal', wordBreak: 'break-all' }}>
                             {port.slug}
                           </td>
                           <td>
@@ -3205,28 +3205,28 @@ export default function AdminApp() {
 
         .admin-table {
           width: 100%;
-          min-width: 950px;
+          min-width: 700px;
           border-collapse: collapse;
           text-align: left;
           background: #ffffff;
         }
 
         .admin-table th {
-          padding: 16px 24px;
+          padding: 10px 12px;
           background: #f8fafc;
           border-bottom: 1px solid var(--border);
           font-weight: 700;
-          font-size: 0.85rem;
+          font-size: 0.785rem;
           color: var(--text-secondary);
           text-transform: uppercase;
           letter-spacing: 0.02em;
         }
 
         .admin-table td {
-          padding: 16px 24px;
+          padding: 10px 12px;
           border-bottom: 1px solid var(--border);
           vertical-align: middle;
-          font-size: 0.9rem;
+          font-size: 0.825rem;
         }
 
         .admin-table tr:hover {
