@@ -16,6 +16,10 @@ interface InteractiveDemoViewerProps {
     challengeDetailed?: string;
     solutionDetailed?: string;
     resultsHighlight?: string;
+    demoUrl?: string;
+    liveUrl?: string;
+    projectImportance?: string;
+    shortDesc?: string;
   };
   onClose: () => void;
 }
@@ -62,7 +66,7 @@ export default function InteractiveDemoViewer({ project, onClose }: InteractiveD
               </div>
               <div className="browser-address">
                 <span className="https-lock">🔒</span>
-                <span className="address-text">https://demo.kodeflow.id/{project.slug}/app</span>
+                <span className="address-text">{project.demoUrl || `https://demo.kodeflow.id/${project.slug}/app`}</span>
               </div>
               <div className="browser-actions">
                 <span className="refresh-icon">🔄</span>
@@ -374,6 +378,20 @@ export default function InteractiveDemoViewer({ project, onClose }: InteractiveD
 
 // Router component to render corresponding app simulation
 function DemoRouter({ slug, project }: { slug: string; project: any }) {
+  const builtInSlugs = ['wepose', 'lppm-portal', 'erp-aethera', 'medplus-health', 'solaria-ecommerce', 'velo-wallet'];
+  
+  if (project.demoUrl && !builtInSlugs.includes(slug)) {
+    return (
+      <iframe 
+        src={project.demoUrl} 
+        style={{ width: '100%', height: '100%', border: 'none', background: 'white' }} 
+        title={`${project.title} Demo`}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    );
+  }
+
   switch (slug) {
     case 'wepose':
       return <WeposePrototype />;
