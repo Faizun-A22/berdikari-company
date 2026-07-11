@@ -86,6 +86,23 @@ export default function AdminApp() {
   const [pChallenge, setPChallenge] = useState('');
   const [pSolution, setPSolution] = useState('');
   const [pResults, setPResults] = useState('');
+  const [pDemoUrl, setPDemoUrl] = useState('');
+  const [pLiveUrl, setPLiveUrl] = useState('');
+  const [pProjectImportance, setPProjectImportance] = useState('');
+  const [pClientInfo, setPClientInfo] = useState('');
+  const [pStat1Val, setPStat1Val] = useState('');
+  const [pStat1Label, setPStat1Label] = useState('');
+  const [pStat1Desc, setPStat1Desc] = useState('');
+  const [pStat2Val, setPStat2Val] = useState('');
+  const [pStat2Label, setPStat2Label] = useState('');
+  const [pStat2Desc, setPStat2Desc] = useState('');
+  const [pStat3Val, setPStat3Val] = useState('');
+  const [pStat3Label, setPStat3Label] = useState('');
+  const [pStat3Desc, setPStat3Desc] = useState('');
+  const [pChallengeDetailed, setPChallengeDetailed] = useState('');
+  const [pSolutionDetailed, setPSolutionDetailed] = useState('');
+  const [pTestimonialText, setPTestimonialText] = useState('');
+  const [pTestimonialAuthor, setPTestimonialAuthor] = useState('');
   const [isUploadingActImage, setIsUploadingActImage] = useState(false);
   const [pMedia, setPMedia] = useState<any[]>([]);
 
@@ -602,6 +619,23 @@ export default function AdminApp() {
     setPChallenge('');
     setPSolution('');
     setPResults('');
+    setPDemoUrl('');
+    setPLiveUrl('');
+    setPProjectImportance('');
+    setPClientInfo('');
+    setPStat1Val('');
+    setPStat1Label('');
+    setPStat1Desc('');
+    setPStat2Val('');
+    setPStat2Label('');
+    setPStat2Desc('');
+    setPStat3Val('');
+    setPStat3Label('');
+    setPStat3Desc('');
+    setPChallengeDetailed('');
+    setPSolutionDetailed('');
+    setPTestimonialText('');
+    setPTestimonialAuthor('');
     setPMedia([{ type: 'image', url: '/images/erp_dashboard.png' }]);
     setShowPortfolioModal(true);
   };
@@ -618,6 +652,23 @@ export default function AdminApp() {
     setPChallenge(port.challenge);
     setPSolution(port.solution);
     setPResults(port.results);
+    setPDemoUrl(port.demo_url || '');
+    setPLiveUrl(port.live_url || '');
+    setPProjectImportance(port.project_importance || '');
+    setPClientInfo(port.client_info || '');
+    setPStat1Val(port.stat_1_val || '');
+    setPStat1Label(port.stat_1_label || '');
+    setPStat1Desc(port.stat_1_desc || '');
+    setPStat2Val(port.stat_2_val || '');
+    setPStat2Label(port.stat_2_label || '');
+    setPStat2Desc(port.stat_2_desc || '');
+    setPStat3Val(port.stat_3_val || '');
+    setPStat3Label(port.stat_3_label || '');
+    setPStat3Desc(port.stat_3_desc || '');
+    setPChallengeDetailed(port.challenge_detailed || '');
+    setPSolutionDetailed(port.solution_detailed || '');
+    setPTestimonialText(port.testimonial_text || '');
+    setPTestimonialAuthor(port.testimonial_author || '');
     setPMedia(port.media || (port.image_url ? [{ type: 'image', url: port.image_url }] : []));
     setShowPortfolioModal(true);
   };
@@ -659,7 +710,24 @@ export default function AdminApp() {
       tags: tagsArray,
       challenge: pChallenge,
       solution: pSolution,
-      results: pResults
+      results: pResults,
+      demo_url: pDemoUrl,
+      live_url: pLiveUrl,
+      project_importance: pProjectImportance,
+      client_info: pClientInfo,
+      stat_1_val: pStat1Val,
+      stat_1_label: pStat1Label,
+      stat_1_desc: pStat1Desc,
+      stat_2_val: pStat2Val,
+      stat_2_label: pStat2Label,
+      stat_2_desc: pStat2Desc,
+      stat_3_val: pStat3Val,
+      stat_3_label: pStat3Label,
+      stat_3_desc: pStat3Desc,
+      challenge_detailed: pChallengeDetailed,
+      solution_detailed: pSolutionDetailed,
+      testimonial_text: pTestimonialText,
+      testimonial_author: pTestimonialAuthor
     };
 
     const url = currentPortfolio 
@@ -2182,15 +2250,156 @@ export default function AdminApp() {
                       {mediaItem.url && (
                         <div style={{ marginTop: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px' }}>
                           {mediaItem.type === 'image' ? (
-                            <img src={mediaItem.url} alt="Pratinjau" style={{ maxHeight: '80px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <img src={mediaItem.url} alt="Preview" style={{ maxWidth: '120px', maxHeight: '90px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }} />
                           ) : (
-                            <video src={mediaItem.url} controls muted style={{ maxHeight: '80px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <video src={mediaItem.url} style={{ maxWidth: '120px', maxHeight: '90px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }} muted controls />
                           )}
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Tautan Demo &amp; Situs</h4>
+                <div className="form-row-2">
+                  <div className="form-group">
+                    <label htmlFor="p_demo_url">Tautan Demo (Frontend-only)</label>
+                    <input
+                      id="p_demo_url"
+                      type="text"
+                      value={pDemoUrl}
+                      onChange={(e) => setPDemoUrl(e.target.value)}
+                      placeholder="Contoh: /demo/wepose atau URL luar"
+                      style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="p_live_url">Tautan Situs Asli (Opsional)</label>
+                    <input
+                      id="p_live_url"
+                      type="text"
+                      value={pLiveUrl}
+                      onChange={(e) => setPLiveUrl(e.target.value)}
+                      placeholder="Contoh: https://wepose.travel"
+                      style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Sekilas Tentang Proyek</h4>
+                <div className="form-group">
+                  <label htmlFor="p_project_importance">Kenapa Proyek Ini Penting?</label>
+                  <textarea
+                    id="p_project_importance"
+                    rows={3}
+                    style={{ minHeight: '80px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    value={pProjectImportance}
+                    onChange={(e) => setPProjectImportance(e.target.value)}
+                    placeholder="Jelaskan signifikansi proyek untuk memecahkan masalah birokrasi/operasional..."
+                  ></textarea>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="p_client_info">Tentang Perusahaan &amp; Proyek</label>
+                  <textarea
+                    id="p_client_info"
+                    rows={3}
+                    style={{ minHeight: '80px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    value={pClientInfo}
+                    onChange={(e) => setPClientInfo(e.target.value)}
+                    placeholder="Profil singkat klien (e.g. Wepose, agensi layanan pengajuan visa...)"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Hasil Nyata Setelah Sistem Aktif (Metrik/Stats)</h4>
+                
+                <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #1</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
+                    <input type="text" placeholder="Nilai (e.g. 24/7)" value={pStat1Val} onChange={(e) => setPStat1Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Label (e.g. Layanan Pelanggan AI)" value={pStat1Label} onChange={(e) => setPStat1Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                  </div>
+                  <input type="text" placeholder="Deskripsi Singkat..." value={pStat1Desc} onChange={(e) => setPStat1Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                </div>
+
+                <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #2</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
+                    <input type="text" placeholder="Nilai (e.g. 35+)" value={pStat2Val} onChange={(e) => setPStat2Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Label (e.g. Destinasi Dinamis)" value={pStat2Label} onChange={(e) => setPStat2Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                  </div>
+                  <input type="text" placeholder="Deskripsi Singkat..." value={pStat2Desc} onChange={(e) => setPStat2Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                </div>
+
+                <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #3</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
+                    <input type="text" placeholder="Nilai (e.g. 50%)" value={pStat3Val} onChange={(e) => setPStat3Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Label (e.g. Efisiensi Tim)" value={pStat3Label} onChange={(e) => setPStat3Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                  </div>
+                  <input type="text" placeholder="Deskripsi Singkat..." value={pStat3Desc} onChange={(e) => setPStat3Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Tantangan &amp; Solusi Mendalam</h4>
+                <div className="form-group">
+                  <label htmlFor="p_challenge_detailed">Kendala Sebelum Ada Sistem (Mendalam)</label>
+                  <textarea
+                    id="p_challenge_detailed"
+                    rows={4}
+                    style={{ minHeight: '100px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    value={pChallengeDetailed}
+                    onChange={(e) => setPChallengeDetailed(e.target.value)}
+                    placeholder="Deskripsikan proses manual dan kendala sebelum sistem dibangun..."
+                  ></textarea>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="p_solution_detailed">Solusi yang Kodeflow Berikan (Mendalam)</label>
+                  <textarea
+                    id="p_solution_detailed"
+                    rows={4}
+                    style={{ minHeight: '100px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    value={pSolutionDetailed}
+                    onChange={(e) => setPSolutionDetailed(e.target.value)}
+                    placeholder="Deskripsikan arsitektur teknis atau otomasi yang kami rancang..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Verifikasi Klien (Testimonial)</h4>
+                <div className="form-group">
+                  <label htmlFor="p_testimonial_text">Pernyataan Review / Kutipan Klien</label>
+                  <textarea
+                    id="p_testimonial_text"
+                    rows={3}
+                    style={{ minHeight: '80px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    value={pTestimonialText}
+                    onChange={(e) => setPTestimonialText(e.target.value)}
+                    placeholder="Ketik ulasan langsung dari klien..."
+                  ></textarea>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="p_testimonial_author">Nama / Jabatan Penulis Review</label>
+                  <input
+                    id="p_testimonial_author"
+                    type="text"
+                    value={pTestimonialAuthor}
+                    onChange={(e) => setPTestimonialAuthor(e.target.value)}
+                    placeholder="Contoh: IT Leader Wepose atau Kepala LPPM"
+                    style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Informasi Ringkas (Bawaan)</h4>
               </div>
 
               <div className="form-group">

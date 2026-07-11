@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ExternalLink, X, FolderKanban, RefreshCw } from 'lucide-react';
+import { ExternalLink, X, FolderKanban, RefreshCw, Play } from 'lucide-react';
+import InteractiveDemoViewer from './InteractiveDemoViewer';
 
 interface Project {
   id: number;
@@ -17,6 +18,23 @@ interface Project {
   challenge: string;
   solution: string;
   results: string;
+  demoUrl?: string;
+  liveUrl?: string;
+  projectImportance?: string;
+  clientInfo?: string;
+  stat1Val?: string;
+  stat1Label?: string;
+  stat1Desc?: string;
+  stat2Val?: string;
+  stat2Label?: string;
+  stat2Desc?: string;
+  stat3Val?: string;
+  stat3Label?: string;
+  stat3Desc?: string;
+  challengeDetailed?: string;
+  solutionDetailed?: string;
+  testimonialText?: string;
+  testimonialAuthor?: string;
 }
 
 export default function Portfolio() {
@@ -26,6 +44,7 @@ export default function Portfolio() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const [activeDemoProject, setActiveDemoProject] = useState<Project | null>(null);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -50,7 +69,24 @@ export default function Portfolio() {
           tags: item.tags,
           challenge: item.challenge,
           solution: item.solution,
-          results: item.results
+          results: item.results,
+          demoUrl: item.demo_url || '',
+          liveUrl: item.live_url || '',
+          projectImportance: item.project_importance || '',
+          clientInfo: item.client_info || '',
+          stat1Val: item.stat_1_val || '',
+          stat1Label: item.stat_1_label || '',
+          stat1Desc: item.stat_1_desc || '',
+          stat2Val: item.stat_2_val || '',
+          stat2Label: item.stat_2_label || '',
+          stat2Desc: item.stat_2_desc || '',
+          stat3Val: item.stat_3_val || '',
+          stat3Label: item.stat_3_label || '',
+          stat3Desc: item.stat_3_desc || '',
+          challengeDetailed: item.challenge_detailed || '',
+          solutionDetailed: item.solution_detailed || '',
+          testimonialText: item.testimonial_text || '',
+          testimonialAuthor: item.testimonial_author || ''
         }));
         setProjects(mapped);
       } catch (err: any) {
@@ -167,14 +203,14 @@ export default function Portfolio() {
       {/* Project Detail Modal */}
       {selectedProject && (
         <div className="modal-backdrop" onClick={() => { setSelectedProject(null); setActiveMedia(null); }}>
-          <div className="modal-content card-glass" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={() => { setSelectedProject(null); setActiveMedia(null); }}>
+          <div className="modal-content card-glass" onClick={(e) => e.stopPropagation()} style={{ background: '#ffffff', color: '#0f172a' }}>
+            <button className="modal-close-btn" onClick={() => { setSelectedProject(null); setActiveMedia(null); }} style={{ color: '#0f172a' }}>
               <X size={24} />
             </button>
             
             <div className="modal-grid">
-              <div className="modal-visual" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div className="main-media-container" style={{ width: '100%', height: '350px', borderRadius: '12px', overflow: 'hidden', background: '#090d16', border: '1px solid rgba(255,255,255,0.08)', position: 'relative' }}>
+              <div className="modal-visual" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px', background: '#f8fafc', borderRight: '1px solid var(--border)' }}>
+                <div className="main-media-container" style={{ width: '100%', height: '280px', borderRadius: '12px', overflow: 'hidden', background: '#090d16', border: '1px solid rgba(0,0,0,0.08)', position: 'relative' }}>
                   {activeMedia?.type === 'video' ? (
                     activeMedia.url.includes('youtube.com') || activeMedia.url.includes('youtu.be') ? (
                       <iframe
@@ -218,9 +254,9 @@ export default function Portfolio() {
                         className={`media-thumb-card ${activeMedia?.url === item.url ? 'active' : ''}`}
                         onClick={() => setActiveMedia(item)}
                         style={{
-                          width: '70px',
-                          height: '50px',
-                          borderRadius: '8px',
+                          width: '60px',
+                          height: '45px',
+                          borderRadius: '6px',
                           overflow: 'hidden',
                           cursor: 'pointer',
                           border: activeMedia?.url === item.url ? '2px solid var(--primary)' : '2px solid transparent',
@@ -240,62 +276,187 @@ export default function Portfolio() {
                         )}
                         {item.type === 'video' && (
                           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ color: 'white' }}><path d="M8 5v14l11-7z"/></svg>
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style={{ color: 'white' }}><path d="M8 5v14l11-7z"/></svg>
                           </div>
                         )}
                       </div>
                     ))}
                   </div>
                 )}
+
+                {/* Tech Stack under media */}
+                <div style={{ marginTop: '8px' }}>
+                  <h5 style={{ fontSize: '0.8rem', color: 'var(--text-primary)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
+                    Teknologi Yang Digunakan
+                  </h5>
+                  <div className="project-tags-full" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {selectedProject.tags.map((tag, idx) => (
+                      <span key={idx} className="tag-badge-lg" style={{ background: 'rgba(229, 62, 62, 0.05)', border: '1px solid rgba(229, 62, 62, 0.12)', color: 'var(--primary)', padding: '5px 10px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Testimonial card under media */}
+                <div style={{ marginTop: '8px' }}>
+                  <div className="testimonial-quote-card" style={{ background: 'linear-gradient(135deg, rgba(229, 62, 62, 0.03) 0%, rgba(255, 255, 255, 0) 100%)', border: '1px solid var(--border)', padding: '16px', borderRadius: '10px', position: 'relative' }}>
+                    <span style={{ position: 'absolute', top: '2px', left: '10px', fontSize: '2.5rem', color: 'rgba(229,62,62,0.08)', fontFamily: 'serif', lineHeight: 1 }}>“</span>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic', position: 'relative', zIndex: 2, paddingLeft: '8px', lineHeight: '1.5', margin: 0 }}>
+                      {selectedProject.testimonialText || 'Proses development yang sangat cepat, profesional, dan transparan sehingga kami dapat dengan mudah menyampaikan apa yang kami inginkan.'}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', paddingLeft: '8px' }}>
+                      <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(229, 62, 62, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}>💼</div>
+                      <div>
+                        <h6 style={{ fontSize: '0.75rem', color: 'var(--text-primary)', margin: 0, fontWeight: 700 }}>
+                          {selectedProject.testimonialAuthor || `${selectedProject.client} IT Leader`}
+                        </h6>
+                        <small style={{ color: 'var(--text-muted)', fontSize: '0.6rem' }}>Verifikasi Klien Resmi</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              <div className="modal-details">
-                <div className="modal-header">
-                  <span className="project-category">{selectedProject.categoryLabel}</span>
-                  <h3 className="modal-title">{selectedProject.title}</h3>
+              <div className="modal-details" style={{ padding: '24px 32px' }}>
+                <div className="modal-header" style={{ marginBottom: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '16px' }}>
+                  <span className="project-category" style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' }}>
+                    {selectedProject.categoryLabel}
+                  </span>
+                  <h3 className="modal-title" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 12px' }}>
+                    {selectedProject.title}
+                  </h3>
                   
-                  <div className="meta-info-bar">
+                  <div className="meta-info-bar" style={{ display: 'flex', gap: '20px', fontSize: '0.85rem' }}>
                     <div>
-                      <span className="meta-label">Klien:</span>
-                      <span className="meta-value">{selectedProject.client}</span>
+                      <span className="meta-label" style={{ color: 'var(--text-muted)', marginRight: '6px' }}>Klien:</span>
+                      <span className="meta-value" style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{selectedProject.client}</span>
                     </div>
                     <div>
-                      <span className="meta-label">Tahun:</span>
-                      <span className="meta-value">{selectedProject.year}</span>
+                      <span className="meta-label" style={{ color: 'var(--text-muted)', marginRight: '6px' }}>Tahun:</span>
+                      <span className="meta-value" style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{selectedProject.year}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="modal-body">
-                  <div className="modal-section-block">
-                    <h4><span className="bullet-indicator red-dot"></span>Tantangan Proyek</h4>
-                    <p>{selectedProject.challenge}</p>
-                  </div>
-                  
-                  <div className="modal-section-block">
-                    <h4><span className="bullet-indicator green-dot"></span>Solusi Kami</h4>
-                    <p>{selectedProject.solution}</p>
+                <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '20px' }}>
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                    <button 
+                      onClick={() => setActiveDemoProject(selectedProject)}
+                      className="btn"
+                      style={{ background: 'linear-gradient(135deg, #e53e3e 0%, #ff6b6b 100%)', border: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem', boxShadow: '0 4px 15px rgba(229, 62, 62, 0.2)' }}
+                    >
+                      <Play size={14} fill="white" /> Coba Demo (Frontend)
+                    </button>
+                    
+                    {selectedProject.liveUrl && (
+                      <a 
+                        href={selectedProject.liveUrl} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="btn"
+                        style={{ border: '1px solid rgba(0,0,0,0.15)', color: 'var(--text-primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '6px', fontWeight: 600, fontSize: '0.85rem', background: 'white' }}
+                      >
+                        Kunjungi Link Asli <ExternalLink size={14} />
+                      </a>
+                    )}
+
+                    <a 
+                      href={`/contact.html?ref=${selectedProject.slug}`} 
+                      className="btn"
+                      style={{ border: '1px solid rgba(0,0,0,0.15)', color: 'var(--text-primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '6px', fontWeight: 600, fontSize: '0.85rem', background: 'white' }}
+                    >
+                      Konsultasikan Solusi Serupa
+                    </a>
                   </div>
 
+                  {/* Sekilas Tentang Proyek */}
                   <div className="modal-section-block">
-                    <h4><span className="bullet-indicator blue-dot"></span>Dampak Bisnis &amp; Hasil Nyata</h4>
-                    <p className="results-highlight-text">{selectedProject.results}</p>
-                  </div>
-                  
-                  <div className="modal-section-block">
-                    <h4>Teknologi Yang Digunakan</h4>
-                    <div className="project-tags-full">
-                      {selectedProject.tags.map((tag, idx) => (
-                        <span key={idx} className="tag-badge-lg">{tag}</span>
-                      ))}
+                    <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '10px', fontWeight: 700 }}>
+                      Sekilas Tentang Proyek
+                    </h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      <div style={{ background: 'rgba(15, 23, 42, 0.015)', border: '1px solid rgba(0,0,0,0.05)', padding: '12px', borderRadius: '8px' }}>
+                        <h5 style={{ color: 'var(--primary)', marginBottom: '4px', fontSize: '0.8rem', fontWeight: 700 }}>Kenapa Proyek Ini Penting?</h5>
+                        <p style={{ fontSize: '0.8rem', lineHeight: '1.45', color: 'var(--text-secondary)', margin: 0 }}>
+                          {selectedProject.projectImportance || selectedProject.shortDesc}
+                        </p>
+                      </div>
+                      <div style={{ background: 'rgba(15, 23, 42, 0.015)', border: '1px solid rgba(0,0,0,0.05)', padding: '12px', borderRadius: '8px' }}>
+                        <h5 style={{ color: 'var(--primary)', marginBottom: '4px', fontSize: '0.8rem', fontWeight: 700 }}>Tentang Perusahaan</h5>
+                        <p style={{ fontSize: '0.8rem', lineHeight: '1.45', color: 'var(--text-secondary)', margin: 0 }}>
+                          {selectedProject.clientInfo || `Proyek ini dikembangkan khusus untuk ${selectedProject.client} untuk merespons kebutuhan digitalisasi di segmen ${selectedProject.categoryLabel}.`}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="modal-footer">
-                  <a href={`/contact.html?ref=${selectedProject.slug}`} className="btn btn-primary btn-sm btn-consult">
-                    Konsultasikan Solusi Serupa <ExternalLink size={16} />
-                  </a>
+                  {/* Hasil Nyata Setelah Sistem Aktif (Stats) */}
+                  <div className="modal-section-block">
+                    <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '10px', fontWeight: 700 }}>
+                      Hasil Nyata Setelah Sistem Aktif
+                    </h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                      <div style={{ background: 'white', border: '1px solid rgba(0,0,0,0.05)', padding: '12px 8px', borderRadius: '8px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.01)' }}>
+                        <span style={{ display: 'block', fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-heading)' }}>
+                          {selectedProject.stat1Val || '24/7'}
+                        </span>
+                        <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', margin: '2px 0 2px' }}>
+                          {selectedProject.stat1Label || 'Layanan Otomatis'}
+                        </span>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.25 }}>
+                          {selectedProject.stat1Desc || 'Sistem siap sedia diakses tanpa batasan jam kerja.'}
+                        </p>
+                      </div>
+                      
+                      <div style={{ background: 'white', border: '1px solid rgba(0,0,0,0.05)', padding: '12px 8px', borderRadius: '8px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.01)' }}>
+                        <span style={{ display: 'block', fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-heading)' }}>
+                          {selectedProject.stat2Val || '35+'}
+                        </span>
+                        <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', margin: '2px 0 2px' }}>
+                          {selectedProject.stat2Label || 'Modul Dinamis'}
+                        </span>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.25 }}>
+                          {selectedProject.stat2Desc || 'Mengintegrasikan data secara luas dan adaptif.'}
+                        </p>
+                      </div>
+
+                      <div style={{ background: 'white', border: '1px solid rgba(0,0,0,0.05)', padding: '12px 8px', borderRadius: '8px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.01)' }}>
+                        <span style={{ display: 'block', fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-heading)' }}>
+                          {selectedProject.stat3Val || '50%'}
+                        </span>
+                        <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', margin: '2px 0 2px' }}>
+                          {selectedProject.stat3Label || 'Efisiensi Waktu'}
+                        </span>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.25 }}>
+                          {selectedProject.stat3Desc || 'Mengurangi beban kerja tim operasional secara manual.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tantangan & Solusi Mendalam */}
+                  <div className="modal-section-block">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <div style={{ borderLeft: '3px solid #ef4444', paddingLeft: '10px' }}>
+                        <h5 style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: 700, margin: '0 0 4px' }}>
+                          Tantangan Utama (Sebelum Sistem Aktif)
+                        </h5>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.45' }}>
+                          {selectedProject.challengeDetailed || selectedProject.challenge}
+                        </p>
+                      </div>
+                      <div style={{ borderLeft: '3px solid #10b981', paddingLeft: '10px' }}>
+                        <h5 style={{ color: '#10b981', fontSize: '0.85rem', fontWeight: 700, margin: '0 0 4px' }}>
+                          Solusi Kami (Solusi Kodeflow)
+                        </h5>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.45' }}>
+                          {selectedProject.solutionDetailed || selectedProject.solution}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -711,6 +872,13 @@ export default function Portfolio() {
           font-size: 1rem;
         }
       `}</style>
+
+      {activeDemoProject && (
+        <InteractiveDemoViewer 
+          project={activeDemoProject} 
+          onClose={() => setActiveDemoProject(null)} 
+        />
+      )}
     </section>
   );
 }

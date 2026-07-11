@@ -413,7 +413,14 @@ app.get('/api/portfolios', async (req, res) => {
 
 // Buat Portofolio Baru (Protected)
 app.post('/api/portfolios', authenticateToken, async (req, res) => {
-  const { slug, title, category, category_label, image_url, video_url, short_desc, client, year, tags, challenge, solution, results } = req.body;
+  const {
+    slug, title, category, category_label, image_url, video_url, short_desc, client, year, tags, challenge, solution, results,
+    demo_url, live_url, project_importance, client_info,
+    stat_1_val, stat_1_label, stat_1_desc,
+    stat_2_val, stat_2_label, stat_2_desc,
+    stat_3_val, stat_3_label, stat_3_desc,
+    challenge_detailed, solution_detailed, testimonial_text, testimonial_author, media
+  } = req.body;
 
   if (!slug || !title || !category || !category_label || !image_url || !short_desc || !client || !year || !tags || !challenge || !solution || !results) {
     return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
@@ -433,6 +440,24 @@ app.post('/api/portfolios', authenticateToken, async (req, res) => {
     challenge,
     solution,
     results,
+    demo_url: demo_url || '',
+    live_url: live_url || '',
+    project_importance: project_importance || '',
+    client_info: client_info || '',
+    stat_1_val: stat_1_val || '',
+    stat_1_label: stat_1_label || '',
+    stat_1_desc: stat_1_desc || '',
+    stat_2_val: stat_2_val || '',
+    stat_2_label: stat_2_label || '',
+    stat_2_desc: stat_2_desc || '',
+    stat_3_val: stat_3_val || '',
+    stat_3_label: stat_3_label || '',
+    stat_3_desc: stat_3_desc || '',
+    challenge_detailed: challenge_detailed || '',
+    solution_detailed: solution_detailed || '',
+    testimonial_text: testimonial_text || '',
+    testimonial_author: testimonial_author || '',
+    media: media || [],
     created_at: new Date().toISOString()
   };
 
@@ -470,7 +495,14 @@ app.post('/api/portfolios', authenticateToken, async (req, res) => {
 // Perbarui Portofolio (Protected)
 app.put('/api/portfolios/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
-  const { slug, title, category, category_label, image_url, video_url, short_desc, client, year, tags, challenge, solution, results } = req.body;
+  const {
+    slug, title, category, category_label, image_url, video_url, short_desc, client, year, tags, challenge, solution, results,
+    demo_url, live_url, project_importance, client_info,
+    stat_1_val, stat_1_label, stat_1_desc,
+    stat_2_val, stat_2_label, stat_2_desc,
+    stat_3_val, stat_3_label, stat_3_desc,
+    challenge_detailed, solution_detailed, testimonial_text, testimonial_author, media
+  } = req.body;
 
   if (!slug || !title || !category || !category_label || !image_url || !short_desc || !client || !year || !tags || !challenge || !solution || !results) {
     return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
@@ -489,7 +521,25 @@ app.put('/api/portfolios/:id', authenticateToken, async (req, res) => {
     tags,
     challenge,
     solution,
-    results
+    results,
+    demo_url: demo_url || '',
+    live_url: live_url || '',
+    project_importance: project_importance || '',
+    client_info: client_info || '',
+    stat_1_val: stat_1_val || '',
+    stat_1_label: stat_1_label || '',
+    stat_1_desc: stat_1_desc || '',
+    stat_2_val: stat_2_val || '',
+    stat_2_label: stat_2_label || '',
+    stat_2_desc: stat_2_desc || '',
+    stat_3_val: stat_3_val || '',
+    stat_3_label: stat_3_label || '',
+    stat_3_desc: stat_3_desc || '',
+    challenge_detailed: challenge_detailed || '',
+    solution_detailed: solution_detailed || '',
+    testimonial_text: testimonial_text || '',
+    testimonial_author: testimonial_author || '',
+    media: media || []
   };
 
   try {
