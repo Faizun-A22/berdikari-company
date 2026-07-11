@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, ExternalLink, Play, Lock, Calendar, Building2, Award, CheckCircle2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Play, Lock, Calendar, Building2, AlertTriangle, RefreshCw } from 'lucide-react';
 import InteractiveDemoViewer from '../components/InteractiveDemoViewer';
 
 interface Project {
@@ -285,20 +285,6 @@ export default function PortfolioDetailPage() {
               </div>
             </div>
 
-            {/* Testimonial Quote */}
-            <div className="detail-testimonial-card card-glass">
-              <span className="quote-mark">“</span>
-              <p className="testimonial-text">
-                {project.testimonialText || 'Proses development yang sangat cepat, profesional, dan transparan sehingga kami dapat dengan mudah menyampaikan apa yang kami inginkan.'}
-              </p>
-              <div className="testimonial-author-box">
-                <div className="avatar-placeholder">💼</div>
-                <div>
-                  <h4>{project.testimonialAuthor || `${project.client} IT Coordinator`}</h4>
-                  <small>Verifikasi Klien Resmi</small>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* RIGHT COLUMN: Case Study Details */}
@@ -342,58 +328,13 @@ export default function PortfolioDetailPage() {
               </div>
             </div>
 
-            {/* Results / Business Impact Showcase */}
-            <div className="detail-results-card card-glass">
-              <h3>Dampak Bisnis & Hasil Nyata</h3>
-              <div className="results-metrics-grid">
-                <div className="metric-box">
-                  <span className="metric-value">{project.stat1Val || '24/7'}</span>
-                  <span className="metric-label">{project.stat1Label || 'Layanan Otomatis'}</span>
-                  <p className="metric-desc">{project.stat1Desc || 'Sistem siap sedia diakses tanpa batasan jam kerja.'}</p>
-                </div>
-                <div className="metric-box">
-                  <span className="metric-value">{project.stat2Val || '35+'}</span>
-                  <span className="metric-label">{project.stat2Label || 'Modul Terintegrasi'}</span>
-                  <p className="metric-desc">{project.stat2Desc || 'Mengintegrasikan data secara luas dan adaptif.'}</p>
-                </div>
-                <div className="metric-box">
-                  <span className="metric-value">{project.stat3Val || '50%'}</span>
-                  <span className="metric-label">{project.stat3Label || 'Efisiensi Waktu'}</span>
-                  <p className="metric-desc">{project.stat3Desc || 'Mengurangi beban kerja tim operasional secara manual.'}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Challenge & Solution Grid */}
-            <div className="detail-challenge-solution-card card-glass">
-              <div className="case-block block-challenge">
-                <div className="block-header text-red">
-                  <Award size={18} className="block-icon" />
-                  <h4>Tantangan Utama (Sebelum Migrasi)</h4>
-                </div>
-                <p>{project.challengeDetailed || project.challenge}</p>
-              </div>
-
-              <div className="case-block block-solution">
-                <div className="block-header text-green">
-                  <CheckCircle2 size={18} className="block-icon" />
-                  <h4>Solusi Cerdas Kami</h4>
-                </div>
-                <p>{project.solutionDetailed || project.solution}</p>
-              </div>
-            </div>
-
-            {/* Importance and Client Info Block */}
+            {/* Deskripsi Proyek */}
             <div className="detail-importance-card card-glass">
-              <h3>Mengapa Proyek Ini Penting?</h3>
+              <h3>Tentang Proyek</h3>
               <p className="importance-text">
-                {project.projectImportance || project.shortDesc}
+                {project.shortDesc}
               </p>
               <div className="accent-bar-left"></div>
-              <div className="client-info-block">
-                <h5>Tentang Klien / Mitra Perusahaan:</h5>
-                <p>{project.clientInfo || `Proyek digitalisasi ini dikembangkan secara kustom untuk mendukung operational dan efisiensi jangka panjang dari ${project.client}.`}</p>
-              </div>
             </div>
           </div>
         </div>
