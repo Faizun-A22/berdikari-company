@@ -106,6 +106,13 @@ export default function AdminApp() {
   const [isUploadingActImage, setIsUploadingActImage] = useState(false);
   const [pMedia, setPMedia] = useState<any[]>([]);
 
+  // Pagination states
+  const [currentPageActivities, setCurrentPageActivities] = useState(1);
+  const [currentPageSubmissions, setCurrentPageSubmissions] = useState(1);
+  const [currentPagePortfolios, setCurrentPagePortfolios] = useState(1);
+  const [currentPageTransactions, setCurrentPageTransactions] = useState(1);
+  const [currentPageInvoices, setCurrentPageInvoices] = useState(1);
+
   const handleMediaFileUpload = async (file: File, index: number) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -1431,14 +1438,14 @@ export default function AdminApp() {
                       </tr>
                     </thead>
                     <tbody>
-                      {activities.map((act) => (
+                      {activities.slice((currentPageActivities - 1) * 5, currentPageActivities * 5).map((act) => (
                         <tr key={act.id}>
                           <td style={{ width: '80px' }}>
                             <div className="table-img-box">
                               <img src={act.image_url} alt={act.title} />
                             </div>
                           </td>
-                          <td style={{ fontWeight: '600', color: 'var(--text-primary)', maxWidth: '240px' }}>
+                          <td style={{ fontWeight: '600', color: 'var(--text-primary)', maxWidth: '200px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
                             {act.title}
                           </td>
                           <td>
@@ -1453,7 +1460,7 @@ export default function AdminApp() {
                               day: 'numeric'
                             })}
                           </td>
-                          <td className="table-desc" style={{ maxWidth: '300px' }}>
+                          <td className="table-desc" style={{ maxWidth: '280px', whiteSpace: 'normal', wordBreak: 'break-word', lineHeight: '1.4' }}>
                             {act.short_desc}
                           </td>
                           <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
@@ -1478,6 +1485,33 @@ export default function AdminApp() {
                       ))}
                     </tbody>
                   </table>
+                  
+                  {/* Pagination Controls */}
+                  {activities.length > 5 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 24px', background: '#f8fafc', borderTop: '1px solid var(--border)' }}>
+                      <button 
+                        type="button"
+                        disabled={currentPageActivities === 1}
+                        onClick={() => setCurrentPageActivities(prev => prev - 1)}
+                        className="btn"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageActivities === 1 ? 'not-allowed' : 'pointer' }}
+                      >
+                        Sebelumnya
+                      </button>
+                      <span style={{ fontSize: '0.8rem', color: '#4a5568', fontWeight: 600 }}>
+                        Halaman {currentPageActivities} dari {Math.ceil(activities.length / 5)}
+                      </span>
+                      <button 
+                        type="button"
+                        disabled={currentPageActivities >= Math.ceil(activities.length / 5)}
+                        onClick={() => setCurrentPageActivities(prev => prev + 1)}
+                        className="btn"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageActivities >= Math.ceil(activities.length / 5) ? 'not-allowed' : 'pointer' }}
+                      >
+                        Berikutnya
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -1518,7 +1552,7 @@ export default function AdminApp() {
                       </tr>
                     </thead>
                     <tbody>
-                      {submissions.map((sub) => {
+                      {submissions.slice((currentPageSubmissions - 1) * 5, currentPageSubmissions * 5).map((sub) => {
                         // Create standard country code WhatsApp link (replace 08xxx with 628xxx)
                         const rawPhone = sub.phone.replace(/[^0-9+]/g, '');
                         const waPhone = rawPhone.replace(/^0/, '62').replace(/^\+/, '');
@@ -1557,7 +1591,7 @@ export default function AdminApp() {
                                  {!['web', 'mobile', 'uiux', 'ai_automation', 'digital_product'].includes(sub.service) && sub.service}
                               </span>
                             </td>
-                            <td style={{ minWidth: '220px', fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                            <td style={{ maxWidth: '280px', whiteSpace: 'normal', wordBreak: 'break-word', fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
                               {sub.message}
                             </td>
                             <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
@@ -1586,6 +1620,33 @@ export default function AdminApp() {
                       })}
                     </tbody>
                   </table>
+                  
+                  {/* Pagination Controls */}
+                  {submissions.length > 5 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 24px', background: '#f8fafc', borderTop: '1px solid var(--border)' }}>
+                      <button 
+                        type="button"
+                        disabled={currentPageSubmissions === 1}
+                        onClick={() => setCurrentPageSubmissions(prev => prev - 1)}
+                        className="btn"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageSubmissions === 1 ? 'not-allowed' : 'pointer' }}
+                      >
+                        Sebelumnya
+                      </button>
+                      <span style={{ fontSize: '0.8rem', color: '#4a5568', fontWeight: 600 }}>
+                        Halaman {currentPageSubmissions} dari {Math.ceil(submissions.length / 5)}
+                      </span>
+                      <button 
+                        type="button"
+                        disabled={currentPageSubmissions >= Math.ceil(submissions.length / 5)}
+                        onClick={() => setCurrentPageSubmissions(prev => prev + 1)}
+                        className="btn"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageSubmissions >= Math.ceil(submissions.length / 5) ? 'not-allowed' : 'pointer' }}
+                      >
+                        Berikutnya
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -1627,14 +1688,14 @@ export default function AdminApp() {
                       </tr>
                     </thead>
                     <tbody>
-                      {portfolios.map((port) => (
+                      {portfolios.slice((currentPagePortfolios - 1) * 5, currentPagePortfolios * 5).map((port) => (
                         <tr key={port.id}>
                           <td style={{ width: '80px' }}>
                             <div className="table-img-box">
                               <img src={port.image_url} alt={port.title} />
                             </div>
                           </td>
-                          <td style={{ fontWeight: '700', color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                          <td style={{ fontWeight: '700', color: 'var(--text-primary)', maxWidth: '180px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
                             {port.title}
                           </td>
                           <td style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -1648,9 +1709,9 @@ export default function AdminApp() {
                               {!['web', 'mobile', 'uiux'].includes(port.category) && port.category}
                             </span>
                           </td>
-                          <td style={{ fontSize: '0.9rem' }}>{port.client}</td>
+                          <td style={{ fontSize: '0.9rem', maxWidth: '140px', whiteSpace: 'normal', wordBreak: 'break-word' }}>{port.client}</td>
                           <td style={{ fontSize: '0.9rem' }}>{port.year}</td>
-                          <td style={{ maxWidth: '200px', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                          <td style={{ maxWidth: '180px', fontSize: '0.8rem', color: 'var(--text-secondary)', whiteSpace: 'normal', wordBreak: 'break-word' }}>
                             {port.tags ? port.tags.join(', ') : ''}
                           </td>
                           <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
@@ -1675,6 +1736,33 @@ export default function AdminApp() {
                       ))}
                     </tbody>
                   </table>
+                  
+                  {/* Pagination Controls */}
+                  {portfolios.length > 5 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 24px', background: '#f8fafc', borderTop: '1px solid var(--border)' }}>
+                      <button 
+                        type="button"
+                        disabled={currentPagePortfolios === 1}
+                        onClick={() => setCurrentPagePortfolios(prev => prev - 1)}
+                        className="btn"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPagePortfolios === 1 ? 'not-allowed' : 'pointer' }}
+                      >
+                        Sebelumnya
+                      </button>
+                      <span style={{ fontSize: '0.8rem', color: '#4a5568', fontWeight: 600 }}>
+                        Halaman {currentPagePortfolios} dari {Math.ceil(portfolios.length / 5)}
+                      </span>
+                      <button 
+                        type="button"
+                        disabled={currentPagePortfolios >= Math.ceil(portfolios.length / 5)}
+                        onClick={() => setCurrentPagePortfolios(prev => prev + 1)}
+                        className="btn"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPagePortfolios >= Math.ceil(portfolios.length / 5) ? 'not-allowed' : 'pointer' }}
+                      >
+                        Berikutnya
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -1807,7 +1895,7 @@ export default function AdminApp() {
                           </tr>
                         </thead>
                         <tbody>
-                          {transactions.map((tx) => (
+                          {transactions.slice((currentPageTransactions - 1) * 5, currentPageTransactions * 5).map((tx) => (
                             <tr key={tx.id}>
                               <td style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
                                 {new Date(tx.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' })}
@@ -1821,7 +1909,7 @@ export default function AdminApp() {
                               <td style={{ fontWeight: 800, color: tx.type === 'income' ? '#128C7E' : 'var(--text-primary)' }}>
                                 {tx.type === 'income' ? '+' : '-'} {formatRupiah(tx.amount)}
                               </td>
-                              <td className="table-desc" style={{ maxWidth: '300px' }}>{tx.description}</td>
+                              <td className="table-desc" style={{ maxWidth: '280px', whiteSpace: 'normal', wordBreak: 'break-word', lineHeight: '1.4' }}>{tx.description}</td>
                               <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                                 <div className="table-actions">
                                   <button onClick={() => openEditTx(tx)} className="action-btn edit-btn" title="Edit Transaksi"><Edit3 size={16} /></button>
@@ -1832,6 +1920,33 @@ export default function AdminApp() {
                           ))}
                         </tbody>
                       </table>
+                      
+                      {/* Pagination Controls */}
+                      {transactions.length > 5 && (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 24px', background: '#f8fafc', borderTop: '1px solid var(--border)' }}>
+                          <button 
+                            type="button"
+                            disabled={currentPageTransactions === 1}
+                            onClick={() => setCurrentPageTransactions(prev => prev - 1)}
+                            className="btn"
+                            style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageTransactions === 1 ? 'not-allowed' : 'pointer' }}
+                          >
+                            Sebelumnya
+                          </button>
+                          <span style={{ fontSize: '0.8rem', color: '#4a5568', fontWeight: 600 }}>
+                            Halaman {currentPageTransactions} dari {Math.ceil(transactions.length / 5)}
+                          </span>
+                          <button 
+                            type="button"
+                            disabled={currentPageTransactions >= Math.ceil(transactions.length / 5)}
+                            onClick={() => setCurrentPageTransactions(prev => prev + 1)}
+                            className="btn"
+                            style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageTransactions >= Math.ceil(transactions.length / 5) ? 'not-allowed' : 'pointer' }}
+                          >
+                            Berikutnya
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -1869,17 +1984,17 @@ export default function AdminApp() {
                           </tr>
                         </thead>
                         <tbody>
-                          {invoices.map((inv) => {
+                          {invoices.slice((currentPageInvoices - 1) * 5, currentPageInvoices * 5).map((inv) => {
                             const waText = `Halo ${inv.client_name},\nKami mengirimkan tagihan untuk proyek "${inv.project_name}".\n\nNo Invoice: ${inv.invoice_number}\nJumlah: ${formatRupiah(inv.amount)}\nJatuh Tempo: ${new Date(inv.due_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}\nStatus: ${inv.status.toUpperCase()}.\n\nMohon pembayaran dapat ditransfer. Terima kasih.`;
                             const waUrl = `https://wa.me/${inv.client_email.includes('@') ? '' : inv.client_email}?text=${encodeURIComponent(waText)}`;
                             return (
                               <tr key={inv.id}>
                                 <td style={{ fontWeight: '750', color: 'var(--text-primary)', fontFamily: 'monospace' }}>{inv.invoice_number}</td>
-                                <td>
+                                <td style={{ maxWidth: '180px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
                                   <div style={{ fontWeight: '600' }}>{inv.client_name}</div>
                                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{inv.client_email}</div>
                                 </td>
-                                <td style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{inv.project_name}</td>
+                                <td style={{ fontWeight: '600', color: 'var(--text-primary)', maxWidth: '180px', whiteSpace: 'normal', wordBreak: 'break-word' }}>{inv.project_name}</td>
                                 <td style={{ fontWeight: 800 }}>{formatRupiah(inv.amount)}</td>
                                 <td>
                                   <span className={`badge`} style={{ 
@@ -1906,6 +2021,33 @@ export default function AdminApp() {
                           })}
                         </tbody>
                       </table>
+                      
+                      {/* Pagination Controls */}
+                      {invoices.length > 5 && (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 24px', background: '#f8fafc', borderTop: '1px solid var(--border)' }}>
+                          <button 
+                            type="button"
+                            disabled={currentPageInvoices === 1}
+                            onClick={() => setCurrentPageInvoices(prev => prev - 1)}
+                            className="btn"
+                            style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageInvoices === 1 ? 'not-allowed' : 'pointer' }}
+                          >
+                            Sebelumnya
+                          </button>
+                          <span style={{ fontSize: '0.8rem', color: '#4a5568', fontWeight: 600 }}>
+                            Halaman {currentPageInvoices} dari {Math.ceil(invoices.length / 5)}
+                          </span>
+                          <button 
+                            type="button"
+                            disabled={currentPageInvoices >= Math.ceil(invoices.length / 5)}
+                            onClick={() => setCurrentPageInvoices(prev => prev + 1)}
+                            className="btn"
+                            style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px', background: '#edf2f7', border: '1px solid #cbd5e0', color: '#4a5568', cursor: currentPageInvoices >= Math.ceil(invoices.length / 5) ? 'not-allowed' : 'pointer' }}
+                          >
+                            Berikutnya
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
