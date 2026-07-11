@@ -2227,25 +2227,25 @@ export default function AdminApp() {
             <form onSubmit={handleSavePortfolio} className="modal-form-body" style={{ flexGrow: 1, overflowY: 'auto' }}>
               <div className="form-row-2">
                 <div className="form-group">
-                  <label htmlFor="p_title">Nama/Judul Proyek</label>
+                  <label htmlFor="p_title">Judul Karya / Proyek</label>
                   <input
                     id="p_title"
                     type="text"
                     value={pTitle}
                     onChange={(e) => setPTitle(e.target.value)}
-                    placeholder="Contoh: Aethera Enterprise ERP..."
+                    placeholder="Contoh: Dashboard ERP Retail..."
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="p_slug">Slug URL (Unik, huruf kecil & minus)</label>
+                  <label htmlFor="p_slug">URL Slug (Khas, huruf kecil & tanda hubung)</label>
                   <input
                     id="p_slug"
                     type="text"
                     value={pSlug}
                     onChange={(e) => setPSlug(e.target.value)}
-                    placeholder="Contoh: aethera-erp"
+                    placeholder="Contoh: erp-dashboard-retail"
                     required
                   />
                 </div>
@@ -2253,20 +2253,20 @@ export default function AdminApp() {
 
               <div className="form-row-2">
                 <div className="form-group">
-                  <label htmlFor="p_category">Kategori Proyek</label>
+                  <label htmlFor="p_category">Jenis / Kategori Karya</label>
                   <select
                     id="p_category"
                     value={pCategory}
                     onChange={(e) => setPCategory(e.target.value)}
                   >
-                    <option value="web">Website &amp; Web App</option>
-                    <option value="mobile">Mobile Application</option>
-                    <option value="uiux">UI/UX Design</option>
+                    <option value="web">Pengembangan Web</option>
+                    <option value="mobile">Aplikasi Android &amp; iOS</option>
+                    <option value="uiux">Desain UI/UX Kreatif</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="p_year">Tahun Proyek</label>
+                  <label htmlFor="p_year">Tahun Rilis / Selesai</label>
                   <input
                     id="p_year"
                     type="text"
@@ -2280,52 +2280,52 @@ export default function AdminApp() {
 
               <div className="form-row-2">
                 <div className="form-group">
-                  <label htmlFor="p_client">Nama Klien / Perusahaan</label>
+                  <label htmlFor="p_client">Nama Mitra / Klien</label>
                   <input
                     id="p_client"
                     type="text"
                     value={pClient}
                     onChange={(e) => setPClient(e.target.value)}
-                    placeholder="Contoh: PT Semesta Manufaktur"
+                    placeholder="Contoh: PT Industri Semesta"
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="p_tags">Tags / Teknologi (Pisahkan dengan koma)</label>
+                  <label htmlFor="p_tags">Teknologi &amp; Fitur Utama (Pisahkan dengan koma)</label>
                   <input
                     id="p_tags"
                     type="text"
                     value={pTags}
                     onChange={(e) => setPTags(e.target.value)}
-                    placeholder="Contoh: React, NestJS, PostgreSQL"
+                    placeholder="Contoh: React, NestJS, TailwindCSS"
                     required
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label htmlFor="p_short_desc">Deskripsi Singkat (Tampil di kartu depan)</label>
+                <label htmlFor="p_short_desc">Ringkasan Singkat (Tampil pada beranda)</label>
                 <input
                   id="p_short_desc"
                   type="text"
                   value={pShortDesc}
                   onChange={(e) => setPShortDesc(e.target.value)}
-                  placeholder="Ketik 1 kalimat ringkasan tentang proyek..."
+                  placeholder="Ketikkan deskripsi proyek dalam satu kalimat singkat..."
                   required
                 />
               </div>
 
               <div className="form-group" style={{ border: '1px dashed rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', background: 'rgba(0,0,0,0.1)', marginBottom: '20px' }}>
                 <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <span>Galeri Media Gambar &amp; Video (Urutan Tampilan)</span>
+                  <span>Galeri Dokumentasi (Urutan Tampilan)</span>
                   <button
                     type="button"
                     className="btn btn-primary"
                     style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '6px' }}
                     onClick={() => setPMedia(prev => [...prev, { type: 'image', url: '' }])}
                   >
-                    + Tambah Media
+                    + Lampirkan Media Baru
                   </button>
                 </label>
                 
@@ -2357,8 +2357,8 @@ export default function AdminApp() {
                           })}
                           style={{ padding: '8px', borderRadius: '6px', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                         >
-                          <option value="image">Gambar</option>
-                          <option value="video">Video</option>
+                          <option value="image">File Gambar</option>
+                          <option value="video">File Video</option>
                         </select>
                         
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -2370,7 +2370,7 @@ export default function AdminApp() {
                               updated[index] = { ...updated[index], url: e.target.value };
                               return updated;
                             })}
-                            placeholder="Ketik URL gambar/video atau unggah di bawah..."
+                            placeholder="Tulis tautan media atau upload file di bawah..."
                             style={{ padding: '8px', borderRadius: '6px', width: '100%', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                           />
                           
@@ -2404,27 +2404,27 @@ export default function AdminApp() {
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Tautan Demo &amp; Situs</h4>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Tautan Akses Proyek</h4>
                 <div className="form-row-2">
                   <div className="form-group">
-                    <label htmlFor="p_demo_url">Tautan Demo (Frontend-only)</label>
+                    <label htmlFor="p_demo_url">Tautan Demo Proyek (Interaktif)</label>
                     <input
                       id="p_demo_url"
                       type="text"
                       value={pDemoUrl}
                       onChange={(e) => setPDemoUrl(e.target.value)}
-                      placeholder="Contoh: /demo/wepose atau URL luar"
+                      placeholder="Contoh: /demo/erp-aethera atau URL eksternal"
                       style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                     />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="p_live_url">Tautan Situs Asli (Opsional)</label>
+                    <label htmlFor="p_live_url">Link Situs Live (Bila ada)</label>
                     <input
                       id="p_live_url"
                       type="text"
                       value={pLiveUrl}
                       onChange={(e) => setPLiveUrl(e.target.value)}
-                      placeholder="Contoh: https://wepose.travel"
+                      placeholder="Contoh: https://aethera-erp.com"
                       style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                     />
                   </div>
@@ -2432,153 +2432,153 @@ export default function AdminApp() {
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Sekilas Tentang Proyek</h4>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Gambaran Umum Proyek</h4>
                 <div className="form-group">
-                  <label htmlFor="p_project_importance">Kenapa Proyek Ini Penting?</label>
+                  <label htmlFor="p_project_importance">Urgensi &amp; Signifikansi Proyek</label>
                   <textarea
                     id="p_project_importance"
                     rows={3}
                     style={{ minHeight: '80px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                     value={pProjectImportance}
                     onChange={(e) => setPProjectImportance(e.target.value)}
-                    placeholder="Jelaskan signifikansi proyek untuk memecahkan masalah birokrasi/operasional..."
+                    placeholder="Jelaskan mengapa proyek ini penting bagi efisiensi operasional/bisnis..."
                   ></textarea>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="p_client_info">Tentang Perusahaan &amp; Proyek</label>
+                  <label htmlFor="p_client_info">Profil Klien &amp; Latar Belakang</label>
                   <textarea
                     id="p_client_info"
                     rows={3}
                     style={{ minHeight: '80px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                     value={pClientInfo}
                     onChange={(e) => setPClientInfo(e.target.value)}
-                    placeholder="Profil singkat klien (e.g. Wepose, agensi layanan pengajuan visa...)"
+                    placeholder="Jelaskan secara ringkas profil klien atau target industri..."
                   ></textarea>
                 </div>
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Hasil Nyata Setelah Sistem Aktif (Metrik/Stats)</h4>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Hasil &amp; Efisiensi Sistem (Metrik Utama)</h4>
                 
                 <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #1</span>
                   <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
-                    <input type="text" placeholder="Nilai (e.g. 24/7)" value={pStat1Val} onChange={(e) => setPStat1Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                    <input type="text" placeholder="Label (e.g. Layanan Pelanggan AI)" value={pStat1Label} onChange={(e) => setPStat1Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Nilai Metrik (Contoh: 98% atau 24/7)" value={pStat1Val} onChange={(e) => setPStat1Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Nama Indikator (Contoh: Kepuasan Pengguna atau Ketersediaan AI)" value={pStat1Label} onChange={(e) => setPStat1Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
                   </div>
-                  <input type="text" placeholder="Deskripsi Singkat..." value={pStat1Desc} onChange={(e) => setPStat1Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                  <input type="text" placeholder="Keterangan tambahan metrik..." value={pStat1Desc} onChange={(e) => setPStat1Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
                 </div>
 
                 <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #2</span>
                   <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
-                    <input type="text" placeholder="Nilai (e.g. 35+)" value={pStat2Val} onChange={(e) => setPStat2Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                    <input type="text" placeholder="Label (e.g. Destinasi Dinamis)" value={pStat2Label} onChange={(e) => setPStat2Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Nilai Metrik (Contoh: 98% atau 24/7)" value={pStat2Val} onChange={(e) => setPStat2Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Nama Indikator (Contoh: Kepuasan Pengguna atau Ketersediaan AI)" value={pStat2Label} onChange={(e) => setPStat2Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
                   </div>
-                  <input type="text" placeholder="Deskripsi Singkat..." value={pStat2Desc} onChange={(e) => setPStat2Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                  <input type="text" placeholder="Keterangan tambahan metrik..." value={pStat2Desc} onChange={(e) => setPStat2Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
                 </div>
 
                 <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #3</span>
                   <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
-                    <input type="text" placeholder="Nilai (e.g. 50%)" value={pStat3Val} onChange={(e) => setPStat3Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                    <input type="text" placeholder="Label (e.g. Efisiensi Tim)" value={pStat3Label} onChange={(e) => setPStat3Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Nilai Metrik (Contoh: 98% atau 24/7)" value={pStat3Val} onChange={(e) => setPStat3Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                    <input type="text" placeholder="Nama Indikator (Contoh: Kepuasan Pengguna atau Ketersediaan AI)" value={pStat3Label} onChange={(e) => setPStat3Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
                   </div>
-                  <input type="text" placeholder="Deskripsi Singkat..." value={pStat3Desc} onChange={(e) => setPStat3Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                  <input type="text" placeholder="Keterangan tambahan metrik..." value={pStat3Desc} onChange={(e) => setPStat3Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
                 </div>
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Tantangan &amp; Solusi Mendalam</h4>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Studi Kasus: Tantangan &amp; Solusi</h4>
                 <div className="form-group">
-                  <label htmlFor="p_challenge_detailed">Kendala Sebelum Ada Sistem (Mendalam)</label>
+                  <label htmlFor="p_challenge_detailed">Masalah &amp; Hambatan Sebelum Sistem Dibuat</label>
                   <textarea
                     id="p_challenge_detailed"
                     rows={4}
                     style={{ minHeight: '100px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                     value={pChallengeDetailed}
                     onChange={(e) => setPChallengeDetailed(e.target.value)}
-                    placeholder="Deskripsikan proses manual dan kendala sebelum sistem dibangun..."
+                    placeholder="Uraikan secara detail alur manual dan hambatan utama sebelum aplikasi ada..."
                   ></textarea>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="p_solution_detailed">Solusi yang Kodeflow Berikan (Mendalam)</label>
+                  <label htmlFor="p_solution_detailed">Implementasi Solusi dari Tim Kami</label>
                   <textarea
                     id="p_solution_detailed"
                     rows={4}
                     style={{ minHeight: '100px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                     value={pSolutionDetailed}
                     onChange={(e) => setPSolutionDetailed(e.target.value)}
-                    placeholder="Deskripsikan arsitektur teknis atau otomasi yang kami rancang..."
+                    placeholder="Jelaskan pendekatan teknis, arsitektur, atau otomatisasi yang kami terapkan..."
                   ></textarea>
                 </div>
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Verifikasi Klien (Testimonial)</h4>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Ulasan &amp; Rekomendasi Klien</h4>
                 <div className="form-group">
-                  <label htmlFor="p_testimonial_text">Pernyataan Review / Kutipan Klien</label>
+                  <label htmlFor="p_testimonial_text">Kutipan Testimonial Klien</label>
                   <textarea
                     id="p_testimonial_text"
                     rows={3}
                     style={{ minHeight: '80px', resize: 'vertical', background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                     value={pTestimonialText}
                     onChange={(e) => setPTestimonialText(e.target.value)}
-                    placeholder="Ketik ulasan langsung dari klien..."
+                    placeholder="Ketikkan kutipan langsung dari pernyataan puas klien..."
                   ></textarea>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="p_testimonial_author">Nama / Jabatan Penulis Review</label>
+                  <label htmlFor="p_testimonial_author">Nama &amp; Jabatan Pemberi Ulasan</label>
                   <input
                     id="p_testimonial_author"
                     type="text"
                     value={pTestimonialAuthor}
                     onChange={(e) => setPTestimonialAuthor(e.target.value)}
-                    placeholder="Contoh: IT Leader Wepose atau Kepala LPPM"
+                    placeholder="Contoh: IT Manager PT Semesta atau Direktur Utama"
                     style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                   />
                 </div>
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Informasi Ringkas (Bawaan)</h4>
+                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Ringkasan Pendek (Fallback)</h4>
               </div>
 
               <div className="form-group">
-                <label htmlFor="p_challenge">Tantangan Proyek (Challenge)</label>
+                <label htmlFor="p_challenge">Tantangan Utama (Ringkas)</label>
                 <textarea
                   id="p_challenge"
                   rows={3}
                   style={{ minHeight: '80px', resize: 'vertical' }}
                   value={pChallenge}
                   onChange={(e) => setPChallenge(e.target.value)}
-                  placeholder="Apa tantangan utama yang dihadapi klien?..."
+                  placeholder="Apa kendala inti proyek ini? (maksimal 1-2 kalimat)..."
                   required
                 ></textarea>
               </div>
 
               <div className="form-group">
-                <label htmlFor="p_solution">Solusi Kami (Solution)</label>
+                <label htmlFor="p_solution">Solusi IT (Ringkas)</label>
                 <textarea
                   id="p_solution"
                   rows={3}
                   style={{ minHeight: '80px', resize: 'vertical' }}
                   value={pSolution}
                   onChange={(e) => setPSolution(e.target.value)}
-                  placeholder="Bagaimana solusi IT yang kami rancang dan bangun?..."
+                  placeholder="Bagaimana sistem ini memecahkan masalah? (maksimal 1-2 kalimat)..."
                   required
                 ></textarea>
               </div>
 
               <div className="form-group">
-                <label htmlFor="p_results">Dampak Bisnis / Hasil Nyata (Results)</label>
+                <label htmlFor="p_results">Hasil Akhir (Ringkas)</label>
                 <textarea
                   id="p_results"
                   rows={3}
                   style={{ minHeight: '80px', resize: 'vertical' }}
                   value={pResults}
                   onChange={(e) => setPResults(e.target.value)}
-                  placeholder="Apa hasil terukur yang didapatkan klien?..."
+                  placeholder="Apa hasil konkrit yang didapat klien? (maksimal 1-2 kalimat)..."
                   required
                 ></textarea>
               </div>
