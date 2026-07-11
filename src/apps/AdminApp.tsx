@@ -3038,6 +3038,8 @@ export default function AdminApp() {
           flex-grow: 1;
           padding: 40px;
           min-height: 100vh;
+          min-width: 0;
+          overflow-x: hidden;
         }
 
         .main-header {
@@ -3162,10 +3164,15 @@ export default function AdminApp() {
         .table-responsive {
           width: 100%;
           overflow-x: auto;
+          border-radius: 8px;
+          border: 1px solid var(--border);
+          background: #ffffff;
+          -webkit-overflow-scrolling: touch;
         }
 
         .admin-table {
           width: 100%;
+          min-width: 950px;
           border-collapse: collapse;
           text-align: left;
           background: #ffffff;
