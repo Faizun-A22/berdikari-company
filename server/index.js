@@ -418,6 +418,31 @@ app.get('/api/portfolios', async (req, res) => {
   }
 });
 
+// Ambil Satu Portofolio Berdasarkan Slug (Public)
+app.get('/api/portfolios/by-slug/:slug', async (req, res) => {
+  const { slug } = req.params;
+  try {
+    const { data, error } = await supabase
+      .from('portfolios')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) throw error;
+
+    res.json(data);
+  } catch (err) {
+    console.warn('Supabase error fetching portfolio by slug, using local fallback:', err.message);
+    const portfolios = getLocalPortfoliosData();
+    const portfolio = portfolios.find(p => p.slug === slug);
+    if (portfolio) {
+      res.json(portfolio);
+    } else {
+      res.status(404).json({ error: 'Portofolio tidak ditemukan.' });
+    }
+  }
+});
+
 // Buat Portofolio Baru (Protected)
 app.post('/api/portfolios', authenticateToken, async (req, res) => {
   const {

@@ -24,6 +24,8 @@ export default defineConfig({
         contact: resolve(__dirname, 'contact.html'),
         admin: resolve(__dirname, 'admin.html'),
         news: resolve(__dirname, 'news.html'),
+        portfolio_detail: resolve(__dirname, 'portfolio-detail.html'),
+        news_detail: resolve(__dirname, 'news-detail.html'),
       },
     },
   },

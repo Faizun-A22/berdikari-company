@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Calendar, ArrowRight, X, BookOpen, RefreshCw } from 'lucide-react';
+import { Calendar, ArrowRight, BookOpen, RefreshCw } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export default function NewsSection() {
   const [activities, setActivities] = useState<any[]>([]);
   const [filteredActivities, setFilteredActivities] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
-  const [selectedActivity, setSelectedActivity] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   
@@ -40,17 +39,7 @@ export default function NewsSection() {
     }
   }, [selectedCategory, activities]);
 
-  // Disable body scroll when modal is open
-  useEffect(() => {
-    if (selectedActivity) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [selectedActivity]);
+
 
   const formatDate = (dateStr: string) => {
     try {
@@ -146,7 +135,9 @@ export default function NewsSection() {
                     <h3 className="news-card-title">{act.title}</h3>
                     <p className="news-short-desc">{act.short_desc}</p>
                     <button 
-                      onClick={() => setSelectedActivity(act)}
+                      onClick={() => {
+                        window.location.href = `/news-detail.html?id=${act.id}`;
+                      }}
                       className="read-more-btn"
                     >
                       Baca Selengkapnya <ArrowRight size={16} />
@@ -158,46 +149,6 @@ export default function NewsSection() {
           )
         )}
       </div>
-
-      {/* --- DETAIL MODAL --- */}
-      {selectedActivity && (
-        <div className="news-modal-overlay" onClick={() => setSelectedActivity(null)}>
-          <div className="news-modal-card card-glass animate-zoom-in" onClick={(e) => e.stopPropagation()}>
-            <button 
-              className="news-modal-close-btn"
-              onClick={() => setSelectedActivity(null)}
-              aria-label="Tutup berita"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="news-modal-img-box">
-              <img src={selectedActivity.image_url} alt={selectedActivity.title} />
-              <span 
-                className="news-modal-badge"
-                style={{ backgroundColor: getBadgeColor(selectedActivity.category) }}
-              >
-                {selectedActivity.category}
-              </span>
-            </div>
-
-            <div className="news-modal-content">
-              <div className="news-modal-meta">
-                <Calendar size={16} />
-                <span>{formatDate(selectedActivity.date)}</span>
-              </div>
-              
-              <h2 className="news-modal-title">{selectedActivity.title}</h2>
-              
-              <div className="news-modal-body">
-                {selectedActivity.content.split('\n\n').map((para: string, idx: number) => (
-                  <p key={idx}>{para}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <style>{`
         .news-section {

@@ -71,6 +71,7 @@ export default function Home() {
       .then(data => {
         const mapped = data.slice(0, 2).map((item: any) => ({
           id: item.id,
+          slug: item.slug,
           title: item.title,
           category: item.category_label,
           image: item.image_url,
@@ -229,6 +230,10 @@ export default function Home() {
               <div 
                 key={project.id} 
                 className={`card-glass teaser-project-card reveal reveal-slide-up delay-${(index + 1) * 100} ${portfolioVisible ? 'in-view' : ''}`}
+                onClick={() => {
+                  window.location.href = `/portfolio-detail.html?slug=${project.slug}`;
+                }}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="teaser-project-img-box">
                   <img src={project.image} alt={project.title} className="teaser-project-img" />

@@ -2457,36 +2457,6 @@ export default function AdminApp() {
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Hasil &amp; Efisiensi Sistem (Metrik Utama)</h4>
-                
-                <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #1</span>
-                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
-                    <input type="text" placeholder="Nilai Metrik (Contoh: 98% atau 24/7)" value={pStat1Val} onChange={(e) => setPStat1Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                    <input type="text" placeholder="Nama Indikator (Contoh: Kepuasan Pengguna atau Ketersediaan AI)" value={pStat1Label} onChange={(e) => setPStat1Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                  </div>
-                  <input type="text" placeholder="Keterangan tambahan metrik..." value={pStat1Desc} onChange={(e) => setPStat1Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                </div>
-
-                <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #2</span>
-                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
-                    <input type="text" placeholder="Nilai Metrik (Contoh: 98% atau 24/7)" value={pStat2Val} onChange={(e) => setPStat2Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                    <input type="text" placeholder="Nama Indikator (Contoh: Kepuasan Pengguna atau Ketersediaan AI)" value={pStat2Label} onChange={(e) => setPStat2Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                  </div>
-                  <input type="text" placeholder="Keterangan tambahan metrik..." value={pStat2Desc} onChange={(e) => setPStat2Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                </div>
-
-                <div style={{ border: '1px solid rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'block' }}>Metrik #3</span>
-                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px' }}>
-                    <input type="text" placeholder="Nilai Metrik (Contoh: 98% atau 24/7)" value={pStat3Val} onChange={(e) => setPStat3Val(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                    <input type="text" placeholder="Nama Indikator (Contoh: Kepuasan Pengguna atau Ketersediaan AI)" value={pStat3Label} onChange={(e) => setPStat3Label(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                  </div>
-                  <input type="text" placeholder="Keterangan tambahan metrik..." value={pStat3Desc} onChange={(e) => setPStat3Desc(e.target.value)} style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                </div>
-              </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
                 <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Studi Kasus: Tantangan &amp; Solusi</h4>
