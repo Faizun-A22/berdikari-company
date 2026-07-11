@@ -3161,6 +3161,16 @@ export default function AdminApp() {
           color: var(--text-secondary);
         }
 
+        .overflow-hidden {
+          overflow: hidden;
+        }
+
+        .card-glass {
+          max-width: 100%;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
         .table-responsive {
           width: 100%;
           overflow-x: auto;
