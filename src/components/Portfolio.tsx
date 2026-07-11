@@ -49,7 +49,7 @@ export default function Portfolio() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const res = await fetch('/api/portfolios');
+        const res = await fetch('/api/portfolios?t=' + Date.now());
         if (!res.ok) throw new Error('Gagal mengambil data portofolio.');
         const data = await res.json();
         

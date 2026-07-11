@@ -394,7 +394,7 @@ export default function AdminApp() {
   const fetchPortfolios = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/portfolios');
+      const res = await fetch('/api/portfolios?t=' + Date.now());
       if (res.ok) {
         const data = await res.json();
         setPortfolios(data);

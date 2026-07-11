@@ -66,7 +66,7 @@ export default function Home() {
       .catch(err => console.error('Gagal mengambil config untuk CTA:', err));
 
     // Fetch portfolios for featured items (take first 2)
-    fetch('/api/portfolios')
+    fetch('/api/portfolios?t=' + Date.now())
       .then(res => res.json())
       .then(data => {
         const mapped = data.slice(0, 2).map((item: any) => ({
