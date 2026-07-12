@@ -2510,48 +2510,7 @@ export default function AdminApp() {
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '20px' }}>
-                <h4 style={{ color: 'white', marginBottom: '16px', fontSize: '1.1rem' }}>Ringkasan Pendek (Fallback)</h4>
-              </div>
 
-              <div className="form-group">
-                <label htmlFor="p_challenge">Tantangan Utama (Ringkas)</label>
-                <textarea
-                  id="p_challenge"
-                  rows={3}
-                  style={{ minHeight: '80px', resize: 'vertical' }}
-                  value={pChallenge}
-                  onChange={(e) => setPChallenge(e.target.value)}
-                  placeholder="Apa kendala inti proyek ini? (maksimal 1-2 kalimat)..."
-                  required
-                ></textarea>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="p_solution">Solusi IT (Ringkas)</label>
-                <textarea
-                  id="p_solution"
-                  rows={3}
-                  style={{ minHeight: '80px', resize: 'vertical' }}
-                  value={pSolution}
-                  onChange={(e) => setPSolution(e.target.value)}
-                  placeholder="Bagaimana sistem ini memecahkan masalah? (maksimal 1-2 kalimat)..."
-                  required
-                ></textarea>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="p_results">Hasil Akhir (Ringkas)</label>
-                <textarea
-                  id="p_results"
-                  rows={3}
-                  style={{ minHeight: '80px', resize: 'vertical' }}
-                  value={pResults}
-                  onChange={(e) => setPResults(e.target.value)}
-                  placeholder="Apa hasil konkrit yang didapat klien? (maksimal 1-2 kalimat)..."
-                  required
-                ></textarea>
-              </div>
 
               <div className="modal-actions">
                 <button 
