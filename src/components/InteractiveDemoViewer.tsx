@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, CheckCircle2, ShoppingBag, Smartphone, Laptop, RefreshCw, Cpu, Database, Award, ArrowRightLeft, ShieldCheck } from 'lucide-react';
+import { X, Send, CheckCircle2, ShoppingBag, RefreshCw, Cpu, Database, Award, ArrowRightLeft, ShieldCheck } from 'lucide-react';
 
 interface InteractiveDemoViewerProps {
   project: {
@@ -25,78 +25,16 @@ interface InteractiveDemoViewerProps {
 }
 
 export default function InteractiveDemoViewer({ project, onClose }: InteractiveDemoViewerProps) {
-  const [deviceMode, setDeviceMode] = useState<'desktop' | 'mobile'>(
-    project.category === 'mobile' ? 'mobile' : 'desktop'
-  );
+
 
   return (
     <div className="demo-viewer-overlay animate-fade-in">
-      <div className="demo-viewer-header">
-        <div className="demo-viewer-title-box">
-          <span className="demo-badge">FRONTEND DEMO SIMULATOR</span>
-          <h2>{project.title}</h2>
-        </div>
-        <div className="demo-viewer-controls">
-          <button 
-            className={`device-btn ${deviceMode === 'desktop' ? 'active' : ''}`}
-            onClick={() => setDeviceMode('desktop')}
-          >
-            <Laptop size={18} /> Desktop View
-          </button>
-          <button 
-            className={`device-btn ${deviceMode === 'mobile' ? 'active' : ''}`}
-            onClick={() => setDeviceMode('mobile')}
-          >
-            <Smartphone size={18} /> Mobile View
-          </button>
-          <button className="demo-close-btn" onClick={onClose}>
-            <X size={24} />
-          </button>
-        </div>
-      </div>
+      <button className="demo-close-btn fullscreen-close" onClick={onClose} title="Tutup Demo">
+        <X size={28} />
+      </button>
 
-      <div className="demo-viewer-body">
-        {deviceMode === 'desktop' ? (
-          <div className="browser-mockup card-glass">
-            <div className="browser-topbar">
-              <div className="browser-dots">
-                <span className="dot dot-red"></span>
-                <span className="dot dot-yellow"></span>
-                <span className="dot dot-green"></span>
-              </div>
-              <div className="browser-address">
-                <span className="https-lock">🔒</span>
-                <span className="address-text">{project.demoUrl || `https://demo.kodeflow.id/${project.slug}/app`}</span>
-              </div>
-              <div className="browser-actions">
-                <span className="refresh-icon">🔄</span>
-              </div>
-            </div>
-            <div className="browser-viewport">
-              <DemoRouter slug={project.slug} project={project} />
-            </div>
-          </div>
-        ) : (
-          <div className="phone-mockup">
-            <div className="phone-screen">
-              <div className="phone-notch">
-                <div className="notch-camera"></div>
-                <div className="notch-speaker"></div>
-              </div>
-              <div className="phone-statusbar">
-                <span className="status-time">09:41</span>
-                <div className="status-icons">
-                  <span>📶</span>
-                  <span>🔋</span>
-                </div>
-              </div>
-              <div className="phone-viewport">
-                <DemoRouter slug={project.slug} project={project} />
-              </div>
-              <div className="phone-home-indicator"></div>
-            </div>
-          </div>
-        )}
+      <div className="demo-fullscreen-viewport">
+        <DemoRouter slug={project.slug} project={project} />
       </div>
 
       <style>{`
@@ -114,283 +52,42 @@ export default function InteractiveDemoViewer({ project, onClose }: InteractiveD
           color: #f3f4f6;
         }
 
-        .demo-viewer-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 16px 24px;
-          background: #090d16;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .demo-viewer-title-box h2 {
-          font-family: 'Outfit', sans-serif;
-          font-size: 1.25rem;
-          margin: 0;
-          color: white;
-        }
-
-        .demo-badge {
-          background: linear-gradient(135deg, #e53e3e 0%, #ff6b6b 100%);
-          color: white;
-          font-size: 0.65rem;
-          font-weight: 700;
-          padding: 2px 6px;
-          border-radius: 4px;
-          letter-spacing: 0.05em;
-          display: inline-block;
-          margin-bottom: 4px;
-        }
-
-        .demo-viewer-controls {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .device-btn {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #9ca3af;
-          padding: 8px 14px;
-          border-radius: 8px;
-          font-size: 0.85rem;
-          font-weight: 500;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          transition: all 0.3s ease;
-        }
-
-        .device-btn:hover {
-          color: white;
-          background: rgba(255, 255, 255, 0.06);
-        }
-
-        .device-btn.active {
-          background: rgba(229, 62, 62, 0.1);
-          border-color: rgba(229, 62, 62, 0.3);
-          color: #ff6b6b;
-        }
-
-        .demo-close-btn {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+        .fullscreen-close {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          z-index: 9999;
+          width: 52px;
+          height: 52px;
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255,255,255,0.2);
           border-radius: 50%;
-          color: #9ca3af;
+          color: white;
           cursor: pointer;
-          width: 44px;
-          height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .demo-close-btn:hover {
-          color: white;
-          background: rgba(229, 62, 62, 0.8);
-          border-color: #e53e3e;
-          transform: scale(1.05) rotate(90deg);
+        .fullscreen-close:hover {
+          background: rgba(229, 62, 62, 0.9);
+          border-color: #ff6b6b;
+          transform: scale(1.1) rotate(90deg);
         }
 
-        .demo-viewer-body {
-          flex-grow: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 24px;
-          background: linear-gradient(135deg, #0f172a 0%, #050a15 50%, #030712 100%);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .demo-viewer-body::before {
-          content: '';
-          position: absolute;
-          top: -20%;
-          left: -10%;
-          width: 50%;
-          height: 50%;
-          background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        .demo-viewer-body::after {
-          content: '';
-          position: absolute;
-          bottom: -20%;
-          right: -10%;
-          width: 50%;
-          height: 50%;
-          background: radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        /* Browser Mockup */
-        .browser-mockup {
-          width: 100%;
-          max-width: 1100px;
-          height: 90%;
-          max-height: 720px;
-          border-radius: 12px;
-          overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          background: #090d16;
-          display: flex;
-          flex-direction: column;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .browser-topbar {
-          background: #0d1321;
-          height: 40px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-          display: flex;
-          align-items: center;
-          padding: 0 16px;
-          gap: 16px;
-        }
-
-        .browser-dots {
-          display: flex;
-          gap: 6px;
-        }
-
-        .dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          display: inline-block;
-        }
-        .dot-red { background: #ef4444; }
-        .dot-yellow { background: #f59e0b; }
-        .dot-green { background: #10b981; }
-
-        .browser-address {
-          flex-grow: 1;
-          max-width: 600px;
-          background: rgba(255, 255, 255, 0.05);
-          height: 26px;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          padding: 0 12px;
-          font-size: 0.75rem;
-          color: #9ca3af;
-          gap: 6px;
-        }
-
-        .address-text {
-          color: #d1d5db;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
-        .browser-actions {
-          color: #9ca3af;
-          font-size: 0.85rem;
-          cursor: pointer;
-        }
-
-        .browser-viewport {
-          flex-grow: 1;
-          overflow: hidden;
+        .demo-fullscreen-viewport {
+          width: 100vw;
+          height: 100vh;
+          overflow: auto;
           background: #020617;
-          display: flex;
-        }
-
-        /* Phone Mockup */
-        .phone-mockup {
-          width: 320px;
-          height: 640px;
-          border: 10px solid #1f2937;
-          border-radius: 40px;
-          background: #030712;
           position: relative;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+          z-index: 10;
         }
 
-        .phone-screen {
-          width: 100%;
-          height: 100%;
-          border-radius: 30px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          position: relative;
-        }
 
-        .phone-notch {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 110px;
-          height: 20px;
-          background: #1f2937;
-          border-bottom-left-radius: 12px;
-          border-bottom-right-radius: 12px;
-          z-index: 100;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .notch-camera {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #0b1329;
-        }
-
-        .notch-speaker {
-          width: 35px;
-          height: 4px;
-          border-radius: 2px;
-          background: #374151;
-        }
-
-        .phone-statusbar {
-          height: 28px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 4px 16px 0;
-          font-size: 0.65rem;
-          font-weight: 600;
-          color: #d1d5db;
-          z-index: 99;
-          background: #090d16;
-        }
-
-        .status-icons {
-          display: flex;
-          gap: 4px;
-        }
-
-        .phone-viewport {
-          flex-grow: 1;
-          overflow: hidden;
-          background: #020617;
-          display: flex;
-        }
-
-        .phone-home-indicator {
-          position: absolute;
-          bottom: 6px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 100px;
-          height: 4px;
-          background: #4b5563;
-          border-radius: 2px;
-          z-index: 100;
-        }
 
         .animate-fade-in {
           animation: fadeIn 0.3s ease forwards;
