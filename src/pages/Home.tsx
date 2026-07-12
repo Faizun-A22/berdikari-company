@@ -231,7 +231,7 @@ export default function Home() {
                 key={project.id} 
                 className={`card-glass teaser-project-card reveal reveal-slide-up delay-${(index + 1) * 100} ${portfolioVisible ? 'in-view' : ''}`}
                 onClick={() => {
-                  window.location.href = `/portfolio-detail.html?slug=${project.slug}`;
+                  window.location.href = `/portfolio-detail.html?slug=${encodeURIComponent(project.slug)}`;
                 }}
                 style={{ cursor: 'pointer' }}
               >

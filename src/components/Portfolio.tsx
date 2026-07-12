@@ -157,7 +157,7 @@ export default function Portfolio() {
                 key={project.id} 
                 className="portfolio-card"
                 onClick={() => {
-                  window.location.href = `/portfolio-detail.html?slug=${project.slug}`;
+                  window.location.href = `/portfolio-detail.html?slug=${encodeURIComponent(project.slug)}`;
                 }}
               >
                 <div className="portfolio-img-box">

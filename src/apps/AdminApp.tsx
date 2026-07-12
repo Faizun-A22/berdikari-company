@@ -2244,7 +2244,10 @@ export default function AdminApp() {
                     id="p_slug"
                     type="text"
                     value={pSlug}
-                    onChange={(e) => setPSlug(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+                      setPSlug(val);
+                    }}
                     placeholder="Contoh: erp-dashboard-retail"
                     required
                   />

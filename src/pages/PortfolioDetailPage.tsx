@@ -57,7 +57,7 @@ export default function PortfolioDetailPage() {
 
     async function fetchProject() {
       try {
-        const res = await fetch(`/api/portfolios/by-slug/${slug}?t=${Date.now()}`);
+        const res = await fetch(`/api/portfolios/by-slug/${encodeURIComponent(slug || '')}?t=${Date.now()}`);
         if (!res.ok) {
           throw new Error('Portofolio tidak ditemukan.');
         }
