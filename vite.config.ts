@@ -26,6 +26,7 @@ export default defineConfig({
         news: resolve(__dirname, 'news.html'),
         portfolio_detail: resolve(__dirname, 'portfolio-detail.html'),
         news_detail: resolve(__dirname, 'news-detail.html'),
+        demo: resolve(__dirname, 'demo.html'),
       },
     },
   },
