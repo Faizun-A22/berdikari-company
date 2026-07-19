@@ -181,11 +181,6 @@ export default function PortfolioDetailPage() {
 
   return (
     <section className="detail-section">
-      <div className="glow-orb detail-glow-1"></div>
-      <div className="glow-orb detail-glow-2"></div>
-      <div className="detail-bg-layer" style={{ backgroundImage: `url(${project.image})` }}></div>
-      <div className="detail-bg-overlay"></div>
-
       <div className="container relative" style={{ zIndex: 10 }}>
         {/* Back Link Header */}
         <div className="detail-navigation-bar animate-fade-in-down">
@@ -198,7 +193,7 @@ export default function PortfolioDetailPage() {
         {/* Hero Header Area */}
         <div className="detail-header-card animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <span className="detail-category-badge">{project.categoryLabel}</span>
-          <h1 className="detail-main-title gradient-text-expert">{project.title}</h1>
+          <h1 className="detail-main-title">{project.title}</h1>
           <p className="detail-sub-desc">{project.shortDesc}</p>
           
           <div className="detail-meta-row">
@@ -276,9 +271,13 @@ export default function PortfolioDetailPage() {
                 ))}
               </div>
             )}
+          </div>
 
+          {/* RIGHT COLUMN: Case Study Details */}
+          <div className="detail-content-column animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            
             {/* Technology Badge List */}
-            <div className="detail-tech-card card-glass">
+            <div className="detail-tech-card clean-card">
               <h3>Teknologi yang Digunakan</h3>
               <div className="tech-badge-container">
                 {project.tags.map((tag, idx) => (
@@ -287,14 +286,19 @@ export default function PortfolioDetailPage() {
               </div>
             </div>
 
-          </div>
+            {/* Deskripsi Proyek */}
+            <div className="detail-importance-card clean-card">
+              <h3>Tentang Proyek</h3>
+              <p className="importance-text">
+                {project.shortDesc}
+              </p>
+              <div className="accent-bar-left"></div>
+            </div>
 
-          {/* RIGHT COLUMN: Case Study Details */}
-          <div className="detail-content-column animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             {/* Action Control Panel */}
-            <div className="detail-action-card card-glass">
-              <h3>Demo & Akses Sistem</h3>
-              <p>Jelajahi simulasi interaktif dari frontend aplikasi ini atau kunjungi tautan aslinya.</p>
+            <div className="detail-action-card clean-card">
+              <h3>Akses Proyek</h3>
+              <p>Jelajahi simulasi interaktif dari sistem ini atau kunjungi tautan aslinya.</p>
               
               <div className="action-buttons-wrapper">
                 {/* 1. Link Asli (Live Url) Conditional Rendering */}
@@ -306,7 +310,7 @@ export default function PortfolioDetailPage() {
                     className="btn btn-secondary live-link-btn"
                   >
                     <ExternalLink size={16} />
-                    <span>Kunjungi Link Asli</span>
+                    <span>Kunjungi Website</span>
                   </a>
                 ) : (
                   <button 
@@ -315,7 +319,7 @@ export default function PortfolioDetailPage() {
                     title="Tautan bersifat privat dan internal perusahaan."
                   >
                     <Lock size={16} />
-                    <span>Link Asli (Bersifat Pribadi)</span>
+                    <span>Sistem Privat (Internal)</span>
                   </button>
                 )}
 
@@ -325,19 +329,11 @@ export default function PortfolioDetailPage() {
                   className="btn btn-primary demo-simulator-btn"
                 >
                   <Play size={16} fill="white" />
-                  <span>Coba Demo Simulator</span>
+                  <span>Coba Demo Sistem</span>
                 </button>
               </div>
             </div>
 
-            {/* Deskripsi Proyek */}
-            <div className="detail-importance-card card-glass">
-              <h3>Tentang Proyek</h3>
-              <p className="importance-text">
-                {project.shortDesc}
-              </p>
-              <div className="accent-bar-left"></div>
-            </div>
           </div>
         </div>
       </div>
@@ -353,66 +349,29 @@ export default function PortfolioDetailPage() {
       {/* Styled CSS scoped block */}
       <style>{`
         .detail-section {
-          background-color: #020617; /* zinc-950 */
+          background-color: #f8fafc; /* Sangat bersih dan modern */
           position: relative;
           overflow: hidden;
-          padding: 60px 0 120px;
+          padding: 80px 0 120px;
           min-height: 100vh;
           font-family: 'Plus Jakarta Sans', sans-serif;
-          color: #f8fafc;
+          color: #1e293b;
         }
 
-        .detail-bg-layer {
-          position: absolute;
-          top: 0; left: 0; right: 0; height: 100%;
-          background-size: cover;
-          background-position: center;
-          filter: blur(100px) brightness(0.2) saturate(1.2);
-          opacity: 0.6;
-          z-index: 1;
-        }
-
-        .detail-bg-overlay {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: linear-gradient(180deg, rgba(2,6,23,0.8) 0%, rgba(2,6,23,1) 100%);
-          z-index: 2;
-        }
-
-        .detail-glow-1 {
-          top: -10%;
-          left: -10%;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.15) 0%, transparent 60%);
-          z-index: 3;
-          width: 800px; height: 800px;
-          position: absolute;
-          filter: blur(80px);
-        }
-
-        .detail-glow-2 {
-          bottom: 10%;
-          right: -10%;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.1) 0%, transparent 60%);
-          z-index: 3;
-          width: 600px; height: 600px;
-          position: absolute;
-          filter: blur(80px);
-        }
-
-        /* Base Card Glass Premium */
-        .card-glass {
-          background: rgba(15, 23, 42, 0.5); /* slate-900 */
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 24px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        /* Clean Card Corporate */
+        .clean-card {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 16px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
           padding: 32px;
-          transition: transform 0.3s ease, border-color 0.3s ease;
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card-glass:hover {
-          border-color: rgba(229, 62, 62, 0.2);
+        .clean-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.1), 0 10px 10px -5px rgba(220, 38, 38, 0.04);
+          border-color: rgba(220, 38, 38, 0.2);
         }
 
         .detail-navigation-bar {
@@ -425,65 +384,61 @@ export default function PortfolioDetailPage() {
           display: inline-flex;
           align-items: center;
           gap: 12px;
-          color: #94a3b8; /* slate-400 */
+          color: #64748b;
           text-decoration: none;
           font-weight: 600;
           font-size: 0.95rem;
           transition: all 0.3s ease;
-          background: rgba(255, 255, 255, 0.03);
+          background: #ffffff;
           padding: 10px 20px;
           border-radius: 40px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid #cbd5e1;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .back-link:hover {
-          color: #f8fafc;
-          background: rgba(255, 255, 255, 0.08);
-          border-color: rgba(255, 255, 255, 0.2);
+          color: #dc2626;
+          border-color: #dc2626;
           transform: translateX(-4px);
+          box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
         }
 
         /* Header Card */
         .detail-header-card {
-          margin-bottom: 56px;
+          margin-bottom: 48px;
           position: relative;
           z-index: 10;
           text-align: center;
-          padding: 60px 20px;
-          background: radial-gradient(circle at top, rgba(30, 41, 59, 0.3) 0%, transparent 70%);
-          border-radius: 32px;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          padding: 0 20px;
         }
 
         .detail-category-badge {
-          background: rgba(229, 62, 62, 0.1); /* red-500 tint */
-          border: 1px solid rgba(229, 62, 62, 0.3);
-          color: #ef4444;
+          background: #fee2e2; /* Red 100 */
+          color: #dc2626; /* Red 600 */
           font-size: 0.75rem;
           font-weight: 800;
           padding: 8px 20px;
           border-radius: 30px;
-          letter-spacing: 0.15em;
+          letter-spacing: 0.1em;
           display: inline-block;
           margin-bottom: 24px;
           text-transform: uppercase;
         }
 
         .detail-main-title {
-          font-size: clamp(2.5rem, 6vw, 4.5rem);
+          font-size: clamp(2.5rem, 6vw, 4rem);
           font-weight: 800;
-          line-height: 1.1;
+          line-height: 1.2;
           margin: 0 auto 24px;
-          letter-spacing: -0.03em;
-          color: #f8fafc;
-          text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-          max-width: 1000px;
+          letter-spacing: -0.02em;
+          color: #0f172a;
+          max-width: 900px;
         }
 
         .detail-sub-desc {
-          font-size: 1.25rem;
+          font-size: 1.2rem;
           line-height: 1.6;
-          color: #94a3b8;
+          color: #475569;
           margin: 0 auto 40px;
           max-width: 800px;
         }
@@ -499,17 +454,17 @@ export default function PortfolioDetailPage() {
           display: flex;
           align-items: center;
           gap: 10px;
-          color: #94a3b8;
+          color: #475569;
           font-size: 0.95rem;
-          background: rgba(15, 23, 42, 0.6);
+          background: #ffffff;
           padding: 12px 24px;
           border-radius: 40px;
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .meta-item svg {
-          color: #ef4444;
+          color: #dc2626;
         }
 
         .meta-label {
@@ -518,10 +473,10 @@ export default function PortfolioDetailPage() {
 
         .meta-value {
           font-weight: 700;
-          color: #f8fafc;
+          color: #0f172a;
         }
 
-        /* Bento Grid Layout */
+        /* Clean Split Column Layout */
         .detail-grid-layout {
           display: grid;
           grid-template-columns: 1fr;
@@ -533,16 +488,8 @@ export default function PortfolioDetailPage() {
         @media (min-width: 1024px) {
           .detail-grid-layout {
             grid-template-columns: 1.5fr 1fr;
-            grid-template-areas: 
-              "visual action"
-              "visual tech"
-              "visual info";
+            align-items: start;
           }
-          
-          .detail-visual-column { grid-area: visual; }
-          .detail-action-card { grid-area: action; }
-          .detail-tech-card { grid-area: tech; }
-          .detail-importance-card { grid-area: info; }
         }
 
         /* Visual Column */
@@ -550,17 +497,25 @@ export default function PortfolioDetailPage() {
           display: flex;
           flex-direction: column;
           gap: 24px;
+          position: sticky;
+          top: 100px;
         }
 
         .detail-showcase-box {
           width: 100%;
           aspect-ratio: 16/10;
-          border-radius: 24px;
+          border-radius: 16px;
           overflow: hidden;
-          background: #0f172a;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: #f1f5f9;
+          border: 1px solid #e2e8f0;
           position: relative;
-          box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+          transition: transform 0.4s ease;
+        }
+        
+        .detail-showcase-box:hover {
+          transform: scale(1.01);
+          box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
         }
 
         .showcase-image, .showcase-video, .showcase-iframe {
@@ -585,24 +540,26 @@ export default function PortfolioDetailPage() {
         .detail-media-thumb {
           width: 140px;
           height: 90px;
-          border-radius: 16px;
+          border-radius: 12px;
           overflow: hidden;
           cursor: pointer;
           border: 2px solid transparent;
           flex-shrink: 0;
-          opacity: 0.5;
+          opacity: 0.6;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .detail-media-thumb:hover {
           opacity: 1;
           transform: translateY(-4px);
+          box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
         .detail-media-thumb.active {
           opacity: 1;
-          border-color: #ef4444;
-          box-shadow: 0 10px 20px rgba(229, 62, 62, 0.2);
+          border-color: #dc2626;
+          box-shadow: 0 8px 16px rgba(220, 38, 38, 0.2);
           transform: scale(1.05);
         }
 
@@ -632,12 +589,18 @@ export default function PortfolioDetailPage() {
           font-size: 20px;
         }
 
+        .detail-content-column {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+
         .detail-tech-card h3, .detail-action-card h3, 
         .detail-importance-card h3 {
           font-size: 1.25rem;
           font-weight: 700;
           margin-bottom: 24px;
-          color: #f8fafc;
+          color: #0f172a;
           display: flex;
           align-items: center;
           gap: 12px;
@@ -647,42 +610,42 @@ export default function PortfolioDetailPage() {
         .detail-importance-card h3::before {
           content: '';
           display: block;
-          width: 8px;
+          width: 6px;
           height: 20px;
           border-radius: 4px;
-          background: #ef4444;
+          background: #dc2626;
         }
 
         .tech-badge-container {
           display: flex;
           flex-wrap: wrap;
-          gap: 12px;
+          gap: 10px;
         }
 
         .detail-tech-badge {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #cbd5e1;
-          padding: 10px 20px;
-          border-radius: 12px;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          color: #475569;
+          padding: 8px 16px;
+          border-radius: 8px;
           font-size: 0.9rem;
           font-weight: 600;
           transition: all 0.3s ease;
         }
 
         .detail-tech-badge:hover {
-          background: rgba(229, 62, 62, 0.1);
-          border-color: rgba(229, 62, 62, 0.3);
-          color: #f8fafc;
+          background: #fee2e2;
+          border-color: #fca5a5;
+          color: #dc2626;
           transform: translateY(-2px);
         }
 
-        /* Action Card */
+        /* Content Text */
         .detail-action-card p, .importance-text {
           font-size: 1.05rem;
           line-height: 1.7;
-          color: #94a3b8;
-          margin-bottom: 32px;
+          color: #475569;
+          margin-bottom: 24px;
         }
 
         .action-buttons-wrapper {
@@ -699,9 +662,9 @@ export default function PortfolioDetailPage() {
 
         .action-buttons-wrapper .btn {
           flex: 1;
-          padding: 18px 24px;
+          padding: 16px 24px;
           font-size: 1rem;
-          border-radius: 16px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -714,34 +677,35 @@ export default function PortfolioDetailPage() {
         }
 
         .live-link-btn {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #f8fafc;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          color: #334155;
         }
 
         .live-link-btn:hover:not(.disabled) {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: rgba(255, 255, 255, 0.2);
+          background: #f8fafc;
+          border-color: #94a3b8;
           transform: translateY(-2px);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .live-link-btn.disabled {
-          background: rgba(0, 0, 0, 0.2);
-          color: rgba(255, 255, 255, 0.3) !important;
+          background: #f1f5f9;
+          color: #94a3b8 !important;
           cursor: not-allowed;
-          border: 1px dashed rgba(255, 255, 255, 0.05);
+          border: 1px dashed #cbd5e1;
         }
 
         .demo-simulator-btn {
-          background: #ef4444;
+          background: #dc2626;
           color: white;
-          box-shadow: 0 10px 25px rgba(229, 62, 62, 0.3);
+          box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
         }
 
         .demo-simulator-btn:hover {
-          background: #dc2626;
+          background: #b91c1c;
           transform: translateY(-4px);
-          box-shadow: 0 15px 35px rgba(229, 62, 62, 0.4);
+          box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
         }
 
         /* Animations */
