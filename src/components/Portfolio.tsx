@@ -101,7 +101,6 @@ export default function Portfolio() {
 
   return (
     <section id="portfolio" className="portfolio-section">
-      <div className="glow-orb portfolio-glow"></div>
       
       <div className="container">
         <div className="section-title">

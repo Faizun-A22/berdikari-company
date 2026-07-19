@@ -454,8 +454,8 @@ app.post('/api/portfolios', authenticateToken, async (req, res) => {
     challenge_detailed, solution_detailed, testimonial_text, testimonial_author, media
   } = req.body;
 
-  if (!slug || !title || !category || !category_label || !image_url || !short_desc || !client || !year || !tags || !challenge || !solution || !results) {
-    return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
+  if (!slug || !title || !category || !image_url || !short_desc) {
+    return res.status(400).json({ error: 'Field slug, title, category, image_url, short_desc wajib diisi.' });
   }
 
   const newPortfolio = {
@@ -536,8 +536,8 @@ app.put('/api/portfolios/:id', authenticateToken, async (req, res) => {
     challenge_detailed, solution_detailed, testimonial_text, testimonial_author, media
   } = req.body;
 
-  if (!slug || !title || !category || !category_label || !image_url || !short_desc || !client || !year || !tags || !challenge || !solution || !results) {
-    return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
+  if (!slug || !title || !category || !image_url || !short_desc) {
+    return res.status(400).json({ error: 'Field slug, title, category, image_url, short_desc wajib diisi.' });
   }
 
   const updatedFields = {

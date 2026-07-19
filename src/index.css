@@ -117,6 +117,11 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
 }
 
+.main-content > .section:first-child,
+.main-content > div > .section:first-child {
+  padding-top: 40px;
+}
+
 .section-title {
   text-align: center;
   margin-bottom: 60px;
