@@ -727,7 +727,7 @@ app.get('/api/finance/transactions', authenticateToken, async (req, res) => {
 });
 
 app.post('/api/finance/transactions', authenticateToken, async (req, res) => {
-  const { date, type, category, amount, description } = req.body;
+  const { date, type, category, amount, description, receipt_url } = req.body;
 
   if (!type || !category || !amount || !description) {
     return res.status(400).json({ error: 'Seluruh input wajib diisi.' });
@@ -738,7 +738,8 @@ app.post('/api/finance/transactions', authenticateToken, async (req, res) => {
     type,
     category,
     amount: Number(amount),
-    description
+    description,
+    receipt_url
   };
 
   try {
@@ -762,9 +763,9 @@ app.post('/api/finance/transactions', authenticateToken, async (req, res) => {
 
 app.put('/api/finance/transactions/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
-  const { date, type, category, amount, description } = req.body;
+  const { date, type, category, amount, description, receipt_url } = req.body;
 
-  const updateData = { date, type, category, amount: Number(amount), description };
+  const updateData = { date, type, category, amount: Number(amount), description, receipt_url };
 
   try {
     const { data, error } = await supabase

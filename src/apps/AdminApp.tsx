@@ -55,6 +55,8 @@ export default function AdminApp() {
   const [txCategory, setTxCategory] = useState('Proyek Web');
   const [txAmount, setTxAmount] = useState('');
   const [txDescription, setTxDescription] = useState('');
+  const [txReceiptUrl, setTxReceiptUrl] = useState('');
+  const [isUploadingTxImg, setIsUploadingTxImg] = useState(false);
 
   // Form states for invoice
   const [invNumber, setInvNumber] = useState('');
@@ -449,6 +451,7 @@ export default function AdminApp() {
     setTxCategory('Proyek Web');
     setTxAmount('');
     setTxDescription('');
+    setTxReceiptUrl('');
     setShowTxModal(true);
   };
 
@@ -457,9 +460,33 @@ export default function AdminApp() {
     setTxDate(tx.date.split('T')[0]);
     setTxType(tx.type);
     setTxCategory(tx.category);
-    setTxAmount(tx.amount.toString());
+    setTxAmount(tx.amount ? new Intl.NumberFormat('id-ID').format(Number(tx.amount)) : '');
     setTxDescription(tx.description);
+    setTxReceiptUrl(tx.receipt_url || '');
     setShowTxModal(true);
+  };
+
+  
+  const handleTxFileUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    setIsUploadingTxImg(true);
+    const token = localStorage.getItem('berdikari_admin_token');
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      if (!res.ok) throw new Error('Gagal mengunggah bukti.');
+      const data = await res.json();
+      setTxReceiptUrl(data.url);
+      setSuccessMessage('Bukti berhasil diunggah.');
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Gagal mengunggah bukti.');
+    } finally {
+      setIsUploadingTxImg(false);
+    }
   };
 
   const handleSaveTx = async (e: React.FormEvent) => {
@@ -470,8 +497,9 @@ export default function AdminApp() {
       date: txDate,
       type: txType,
       category: txCategory,
-      amount: Number(txAmount),
-      description: txDescription
+      amount: Number(String(txAmount).replace(/\./g, '')),
+      description: txDescription,
+      receipt_url: txReceiptUrl
     };
 
     try {
@@ -543,7 +571,7 @@ export default function AdminApp() {
     setInvClientName(inv.client_name);
     setInvClientEmail(inv.client_email);
     setInvProjectName(inv.project_name);
-    setInvAmount(inv.amount.toString());
+    setInvAmount(inv.amount ? new Intl.NumberFormat('id-ID').format(Number(inv.amount)) : '');
     setInvStatus(inv.status);
     setInvDueDate(inv.due_date.split('T')[0]);
     setShowInvModal(true);
@@ -558,7 +586,7 @@ export default function AdminApp() {
       client_name: invClientName,
       client_email: invClientEmail,
       project_name: invProjectName,
-      amount: Number(invAmount),
+      amount: Number(String(invAmount).replace(/\./g, '')),
       status: invStatus,
       due_date: invDueDate
     };
@@ -2583,9 +2611,12 @@ export default function AdminApp() {
               <div className="form-group">
                 <label>Jumlah Uang (Rupiah)</label>
                 <input 
-                  type="number" 
-                  value={txAmount} 
-                  onChange={(e) => setTxAmount(e.target.value)} 
+                    type="text" 
+                    value={txAmount} 
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, '');
+                      setTxAmount(raw ? new Intl.NumberFormat('id-ID').format(Number(raw)) : '');
+                    }} 
                   placeholder="Contoh: 5000000" 
                   required 
                 />
@@ -2675,9 +2706,12 @@ export default function AdminApp() {
                 <div className="form-group">
                   <label>Nilai Tagihan (IDR)</label>
                   <input 
-                    type="number" 
+                    type="text" 
                     value={invAmount} 
-                    onChange={(e) => setInvAmount(e.target.value)} 
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, '');
+                      setInvAmount(raw ? new Intl.NumberFormat('id-ID').format(Number(raw)) : '');
+                    }} 
                     placeholder="12000000" 
                     required 
                   />
