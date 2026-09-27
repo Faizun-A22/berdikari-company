@@ -1,4 +1,4 @@
--- RUN THIS IN YOUR SUPABASE SQL EDITOR
+-- RUN THIS IN YOUR SUPABASE SQL EDITOR OR MIGRATE TO DATABASE
 
 -- 1. Tabel Kustomisasi Landing Page (Maksimal 1 baris)
 CREATE TABLE IF NOT EXISTS landing_config (
@@ -155,114 +155,6 @@ VALUES
   'Portal LPPM ini memudahkan kami melacak luaran penelitian dosen secara real-time untuk kebutuhan akreditasi institusi.',
   'Ketua LPPM Universitas Berdikari',
   '[{"type": "image", "url": "/images/lppm_dashboard.png"}]'::jsonb
-),
-(
-  'erp-aethera', 
-  'Aethera Enterprise ERP', 
-  'web', 
-  'Website & Web App', 
-  '/images/erp_dashboard.png', 
-  '',
-  'Dashboard ERP kustom untuk otomatisasi keuangan, SDM, dan rantai pasokan korporasi.',
-  'PT Aethera Manufaktur',
-  '2025',
-  ARRAY['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Chart.js'],
-  'Mengintegrasikan data multi-cabang yang sebelumnya tersebar secara manual di Excel, menyebabkan keterlambatan sinkronisasi data keuangan hingga 4 hari.',
-  'Menangani sinkronisasi data real-time kurang dari 2 detik dan visualisasi chart interaktif untuk pengambilan keputusan instan.',
-  'Meningkatkan akurasi laporan keuangan hingga 99.8%, menghemat 120+ jam kerja administratif per bulan, dan mempercepat rekonsiliasi bulanan dari 4 hari menjadi 15 menit.',
-  '/demo/erp-aethera',
-  'https://aethera-demo.berdikari.co',
-  'Dalam industri manufaktur skala menengah ke atas, sinkronisasi data antar cabang sangat krusial. Tanpa sistem yang terintegrasi, inventarisasi gudang, manajemen HRD, dan data penjualan mengalami lag yang berdampak buruk pada proses pengadaan bahan baku.',
-  'PT Aethera Manufaktur adalah perusahaan perakitan suku cadang otomotif terkemuka dengan 3 cabang pabrik di Jawa Barat.',
-  '2dtk', 'Sinkronisasi Data', 'Data operasional dari 3 cabang terintegrasi secara real-time di bawah 2 detik untuk menghindari duplikasi data.',
-  '120+', 'Jam Kerja Dihemat', 'Otomatisasi proses input data rekonsiliasi inventaris dan penggajian karyawan memangkas lembur staf administrasi.',
-  '15mnt', 'Rekonsiliasi Bulanan', 'Menyusun laporan bulanan konsolidasi kini selesai dalam hitungan menit dari sebelumnya membutuhkan waktu 4 hari kerja.',
-  'Data inventori di gudang seringkali tidak sinkron dengan laporan penjualan, menyebabkan tim produksi memproduksi suku cadang yang stoknya masih melimpah sementara stok yang kritis justru kosong.',
-  'Membangun modul Enterprise Resource Planning (ERP) berbasis web terintegrasi dengan modul Finance, Supply Chain, and HR. Dilengkapi dengan rest API berkinerja tinggi serta optimasi index database PostgreSQL.',
-  'ERP ini membantu kami menyinkronkan rantai produksi kami secara efisien. Keterlambatan pengadaan material berkurang drastis.',
-  'Direktur Operasional Aethera',
-  '[{"type": "image", "url": "/images/erp_dashboard.png"}]'::jsonb
-),
-(
-  'medplus-health', 
-  'MedPlus Health Solution', 
-  'mobile', 
-  'Mobile Application', 
-  '/images/medical_app.png', 
-  '',
-  'Aplikasi konsultasi dokter online, rekam medis digital, dan pemesanan obat langsung.',
-  'Klinik MedPlus Utama',
-  '2025',
-  ARRAY['Flutter', 'Firebase', 'Node.js', 'Google Maps API'],
-  'Pasien harus mengantre hingga 2 jam untuk konsultasi rutin dan kesulitan melacak riwayat resep obat secara digital.',
-  'Mengembangkan aplikasi mobile Android & iOS dengan fitur telekonsultasi video terintegrasi, pemesanan obat berbasis lokasi, dan e-medical record terenkripsi.',
-  'Mengurangi waktu tunggu pasien sebesar 82%, melayani 5.000+ telekonsultasi aktif di bulan pertama, dan meningkatkan retensi pasien klinik sebesar 45%.',
-  '/demo/medplus-health',
-  '',
-  'Pelayanan kesehatan tradisional sering terhambat oleh antrean fisik yang padat dan resep obat kertas yang gampang hilang. Pasien membutuhkan alternatif layanan jarak jauh (telemedicine) yang andal dan mudah diakses langsung lewat ponsel pintar.',
-  'Klinik MedPlus Utama merupakan jaringan klinik kesehatan keluarga dengan puluhan dokter spesialis berlisensi.',
-  '82%', 'Pengurangan Waktu Tunggu', 'Daftar konsultasi via mobile memangkas waktu tunggu di ruang tunggu klinik secara dramatis.',
-  '5.000+', 'Pasien Terlayani', 'Bulan pertama peluncuran mencatat ribuan telekonsultasi sukses melalui sambungan video terenkripsi.',
-  '45%', 'Retensi Pasien', 'Pasien lebih setia kembali berobat berkat riwayat medis digital dan notifikasi resep otomatis di ponsel mereka.',
-  'Kepadatan pasien di klinik fisik di jam-jam sibuk menimbulkan risiko penularan penyakit di ruang tunggu dan kelelahan staf medis.',
-  'Mengembangkan aplikasi mobile Flutter dengan integrasi layanan video call WebRTC, database rekam medis terenkripsi berbasis Firebase, dan tracking pengiriman obat ojek online.',
-  'Sistem telekonsultasi MedPlus membantu kami menjangkau pasien di daerah terpencil dengan sangat baik dan profesional.',
-  'Kepala Klinik MedPlus',
-  '[{"type": "image", "url": "/images/medical_app.png"}]'::jsonb
-),
-(
-  'solaria-ecommerce', 
-  'Solaria Premium E-Commerce', 
-  'web', 
-  'Website & Web App', 
-  '/images/ecommerce_web.png', 
-  '',
-  'Platform belanja online dengan navigasi modern, checkout kilat, dan payment gateway.',
-  'Solaria Retail Group',
-  '2024',
-  ARRAY['Next.js', 'TailwindCSS', 'Stripe', 'GraphQL', 'Shopify API'],
-  'Tingkat drop-off (keranjang belanja ditinggalkan) mencapai 68% karena proses pengisian formulir checkout yang berbelit-belit.',
-  'Mendesain ulang user flow website dan mengimplementasikan fitur checkout satu klik dengan integrasi payment gateway otomatis yang menurunkan tingkat drop-off menjadi 22%.',
-  'Menurunkan tingkat keranjang belanja diabaikan sebesar 46%, meningkatkan rata-rata nilai transaksi (AOV) sebesar 18%, dan mendongkrak penjualan online sebesar 32%.',
-  '/demo/solaria-ecommerce',
-  'https://solaria-ecommerce.com',
-  'Toko ritel fisik Solaria membutuhkan ekspansi digital berskala besar untuk menangkap pasar Gen-Z. Website lama mereka lambat dan memiliki alur belanja yang memusingkan bagi pengguna ponsel.',
-  'Solaria Retail Group adalah brand pakaian gaya hidup kontemporer dengan 50+ gerai di pusat perbelanjaan.',
-  '46%', 'Pengurangan Drop-off', 'Checkout ringkas menurunkan tingkat keranjang belanja yang terbengkalai secara drastis.',
-  '18%', 'Kenaikan Nilai Transaksi', 'Fitur upsell otomatis berdasarkan rekomendasi produk AI di keranjang mendorong pembelian tambahan.',
-  '32%', 'Kenaikan Penjualan Online', 'Kecepatan loading website berbasis server-side rendering Next.js melipatgandakan konversi pengunjung.',
-  'Platform e-commerce lama sering lambat memproses gambar resolusi tinggi produk pakaian, berakibat pada tingginya bounce rate pengunjung di bawah 5 detik.',
-  'Mendesain dan mendeploy web e-commerce Next.js headless menggunakan Shopify API untuk manajemen inventori serta Stripe untuk pembayaran internasional terenkripsi.',
-  'Sistem e-commerce baru ini terasa sangat cepat di mobile. Konversi penjualan digital kami melonjak tajam.',
-  'VP E-Commerce Solaria',
-  '[{"type": "image", "url": "/images/ecommerce_web.png"}]'::jsonb
-),
-(
-  'velo-wallet', 
-  'Velo E-Wallet & Crypto', 
-  'mobile', 
-  'Mobile Application', 
-  '/images/ewallet_app.png', 
-  '',
-  'Aplikasi dompet digital multifungsi untuk transfer, pembayaran biller, dan jual-beli crypto.',
-  'Velo Finance Ltd.',
-  '2025',
-  ARRAY['React Native', 'Web3.js', 'NestJS', 'Redis', 'FaceID SDK'],
-  'Memerlukan otentikasi transaksi super aman yang tetap terasa cepat dan tanpa lag di ponsel berspesifikasi rendah.',
-  'Membuat aplikasi e-wallet ultra-ringan dengan otentikasi biometrik lokal yang diamankan enkripsi AES-256 dan sinkronisasi blockchain asinkron.',
-  'Mencapai 200.000+ pengguna aktif bulanan dalam 90 hari pertama, dengan tingkat keberhasilan transaksi 99,99% dan rating 4.8 di Play Store.',
-  '/demo/velo-wallet',
-  '',
-  'Aplikasi keuangan terdesentralisasi (Web3) seringkali dinilai terlalu rumit untuk pengguna awam. Penggabungan fitur dompet konvensional (fiat) dan mata uang kripto dalam satu UI yang sederhana adalah tantangan produk ini.',
-  'Velo Finance Ltd. adalah startup fintech berlisensi yang fokus pada inklusi keuangan digital modern.',
-  '200K+', 'Pengguna Aktif', 'Mendapatkan antusiasme tinggi berkat kemudahan transaksi crypto tanpa pemahaman teknis blockchain yang rumit.',
-  '99,99%', 'Keberhasilan Transaksi', 'Optimasi caching backend Redis menjamin tidak ada transaksi ganda atau kegagalan transfer.',
-  '4.8', 'Rating Play Store', 'Ulasan positif memuji kemudahan otentikasi sidik jari/FaceID dan kelancaran UI aplikasi.',
-  'Waktu sinkronisasi data saldo blockchain seringkali lambat di jaringan internet seluler yang kurang stabil di daerah rural.',
-  'Membangun aplikasi mobile cross-platform dengan React Native, modul enkripsi native biometrik FaceID/Keychain, serta microservices NestJS dengan message queue Redis.',
-  'Velo berhasil menjembatani kebutuhan pembayaran harian dan manajemen aset digital dengan cara yang sangat simpel.',
-  'CTO Velo Finance',
-  '[{"type": "image", "url": "/images/ewallet_app.png"}]'::jsonb
 )
 ON CONFLICT (slug) DO NOTHING;
 
@@ -274,6 +166,7 @@ CREATE TABLE IF NOT EXISTS financial_transactions (
     category TEXT NOT NULL,
     amount NUMERIC NOT NULL,
     description TEXT NOT NULL,
+    receipt_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -310,16 +203,32 @@ VALUES
 ('INV-2026-003', 'Rian Hidayat', 'rian@solaria.com', 'E-Commerce Website Revamp', 4500000, 'cancelled', '2026-07-10')
 ON CONFLICT (invoice_number) DO NOTHING;
 
--- 7. Tabel Users (Kredensial Pengguna Admin)
+-- 7. Tabel Users (Kredensial Pengguna Admin dan Anggota/Members)
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    username TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    role TEXT DEFAULT 'admin',
+    username TEXT UNIQUE, -- Nullable karena member mendaftar pakai nomor HP
+    password_hash TEXT, -- Nullable karena member login via OTP
+    phone_number TEXT UNIQUE, -- Nullable karena admin mendaftar pakai username
+    name TEXT, -- Nama lengkap member/pengguna
+    profile_picture TEXT, -- URL foto profil pengguna
+    role TEXT DEFAULT 'member' CHECK (role IN ('admin', 'member')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Masukkan user default awal
+-- Masukkan user default awal (admin) jika belum ada
 INSERT INTO users (username, password_hash, role)
 VALUES ('admin', 'berdikariadmin', 'admin')
 ON CONFLICT (username) DO NOTHING;
+
+-- 8. Tabel OTP Codes (Penyimpanan OTP sementara untuk Verifikasi)
+CREATE TABLE IF NOT EXISTS otp_codes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    phone_number TEXT NOT NULL,
+    code TEXT NOT NULL,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    verified BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Buat index untuk performa pencarian OTP berdasarkan nomor HP
+CREATE INDEX IF NOT EXISTS idx_otp_codes_phone ON otp_codes(phone_number);

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "admin-id-12345",
+    "username": "admin",
+    "password_hash": "berdikariadmin",
+    "role": "admin",
+    "created_at": "2026-08-28T10:12:36.018Z"
+  },
+  {
+    "phone_number": "081234567890",
+    "name": "Berdikari Member",
+    "profile_picture": "/api/uploads/profile_1787911991524_test_avatar.png",
+    "role": "member",
+    "created_at": "2026-08-28T10:13:12.073Z",
+    "id": "u_1787911992209"
+  }
+]
