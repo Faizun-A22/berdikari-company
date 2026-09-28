@@ -488,6 +488,8 @@ export default function AdminApp() {
       setIsUploadingTxImg(false);
     }
   };
+  void isUploadingTxImg;
+  void handleTxFileUpload;
 
   const handleSaveTx = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -979,7 +981,7 @@ export default function AdminApp() {
         <div className="glow-orb login-glow-1"></div>
         <div className="glow-orb login-glow-2"></div>
         
-        <div className={`card-glass login-card ${shake ? 'shake-animation' : ''}`}>
+        <div className={`login-card ${shake ? 'shake-animation' : ''}`}>
           <div className="login-header">
             <div className="login-logo">
               <img src="/logo.png" alt="Logo" style={{ height: '48px', objectFit: 'contain', marginRight: '8px' }} />
@@ -1082,30 +1084,37 @@ export default function AdminApp() {
             padding: 40px;
             text-align: center;
             border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.88) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             color: #f8fafc;
             position: relative;
             z-index: 10;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
           }
-           .login-card .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, #ef4444 100%) !important;
+          .login-card:hover {
+            background: rgba(15, 23, 42, 0.92) !important;
+            border-color: rgba(229, 62, 62, 0.35) !important;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 30px rgba(229, 62, 62, 0.12) !important;
+            transform: none !important;
+          }
+          .login-card .btn-primary {
+            background: linear-gradient(135deg, #e53e3e 0%, #b91c1c 100%) !important;
             border: none !important;
             color: white !important;
             font-weight: 700;
             padding: 14px 28px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.25) !important;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3) !important;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
           }
           .login-card .btn-primary:hover {
-            background: linear-gradient(135deg, #c53030 0%, #e53e3e 100%) !important;
-            box-shadow: 0 6px 22px rgba(229, 62, 62, 0.45) !important;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important;
+            box-shadow: 0 6px 24px rgba(229, 62, 62, 0.5) !important;
             transform: translateY(-2px) !important;
           }
           .login-logo {
@@ -1164,18 +1173,22 @@ export default function AdminApp() {
           .password-input-wrapper input {
             width: 100%;
             padding: 12px 45px 12px 45px;
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 8px;
             color: #ffffff;
             font-size: 0.95rem;
             transition: all var(--transition-fast);
           }
+          .password-input-wrapper input:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(30, 41, 59, 0.85);
+          }
           .password-input-wrapper input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
-            background: rgba(30, 41, 59, 0.8);
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+            background: rgba(30, 41, 59, 0.95);
           }
           .toggle-password {
             position: absolute;
