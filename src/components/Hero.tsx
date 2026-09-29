@@ -1,52 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import {
   ArrowRight,
-  Code,
   ShieldCheck,
-  Zap,
-  Award,
-  Star,
-  TrendingUp,
-  CheckCircle2,
+  Headphones,
+  Tag,
+  Layers,
+  Search,
   Globe,
-  Smartphone,
-  Cpu,
+  CheckCircle2,
 } from 'lucide-react';
 
-function useCountUp(target: number, duration = 2000, decimals = 0) {
-  const [value, setValue] = useState(0);
-  const rafRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const startTime = performance.now();
-
-    const animate = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(parseFloat((eased * target).toFixed(decimals)));
-      if (progress < 1) {
-        rafRef.current = requestAnimationFrame(animate);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [target, duration, decimals]);
-
-  return value;
-}
-
 export default function Hero() {
-  const [heroBadge, setHeroBadge] = useState('Penyedia Layanan IT & Solusi Digital Premium');
+  const [heroBadge, setHeroBadge] = useState('TRANSFORMASI DIGITAL NUSANTARA');
   const [heroTitle, setHeroTitle] = useState(
-    'Transformasi Digital Bisnis Anda Bersama <span class="gradient-text-expert font-extra">Berdikari Digital Nusantara</span>'
+    'Bangun Sistem Unggul. <br/><span class="hero-highlight-curve">Akselerasi Bisnis Anda.</span>'
   );
   const [heroDesc, setHeroDesc] = useState(
-    'Kami merancang website premium, aplikasi mobile, sistem AI otomatisasi cerdas, serta produk digital siap pakai untuk mengakselerasi pertumbuhan bisnis Anda secara mandiri.'
+    'Solusi rekayasa perangkat lunak modern untuk website premium, aplikasi mobile multiplatform, dan kecerdasan buatan (AI) otomatisasi yang dirancang presisi untuk skala bisnis Anda.'
   );
+
+  // Quick Solution Bar States
+  const [selectedService, setSelectedService] = useState('Website & Web App');
+  const [selectedScale, setSelectedScale] = useState('UMKM / Starter');
 
   useEffect(() => {
     fetch('/api/config')
@@ -59,733 +34,552 @@ export default function Hero() {
       .catch((err) => console.error('Gagal mengambil config untuk Hero:', err));
   }, []);
 
-  const countProyek = useCountUp(150, 2000, 0);
-  const countKepuasan = useCountUp(99.2, 2200, 1);
-  const countTahun = useCountUp(5, 1800, 0);
-  const countAhli = useCountUp(25, 2000, 0);
-
-  const stats = [
-    { icon: <Code className="text-red" size={20} />, value: '150+', label: 'Proyek Selesai', display: `${countProyek}+` },
-    { icon: <Zap className="text-red" size={20} />, value: '99.2%', label: 'Kepuasan Klien', display: `${countKepuasan}%` },
-    { icon: <ShieldCheck className="text-red" size={20} />, value: '5+', label: 'Tahun Pengalaman', display: `${countTahun}+` },
-    { icon: <Award className="text-red" size={20} />, value: '25+', label: 'Ahli IT Profesional', display: `${countAhli}+` },
-  ];
+  const getQuickConsultUrl = () => {
+    const message = `Halo Berdikari Digital Nusantara, saya ingin konsultasi proyek:\n- Layanan: ${selectedService}\n- Skala Kebutuhan: ${selectedScale}\nMohon informasi estimasi & langkah selanjutnya.`;
+    return `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
+  };
 
   return (
-    <section id="home" className="hero-section">
-      {/* Dynamic Ambient Background Glows */}
-      <div className="hero-glow-orb hero-glow-1"></div>
-      <div className="hero-glow-orb hero-glow-2"></div>
-      <div className="hero-glow-orb hero-glow-3"></div>
+    <section id="home" className="hero-editorial-section">
+      {/* Background Graphic Wave Mask */}
+      <div className="hero-bg-container">
+        <div className="hero-gradient-canvas"></div>
+        <div className="hero-curve-wave"></div>
+      </div>
 
-      {/* Floating Animated Geometric Chips */}
-      <div className="ambient-shape shape-1" aria-hidden="true" />
-      <div className="ambient-shape shape-2" aria-hidden="true" />
-      <div className="ambient-shape shape-3" aria-hidden="true" />
-
-      <div className="container hero-container">
-        {/* Main Header Content */}
-        <div className="hero-content">
-          {/* Animated Badge */}
-          <div className="badge-wrapper hero-stagger hero-stagger-1">
-            <span className="hero-badge">
-              <span className="badge-dot"></span>
+      <div className="container hero-editorial-container">
+        {/* Top Text Content */}
+        <div className="hero-editorial-content">
+          <div className="editorial-badge-row">
+            <span className="editorial-pill-badge">
+              <span className="pill-dot"></span>
               {heroBadge}
             </span>
           </div>
 
-          {/* Heading */}
           <h1
-            className="hero-title hero-stagger hero-stagger-2"
+            className="editorial-main-title"
             dangerouslySetInnerHTML={{ __html: heroTitle }}
           ></h1>
 
-          {/* Subtitle */}
-          <p className="hero-description hero-stagger hero-stagger-3">
-            {heroDesc}
-          </p>
+          <p className="editorial-subtitle">{heroDesc}</p>
 
-          {/* CTA Buttons */}
-          <div className="hero-actions hero-stagger hero-stagger-4">
-            <a href="/contact.html" className="btn btn-primary hero-btn-cta">
-              <span>Konsultasi Gratis</span>
-              <ArrowRight size={18} className="btn-arrow" />
+          <div className="editorial-cta-row">
+            <a href="/contact.html" className="btn-pill-primary">
+              <span>Konsultasi Sekarang</span>
+              <div className="btn-icon-circle">
+                <ArrowRight size={15} />
+              </div>
             </a>
-            <a href="/portfolio.html" className="btn btn-secondary hero-btn-secondary">
-              Lihat Portofolio
+            <a href="/portfolio.html" className="btn-pill-outline">
+              Lihat Karya & Portofolio
             </a>
           </div>
         </div>
 
-        {/* Lightweight Floating Feature Showcase (Modern Pinterest/Camplify Style without Phone Frame) */}
-        <div className="hero-floating-showcase hero-stagger hero-stagger-5">
-          {/* Card 1: Fast Delivery & Performance */}
-          <div className="showcase-card showcase-card-left float-card-1">
-            <div className="card-icon-pill bg-red-soft">
-              <TrendingUp size={18} className="text-red" />
-            </div>
-            <div className="card-body-text">
-              <span className="card-top-tag">Lighthouse 99+</span>
-              <h4 className="card-main-title">Performa Ultra Cepat</h4>
-              <p className="card-desc">React & Flutter Next-Gen Architecture</p>
+        {/* Floating Horizontal Solution Filter Bar (Pomaii Style) */}
+        <div className="floating-solution-bar card-glass">
+          <div className="solution-bar-col">
+            <label className="bar-label">
+              <Globe size={14} className="bar-icon text-red" />
+              <span>Pilihan Layanan</span>
+            </label>
+            <select
+              className="bar-select"
+              value={selectedService}
+              onChange={(e) => setSelectedService(e.target.value)}
+            >
+              <option value="Website & Web App">Website & Web App</option>
+              <option value="Mobile App (Android & iOS)">Mobile App (Android/iOS)</option>
+              <option value="AI Otomatisasi & Chatbot">AI Otomatisasi & Chatbot</option>
+              <option value="Sistem SaaS / POS Kasir">Sistem SaaS / Kasir Toko</option>
+            </select>
+          </div>
+
+          <div className="bar-divider"></div>
+
+          <div className="solution-bar-col">
+            <label className="bar-label">
+              <Layers size={14} className="bar-icon text-red" />
+              <span>Skala Kebutuhan</span>
+            </label>
+            <select
+              className="bar-select"
+              value={selectedScale}
+              onChange={(e) => setSelectedScale(e.target.value)}
+            >
+              <option value="UMKM / Starter (Rp 499rb)">Starter / UMKM (Hemat)</option>
+              <option value="Bisnis Berkembang (Kustom)">Bisnis / Company Profile</option>
+              <option value="Enterprise / Sistem Skala Penuh">Enterprise & Kompleks</option>
+            </select>
+          </div>
+
+          <div className="bar-divider"></div>
+
+          <div className="solution-bar-col">
+            <label className="bar-label">
+              <CheckCircle2 size={14} className="bar-icon text-red" />
+              <span>Model Layanan</span>
+            </label>
+            <div className="bar-static-text">
+              <strong>Managed & Garansi</strong>
+              <span className="bar-sub-badge">Free 3 Bulan</span>
             </div>
           </div>
 
-          {/* Card 2: Interactive Rating & Client Trust */}
-          <div className="showcase-card showcase-card-center float-card-2">
-            <div className="rating-avatar-stack">
-              <span className="avatar-chip">👨‍💻</span>
-              <span className="avatar-chip">👩‍💼</span>
-              <span className="avatar-chip">🚀</span>
-            </div>
-            <div className="card-body-text">
-              <div className="star-row">
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <span className="rating-num">4.9/5.0</span>
-              </div>
-              <span className="card-sub-info">150+ Klien & Mitra Bisnis Percaya</span>
-            </div>
-          </div>
-
-          {/* Card 3: Security & 24/7 Monitoring */}
-          <div className="showcase-card showcase-card-right float-card-3">
-            <div className="card-icon-pill bg-red-soft">
-              <ShieldCheck size={18} className="text-red" />
-            </div>
-            <div className="card-body-text">
-              <span className="card-top-tag text-green">
-                <span className="live-pulse-dot"></span> 99.9% Uptime
-              </span>
-              <h4 className="card-main-title">Garansi Bug-Free 3 Bulan</h4>
-              <p className="card-desc">Cloud Server & SSL Terproteksi Mandiri</p>
-            </div>
+          <div className="solution-bar-action">
+            <a
+              href={getQuickConsultUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bar-search-btn"
+            >
+              <Search size={16} />
+              <span>Cari Solusi</span>
+            </a>
           </div>
         </div>
 
-        {/* Live Technology Ticker Pills */}
-        <div className="hero-tech-pills hero-stagger hero-stagger-5">
-          <span className="tech-pill"><Globe size={14} /> Web Apps</span>
-          <span className="tech-pill"><Smartphone size={14} /> Mobile Flutter</span>
-          <span className="tech-pill"><Cpu size={14} /> AI Automasi</span>
-          <span className="tech-pill"><CheckCircle2 size={14} /> Cloud Scalable</span>
-        </div>
-
-        {/* Stats Grid with Counting Animation */}
-        <div className="hero-stats-grid hero-stagger hero-stagger-6">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="card-glass stat-card">
-              <div className="stat-icon-wrapper">
-                {stat.icon}
-              </div>
-              <div className="stat-info">
-                <span className="stat-value">{stat.display}</span>
-                <span className="stat-label">{stat.label}</span>
-              </div>
+        {/* 4-Pillar Trust Feature Bar (Pomaii Style) */}
+        <div className="editorial-trust-bar">
+          <div className="trust-item">
+            <div className="trust-icon-box">
+              <Layers size={20} className="text-red" />
             </div>
-          ))}
+            <div className="trust-text">
+              <h4>Teknologi Modern</h4>
+              <p>React, Next.js, & Flutter terkini dengan Lighthouse 95+.</p>
+            </div>
+          </div>
+
+          <div className="trust-item">
+            <div className="trust-icon-box">
+              <Tag size={20} className="text-red" />
+            </div>
+            <div className="trust-text">
+              <h4>Harga Rasional</h4>
+              <p>Paket awal mulai Rp 499.000 dengan maintenance Rp 50.000/bln.</p>
+            </div>
+          </div>
+
+          <div className="trust-item">
+            <div className="trust-icon-box">
+              <ShieldCheck size={20} className="text-red" />
+            </div>
+            <div className="trust-text">
+              <h4>Aman & Terproteksi</h4>
+              <p>Server cloud terisolasi, sertifikat SSL gratis, dan backup rutin.</p>
+            </div>
+          </div>
+
+          <div className="trust-item">
+            <div className="trust-icon-box">
+              <Headphones size={20} className="text-red" />
+            </div>
+            <div className="trust-text">
+              <h4>Dukungan Purnajual</h4>
+              <p>Garansi bebas bug 3 bulan dan respons cepat pemeliharaan.</p>
+            </div>
+          </div>
         </div>
       </div>
 
       <style>{`
-        /* ===== Hardware-Accelerated Animations ===== */
-        @keyframes heroFadeInUp {
-          0% {
-            opacity: 0;
-            transform: translate3d(0, 28px, 0);
-          }
-          100% {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-          }
-        }
-
-        @keyframes floatGentle1 {
-          0%, 100% {
-            transform: translate3d(0, 0, 0);
-          }
-          50% {
-            transform: translate3d(0, -10px, 0);
-          }
-        }
-
-        @keyframes floatGentle2 {
-          0%, 100% {
-            transform: translate3d(0, 0, 0);
-          }
-          50% {
-            transform: translate3d(0, -14px, 0);
-          }
-        }
-
-        @keyframes floatGentle3 {
-          0%, 100% {
-            transform: translate3d(0, 0, 0);
-          }
-          50% {
-            transform: translate3d(0, -8px, 0);
-          }
-        }
-
-        @keyframes ambientPulse {
-          0%, 100% {
-            transform: scale(1);
-            opacity: 0.7;
-          }
-          50% {
-            transform: scale(1.15);
-            opacity: 0.95;
-          }
-        }
-
-        @keyframes pulseGlow {
-          0%, 100% {
-            box-shadow: 0 0 6px var(--primary);
-            opacity: 1;
-          }
-          50% {
-            box-shadow: 0 0 16px var(--primary), 0 0 30px rgba(229, 62, 62, 0.35);
-            opacity: 0.85;
-          }
-        }
-
-        @keyframes backgroundShift {
-          0% {
-            background-position: 50% 0%;
-          }
-          50% {
-            background-position: 50% 100%;
-          }
-          100% {
-            background-position: 50% 0%;
-          }
-        }
-
-        /* ===== Hero Section Container ===== */
-        .hero-section {
-          min-height: 94vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding-top: 130px;
-          padding-bottom: 75px;
+        /* ===== Hero Section Canvas ===== */
+        .hero-editorial-section {
           position: relative;
+          padding-top: 140px;
+          padding-bottom: 70px;
+          background-color: #ffffff;
           overflow: hidden;
-          background: radial-gradient(ellipse at 50% -10%, rgba(229, 62, 62, 0.07) 0%, transparent 65%),
-                      radial-gradient(ellipse at 85% 70%, rgba(229, 62, 62, 0.035) 0%, transparent 50%),
-                      var(--bg-dark);
-          background-size: 180% 180%;
-          animation: backgroundShift 14s ease-in-out infinite;
         }
 
-        /* Ambient Glow Orbs */
-        .hero-glow-orb {
+        .hero-bg-container {
           position: absolute;
-          border-radius: 50%;
-          pointer-events: none;
-          filter: blur(55px);
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 68%;
+          overflow: hidden;
           z-index: 1;
+          pointer-events: none;
         }
 
-        .hero-glow-1 {
-          width: 420px;
-          height: 420px;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.12) 0%, transparent 70%);
-          top: -8%;
-          left: 15%;
-          animation: ambientPulse 8s ease-in-out infinite;
-        }
-
-        .hero-glow-2 {
-          width: 360px;
-          height: 360px;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.08) 0%, transparent 70%);
-          bottom: 10%;
-          right: 12%;
-          animation: ambientPulse 9s ease-in-out infinite 2s;
-        }
-
-        .hero-glow-3 {
-          width: 280px;
-          height: 280px;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.06) 0%, transparent 70%);
-          top: 40%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          animation: ambientPulse 10s ease-in-out infinite 4s;
-        }
-
-        /* Ambient Decorative Shapes */
-        .ambient-shape {
+        .hero-gradient-canvas {
           position: absolute;
-          pointer-events: none;
-          z-index: 1;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: 
+            radial-gradient(ellipse at 85% 15%, rgba(229, 62, 62, 0.08) 0%, transparent 60%),
+            radial-gradient(ellipse at 15% 35%, rgba(229, 62, 62, 0.05) 0%, transparent 50%),
+            linear-gradient(180deg, #fff9f9 0%, #ffffff 100%);
         }
 
-        .shape-1 {
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          background: rgba(229, 62, 62, 0.035);
-          top: 15%;
-          left: 6%;
-          animation: floatGentle1 7s ease-in-out infinite;
+        .hero-curve-wave {
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          right: 0;
+          height: 80px;
+          background: #ffffff;
+          border-top-left-radius: 50% 100%;
+          border-top-right-radius: 50% 100%;
+          transform: scaleX(1.3);
         }
 
-        .shape-2 {
-          width: 100px;
-          height: 100px;
-          border-radius: 24px;
-          background: rgba(229, 62, 62, 0.04);
-          top: 25%;
-          right: 7%;
-          animation: floatGentle2 8s ease-in-out infinite 1s;
-        }
-
-        .shape-3 {
-          width: 70px;
-          height: 70px;
-          border-radius: 50%;
-          background: rgba(229, 62, 62, 0.04);
-          bottom: 22%;
-          left: 9%;
-          animation: floatGentle3 6.5s ease-in-out infinite 2s;
-        }
-
-        /* ===== Hero Content ===== */
-        .hero-container {
+        .hero-editorial-container {
+          position: relative;
+          z-index: 10;
           display: flex;
           flex-direction: column;
           align-items: center;
           text-align: center;
-          position: relative;
-          z-index: 10;
-          gap: 36px;
-          width: 100%;
+          gap: 40px;
         }
 
-        .hero-content {
-          max-width: 880px;
+        .hero-editorial-content {
+          max-width: 900px;
+          margin: 0 auto;
         }
 
-        /* Staggered Animations */
-        .hero-stagger {
-          opacity: 0;
-          animation: heroFadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          will-change: transform, opacity;
-        }
-
-        .hero-stagger-1 { animation-delay: 0.08s; }
-        .hero-stagger-2 { animation-delay: 0.2s; }
-        .hero-stagger-3 { animation-delay: 0.32s; }
-        .hero-stagger-4 { animation-delay: 0.44s; }
-        .hero-stagger-5 { animation-delay: 0.56s; }
-        .hero-stagger-6 { animation-delay: 0.7s; }
-
-        /* Badge */
-        .badge-wrapper {
+        /* ===== Badge Pill ===== */
+        .editorial-badge-row {
           display: flex;
           justify-content: center;
-          margin-bottom: 20px;
+          margin-bottom: 22px;
         }
 
-        .hero-badge {
+        .editorial-pill-badge {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: rgba(229, 62, 62, 0.04);
-          border: 1px solid rgba(229, 62, 62, 0.14);
-          color: var(--text-primary);
-          padding: 8px 20px;
+          background: rgba(229, 62, 62, 0.06);
+          border: 1px solid rgba(229, 62, 62, 0.18);
+          color: var(--primary);
+          padding: 6px 18px;
           border-radius: 100px;
-          font-size: 0.875rem;
-          font-weight: 600;
-          letter-spacing: 0.02em;
-          backdrop-filter: blur(10px);
-          transition: var(--transition-normal);
+          font-size: 0.78rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
         }
 
-        .hero-badge:hover {
-          border-color: rgba(229, 62, 62, 0.3);
-          background: rgba(229, 62, 62, 0.08);
-          transform: translateY(-1px);
-        }
-
-        .badge-dot {
-          width: 8px;
-          height: 8px;
-          background-color: var(--primary);
+        .pill-dot {
+          width: 7px;
+          height: 7px;
           border-radius: 50%;
-          box-shadow: 0 0 10px var(--primary);
+          background: var(--primary);
+          box-shadow: 0 0 8px var(--primary);
+        }
+
+        /* ===== Main Title ===== */
+        .editorial-main-title {
+          font-size: 3.8rem;
+          font-weight: 900;
+          line-height: 1.12;
+          letter-spacing: -0.035em;
+          color: #0f172a;
+          margin-bottom: 24px;
+        }
+
+        .hero-highlight-curve {
+          position: relative;
+          color: var(--primary);
           display: inline-block;
-          animation: pulseGlow 2s infinite ease-in-out;
         }
 
-        /* Title */
-        .hero-title {
-          font-size: 3.5rem;
-          font-weight: 900;
-          line-height: 1.15;
-          letter-spacing: -0.03em;
-          margin-bottom: 22px;
-          color: var(--text-primary);
+        .hero-highlight-curve::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 4px;
+          width: 100%;
+          height: 10px;
+          background: rgba(229, 62, 62, 0.12);
+          border-radius: 6px;
+          z-index: -1;
+          transform: rotate(-1deg);
         }
 
-        .font-extra {
-          font-weight: 900;
-        }
-
-        /* Description */
-        .hero-description {
+        .editorial-subtitle {
           font-size: 1.15rem;
-          color: var(--text-secondary);
-          margin-bottom: 34px;
-          line-height: 1.7;
+          line-height: 1.75;
+          color: #475569;
           max-width: 720px;
-          margin-left: auto;
-          margin-right: auto;
+          margin: 0 auto 36px auto;
         }
 
-        /* Action Buttons */
-        .hero-actions {
+        /* ===== Buttons ===== */
+        .editorial-cta-row {
           display: flex;
           justify-content: center;
+          align-items: center;
           gap: 16px;
           flex-wrap: wrap;
         }
 
-        .hero-btn-cta {
-          padding: 14px 28px;
-          font-size: 1rem;
+        .btn-pill-primary {
           display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .hero-btn-cta:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 25px rgba(229, 62, 62, 0.3);
-        }
-
-        .hero-btn-cta:hover .btn-arrow {
-          transform: translateX(4px);
-        }
-
-        .btn-arrow {
-          transition: transform 0.2s ease;
-        }
-
-        .hero-btn-secondary {
-          padding: 14px 26px;
-          font-size: 1rem;
-          transition: transform 0.25s ease;
-        }
-
-        .hero-btn-secondary:hover {
-          transform: translateY(-2px);
-        }
-
-        /* ===== Lightweight Floating Feature Showcase (Camplify Style) ===== */
-        .hero-floating-showcase {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          width: 100%;
-          max-width: 980px;
-          margin: 12px auto 0 auto;
-        }
-
-        .showcase-card {
-          background: rgba(255, 255, 255, 0.92);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(229, 62, 62, 0.12);
-          border-radius: 16px;
-          padding: 18px 20px;
-          text-align: left;
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-          will-change: transform;
-        }
-
-        .showcase-card:hover {
-          transform: translateY(-6px) scale(1.02);
-          box-shadow: 0 16px 36px rgba(229, 62, 62, 0.1);
-          border-color: rgba(229, 62, 62, 0.3);
-        }
-
-        .float-card-1 {
-          animation: floatGentle1 6s ease-in-out infinite;
-        }
-
-        .float-card-2 {
-          animation: floatGentle2 7s ease-in-out infinite 0.5s;
-        }
-
-        .float-card-3 {
-          animation: floatGentle3 6.5s ease-in-out infinite 1s;
-        }
-
-        .bg-red-soft {
-          background: rgba(229, 62, 62, 0.08);
-        }
-
-        .card-icon-pill {
-          width: 44px;
-          height: 44px;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-
-        .card-body-text {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .card-top-tag {
-          font-size: 0.72rem;
-          font-weight: 800;
-          color: var(--primary);
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .card-top-tag.text-green {
-          color: #10b981;
-        }
-
-        .live-pulse-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #10b981;
-          display: inline-block;
-          animation: pulseGlow 1.8s infinite;
-        }
-
-        .card-main-title {
-          font-size: 0.95rem;
-          font-weight: 800;
-          color: var(--text-primary);
-          margin: 2px 0;
-          line-height: 1.25;
-        }
-
-        .card-desc {
-          font-size: 0.78rem;
-          color: var(--text-secondary);
-          margin: 0;
-          line-height: 1.35;
-        }
-
-        .rating-avatar-stack {
-          display: flex;
-          align-items: center;
-        }
-
-        .avatar-chip {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: #fee2e2;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.85rem;
-          border: 2px solid #ffffff;
-          margin-left: -10px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-        }
-
-        .avatar-chip:first-child {
-          margin-left: 0;
-        }
-
-        .star-row {
-          display: flex;
-          align-items: center;
-          gap: 2px;
-        }
-
-        .rating-num {
-          font-size: 0.8rem;
-          font-weight: 800;
-          color: var(--text-primary);
-          margin-left: 4px;
-        }
-
-        .card-sub-info {
-          font-size: 0.75rem;
-          color: var(--text-secondary);
-          margin-top: 2px;
-        }
-
-        /* Tech Pills */
-        .hero-tech-pills {
-          display: flex;
-          justify-content: center;
           align-items: center;
           gap: 12px;
-          flex-wrap: wrap;
-        }
-
-        .tech-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          background: rgba(255, 255, 255, 0.8);
-          border: 1px solid var(--border);
-          padding: 6px 14px;
+          background: var(--primary);
+          color: #ffffff;
+          padding: 12px 14px 12px 28px;
           border-radius: 100px;
-          font-size: 0.8rem;
           font-weight: 700;
-          color: var(--text-secondary);
-          backdrop-filter: blur(8px);
+          font-size: 0.95rem;
+          box-shadow: 0 8px 24px rgba(229, 62, 62, 0.3);
           transition: all 0.25s ease;
         }
 
-        .tech-pill:hover {
+        .btn-pill-primary:hover {
+          background: #dc2626;
+          transform: translateY(-2px);
+          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.4);
+        }
+
+        .btn-icon-circle {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.22);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.2s ease;
+        }
+
+        .btn-pill-primary:hover .btn-icon-circle {
+          transform: translateX(3px);
+        }
+
+        .btn-pill-outline {
+          display: inline-flex;
+          align-items: center;
+          padding: 14px 28px;
+          border-radius: 100px;
+          border: 1px solid #cbd5e1;
+          background: #ffffff;
+          color: #334155;
+          font-weight: 700;
+          font-size: 0.95rem;
+          transition: all 0.25s ease;
+        }
+
+        .btn-pill-outline:hover {
+          border-color: var(--primary);
           color: var(--primary);
-          border-color: rgba(229, 62, 62, 0.3);
-          background: rgba(229, 62, 62, 0.04);
+          background: #fff5f5;
           transform: translateY(-2px);
         }
 
-        /* ===== Stats Grid ===== */
-        .hero-stats-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 20px;
+        /* ===== Floating Solution Bar (Pomaii Style) ===== */
+        .floating-solution-bar {
           width: 100%;
-          max-width: 1050px;
-          margin-top: 6px;
-        }
-
-        .stat-card {
+          max-width: 980px;
+          background: #ffffff;
+          border: 1px solid rgba(229, 62, 62, 0.16);
+          box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08);
+          border-radius: 100px;
+          padding: 12px 16px 12px 32px;
           display: flex;
           align-items: center;
-          gap: 14px;
-          padding: 22px;
+          justify-content: space-between;
+          gap: 16px;
           text-align: left;
-          border-radius: 14px;
-          background: #ffffff;
-          border: 1px solid var(--border);
-          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-          will-change: transform;
+          transition: box-shadow 0.3s ease;
         }
 
-        .stat-card:hover {
-          transform: scale(1.04) translateY(-4px);
-          box-shadow: 0 12px 28px rgba(229, 62, 62, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
-          border-color: rgba(229, 62, 62, 0.25);
+        .floating-solution-bar:hover {
+          box-shadow: 0 24px 50px -10px rgba(229, 62, 62, 0.12);
         }
 
-        .stat-icon-wrapper {
-          width: 46px;
-          height: 46px;
+        .solution-bar-col {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .bar-label {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+          margin-bottom: 2px;
+        }
+
+        .bar-select {
+          border: none;
+          background: transparent;
+          font-size: 0.925rem;
+          font-weight: 800;
+          color: #0f172a;
+          outline: none;
+          cursor: pointer;
+          font-family: inherit;
+          padding: 2px 0;
+        }
+
+        .bar-divider {
+          width: 1px;
+          height: 38px;
+          background: #e2e8f0;
+          flex-shrink: 0;
+        }
+
+        .bar-static-text {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.925rem;
+          color: #0f172a;
+        }
+
+        .bar-sub-badge {
+          font-size: 0.68rem;
+          background: #ecfdf5;
+          color: #059669;
+          font-weight: 800;
+          padding: 2px 8px;
+          border-radius: 100px;
+        }
+
+        .solution-bar-action {
+          flex-shrink: 0;
+        }
+
+        .bar-search-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: #0f172a;
+          color: #ffffff;
+          padding: 14px 26px;
+          border-radius: 100px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          transition: all 0.25s ease;
+        }
+
+        .bar-search-btn:hover {
+          background: var(--primary);
+          color: #ffffff;
+          transform: scale(1.03);
+          box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
+        }
+
+        /* ===== Editorial Trust Bar (4 Columns) ===== */
+        .editorial-trust-bar {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 28px;
+          width: 100%;
+          max-width: 1100px;
+          padding-top: 15px;
+          text-align: left;
+        }
+
+        .trust-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+        }
+
+        .trust-icon-box {
+          width: 44px;
+          height: 44px;
           border-radius: 12px;
-          background: rgba(229, 62, 62, 0.05);
-          border: 1px solid rgba(229, 62, 62, 0.1);
+          background: #fff5f5;
+          border: 1px solid rgba(229, 62, 62, 0.15);
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          transition: var(--transition-normal);
+          transition: transform 0.25s ease;
         }
 
-        .stat-card:hover .stat-icon-wrapper {
-          background: rgba(229, 62, 62, 0.12);
-          border-color: rgba(229, 62, 62, 0.25);
+        .trust-item:hover .trust-icon-box {
+          transform: translateY(-3px);
+          background: var(--primary);
+          color: #ffffff;
         }
 
-        .stat-info {
-          display: flex;
-          flex-direction: column;
+        .trust-item:hover .trust-icon-box .text-red {
+          color: #ffffff;
         }
 
-        .stat-value {
-          font-family: var(--font-heading);
-          font-size: 1.5rem;
+        .trust-text h4 {
+          font-size: 0.95rem;
           font-weight: 800;
-          color: var(--text-primary);
-          line-height: 1.2;
-          font-variant-numeric: tabular-nums;
+          color: #0f172a;
+          margin: 0 0 4px 0;
         }
 
-        .stat-label {
-          font-size: 0.85rem;
-          color: var(--text-secondary);
+        .trust-text p {
+          font-size: 0.8rem;
+          color: #64748b;
+          line-height: 1.45;
+          margin: 0;
         }
 
-        /* ===== Responsive Media Queries ===== */
+        /* ===== Responsive Queries ===== */
         @media (max-width: 991px) {
-          .hero-title {
-            font-size: 2.85rem;
+          .editorial-main-title {
+            font-size: 3rem;
           }
 
-          .hero-floating-showcase {
-            grid-template-columns: 1fr;
-            max-width: 520px;
+          .floating-solution-bar {
+            border-radius: 24px;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 20px;
           }
 
-          .hero-stats-grid {
+          .bar-divider {
+            width: 100%;
+            height: 1px;
+          }
+
+          .bar-search-btn {
+            justify-content: center;
+            width: 100%;
+          }
+
+          .editorial-trust-bar {
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            gap: 20px;
           }
         }
 
         @media (max-width: 768px) {
-          .hero-section {
+          .hero-editorial-section {
             padding-top: 110px;
-            padding-bottom: 55px;
+            padding-bottom: 50px;
           }
 
-          .hero-title {
-            font-size: 2.25rem;
+          .editorial-main-title {
+            font-size: 2.35rem;
           }
 
-          .hero-description {
+          .editorial-subtitle {
             font-size: 1rem;
-          }
-
-          .hero-container {
-            gap: 28px;
-          }
-
-          .ambient-shape {
-            display: none;
           }
         }
 
-        @media (max-width: 480px) {
-          .hero-title {
+        @media (max-width: 576px) {
+          .editorial-main-title {
             font-size: 1.95rem;
           }
 
-          .hero-stats-grid {
+          .editorial-trust-bar {
             grid-template-columns: 1fr;
-            gap: 12px;
-          }
-
-          .hero-tech-pills {
-            gap: 8px;
-          }
-
-          .tech-pill {
-            font-size: 0.75rem;
-            padding: 5px 12px;
+            gap: 18px;
           }
         }
       `}</style>
