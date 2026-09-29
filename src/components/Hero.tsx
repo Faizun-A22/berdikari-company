@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  ArrowRight,
-  ShieldCheck,
-  Headphones,
-  Tag,
-  Layers,
-  Search,
-  Globe,
-  CheckCircle2,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function Hero() {
   const [heroBadge, setHeroBadge] = useState('TRANSFORMASI DIGITAL NUSANTARA');
@@ -18,10 +9,6 @@ export default function Hero() {
   const [heroDesc, setHeroDesc] = useState(
     'Solusi rekayasa perangkat lunak modern untuk website premium, aplikasi mobile multiplatform, dan kecerdasan buatan (AI) otomatisasi yang dirancang presisi untuk skala bisnis Anda.'
   );
-
-  // Quick Solution Bar States
-  const [selectedService, setSelectedService] = useState('Website & Web App');
-  const [selectedScale, setSelectedScale] = useState('UMKM / Starter');
 
   useEffect(() => {
     fetch('/api/config')
@@ -33,11 +20,6 @@ export default function Hero() {
       })
       .catch((err) => console.error('Gagal mengambil config untuk Hero:', err));
   }, []);
-
-  const getQuickConsultUrl = () => {
-    const message = `Halo Berdikari Digital Nusantara, saya ingin konsultasi proyek:\n- Layanan: ${selectedService}\n- Skala Kebutuhan: ${selectedScale}\nMohon informasi estimasi & langkah selanjutnya.`;
-    return `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
-  };
 
   return (
     <section id="home" className="hero-editorial-section">
@@ -72,124 +54,18 @@ export default function Hero() {
               </div>
             </a>
             <a href="/portfolio.html" className="btn-pill-outline">
-              Lihat Karya & Portofolio
+              Lihat Karya &amp; Portofolio
             </a>
-          </div>
-        </div>
-
-        {/* Floating Horizontal Solution Filter Bar (Pomaii Style) */}
-        <div className="floating-solution-bar card-glass">
-          <div className="solution-bar-col">
-            <label className="bar-label">
-              <Globe size={14} className="bar-icon text-red" />
-              <span>Pilihan Layanan</span>
-            </label>
-            <select
-              className="bar-select"
-              value={selectedService}
-              onChange={(e) => setSelectedService(e.target.value)}
-            >
-              <option value="Website & Web App">Website & Web App</option>
-              <option value="Mobile App (Android & iOS)">Mobile App (Android/iOS)</option>
-              <option value="AI Otomatisasi & Chatbot">AI Otomatisasi & Chatbot</option>
-              <option value="Sistem SaaS / POS Kasir">Sistem SaaS / Kasir Toko</option>
-            </select>
-          </div>
-
-          <div className="bar-divider"></div>
-
-          <div className="solution-bar-col">
-            <label className="bar-label">
-              <Layers size={14} className="bar-icon text-red" />
-              <span>Skala Kebutuhan</span>
-            </label>
-            <select
-              className="bar-select"
-              value={selectedScale}
-              onChange={(e) => setSelectedScale(e.target.value)}
-            >
-              <option value="UMKM / Starter (Rp 499rb)">Starter / UMKM (Hemat)</option>
-              <option value="Bisnis Berkembang (Kustom)">Bisnis / Company Profile</option>
-              <option value="Enterprise / Sistem Skala Penuh">Enterprise & Kompleks</option>
-            </select>
-          </div>
-
-          <div className="bar-divider"></div>
-
-          <div className="solution-bar-col">
-            <label className="bar-label">
-              <CheckCircle2 size={14} className="bar-icon text-red" />
-              <span>Model Layanan</span>
-            </label>
-            <div className="bar-static-text">
-              <strong>Managed & Support</strong>
-              <span className="bar-sub-badge">SLA Terkelola</span>
-            </div>
-          </div>
-
-          <div className="solution-bar-action">
-            <a
-              href={getQuickConsultUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bar-search-btn"
-            >
-              <Search size={16} />
-              <span>Cari Solusi</span>
-            </a>
-          </div>
-        </div>
-
-        {/* 4-Pillar Trust Feature Bar (Pomaii Style) */}
-        <div className="editorial-trust-bar">
-          <div className="trust-item">
-            <div className="trust-icon-box">
-              <Layers size={20} className="text-red" />
-            </div>
-            <div className="trust-text">
-              <h4>Teknologi Modern</h4>
-              <p>React, Next.js, & Flutter dengan arsitektur performa tinggi.</p>
-            </div>
-          </div>
-
-          <div className="trust-item">
-            <div className="trust-icon-box">
-              <Tag size={20} className="text-red" />
-            </div>
-            <div className="trust-text">
-              <h4>Harga Rasional</h4>
-              <p>Paket awal mulai Rp 499.000 dengan maintenance Rp 50.000/bln.</p>
-            </div>
-          </div>
-
-          <div className="trust-item">
-            <div className="trust-icon-box">
-              <ShieldCheck size={20} className="text-red" />
-            </div>
-            <div className="trust-text">
-              <h4>Aman & Terproteksi</h4>
-              <p>Server cloud terisolasi, sertifikat SSL gratis, dan backup rutin.</p>
-            </div>
-          </div>
-
-          <div className="trust-item">
-            <div className="trust-icon-box">
-              <Headphones size={20} className="text-red" />
-            </div>
-            <div className="trust-text">
-              <h4>Dukungan Purnajual</h4>
-              <p>Pemantauan server berkala dan respons cepat pemeliharaan.</p>
-            </div>
           </div>
         </div>
       </div>
 
       <style>{`
-        /* ===== Hero Section Canvas (Compact & Perfectly Spaced under Navbar) ===== */
+        /* ===== Hero Section Canvas (Clean & Spaced under Navbar) ===== */
         .hero-editorial-section {
           position: relative;
-          padding-top: 24px;
-          padding-bottom: 50px;
+          padding-top: 36px;
+          padding-bottom: 56px;
           background-color: #ffffff;
           overflow: hidden;
         }
@@ -236,7 +112,6 @@ export default function Hero() {
           flex-direction: column;
           align-items: center;
           text-align: center;
-          gap: 28px;
         }
 
         .hero-editorial-content {
@@ -248,7 +123,7 @@ export default function Hero() {
         .editorial-badge-row {
           display: flex;
           justify-content: center;
-          margin-bottom: 14px;
+          margin-bottom: 16px;
         }
 
         .editorial-pill-badge {
@@ -307,8 +182,8 @@ export default function Hero() {
           font-size: 1.05rem;
           line-height: 1.65;
           color: #475569;
-          max-width: 700px;
-          margin: 0 auto 28px auto;
+          max-width: 720px;
+          margin: 0 auto 32px auto;
         }
 
         /* ===== Buttons ===== */
@@ -375,192 +250,17 @@ export default function Hero() {
           transform: translateY(-2px);
         }
 
-        /* ===== Floating Solution Bar (Pomaii Style) ===== */
-        .floating-solution-bar {
-          width: 100%;
-          max-width: 960px;
-          background: #ffffff;
-          border: 1px solid rgba(229, 62, 62, 0.16);
-          box-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.07);
-          border-radius: 100px;
-          padding: 10px 14px 10px 28px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-          text-align: left;
-          transition: box-shadow 0.3s ease;
-        }
-
-        .floating-solution-bar:hover {
-          box-shadow: 0 20px 45px -10px rgba(229, 62, 62, 0.12);
-        }
-
-        .solution-bar-col {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-        }
-
-        .bar-label {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 0.72rem;
-          font-weight: 700;
-          color: #64748b;
-          text-transform: uppercase;
-          letter-spacing: 0.03em;
-          margin-bottom: 2px;
-        }
-
-        .bar-select {
-          border: none;
-          background: transparent;
-          font-size: 0.9rem;
-          font-weight: 800;
-          color: #0f172a;
-          outline: none;
-          cursor: pointer;
-          font-family: inherit;
-          padding: 2px 0;
-        }
-
-        .bar-divider {
-          width: 1px;
-          height: 34px;
-          background: #e2e8f0;
-          flex-shrink: 0;
-        }
-
-        .bar-static-text {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 0.9rem;
-          color: #0f172a;
-        }
-
-        .bar-sub-badge {
-          font-size: 0.68rem;
-          background: #ecfdf5;
-          color: #059669;
-          font-weight: 800;
-          padding: 2px 8px;
-          border-radius: 100px;
-        }
-
-        .solution-bar-action {
-          flex-shrink: 0;
-        }
-
-        .bar-search-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background: #0f172a;
-          color: #ffffff;
-          padding: 12px 24px;
-          border-radius: 100px;
-          font-weight: 700;
-          font-size: 0.88rem;
-          transition: all 0.25s ease;
-        }
-
-        .bar-search-btn:hover {
-          background: var(--primary);
-          color: #ffffff;
-          transform: scale(1.03);
-          box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
-        }
-
-        /* ===== Editorial Trust Bar (4 Columns) ===== */
-        .editorial-trust-bar {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
-          width: 100%;
-          max-width: 1060px;
-          padding-top: 8px;
-          text-align: left;
-        }
-
-        .trust-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 12px;
-        }
-
-        .trust-icon-box {
-          width: 42px;
-          height: 42px;
-          border-radius: 12px;
-          background: #fff5f5;
-          border: 1px solid rgba(229, 62, 62, 0.15);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          transition: transform 0.25s ease;
-        }
-
-        .trust-item:hover .trust-icon-box {
-          transform: translateY(-2px);
-          background: var(--primary);
-          color: #ffffff;
-        }
-
-        .trust-item:hover .trust-icon-box .text-red {
-          color: #ffffff;
-        }
-
-        .trust-text h4 {
-          font-size: 0.92rem;
-          font-weight: 800;
-          color: #0f172a;
-          margin: 0 0 3px 0;
-        }
-
-        .trust-text p {
-          font-size: 0.78rem;
-          color: #64748b;
-          line-height: 1.45;
-          margin: 0;
-        }
-
         /* ===== Responsive Queries ===== */
         @media (max-width: 991px) {
           .editorial-main-title {
             font-size: 2.85rem;
           }
-
-          .floating-solution-bar {
-            border-radius: 20px;
-            flex-direction: column;
-            align-items: stretch;
-            padding: 16px;
-          }
-
-          .bar-divider {
-            width: 100%;
-            height: 1px;
-          }
-
-          .bar-search-btn {
-            justify-content: center;
-            width: 100%;
-          }
-
-          .editorial-trust-bar {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-          }
         }
 
         @media (max-width: 768px) {
           .hero-editorial-section {
-            padding-top: 16px;
-            padding-bottom: 36px;
+            padding-top: 24px;
+            padding-bottom: 40px;
           }
 
           .editorial-main-title {
@@ -575,11 +275,6 @@ export default function Hero() {
         @media (max-width: 576px) {
           .editorial-main-title {
             font-size: 1.9rem;
-          }
-
-          .editorial-trust-bar {
-            grid-template-columns: 1fr;
-            gap: 14px;
           }
         }
       `}</style>

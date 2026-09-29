@@ -5,7 +5,6 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 export default function AboutPage() {
   const [visionRef, visionVisible] = useScrollReveal();
   const [valuesRef, valuesVisible] = useScrollReveal();
-  const [teamRef, teamVisible] = useScrollReveal();
 
   const values = [
     {
@@ -22,29 +21,6 @@ export default function AboutPage() {
       icon: <Heart size={24} />,
       title: 'Kemitraan Jangka Panjang',
       desc: 'Kami memandang klien sebagai mitra strategis, mendukung pertumbuhan aplikasi pasca-peluncuran.',
-    },
-  ];
-
-  const team = [
-    {
-      name: 'Rian Wijaya',
-      role: 'CEO & Founder',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80',
-    },
-    {
-      name: 'Aditya Pratama',
-      role: 'Chief Technology Officer',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
-    },
-    {
-      name: 'Siti Rahma',
-      role: 'Lead UI/UX Designer',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80',
-    },
-    {
-      name: 'Hadi Sentosa',
-      role: 'Senior Fullstack Engineer',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
     },
   ];
 
@@ -120,38 +96,6 @@ export default function AboutPage() {
 
       {/* Import Timeline Workflow */}
       <About />
-
-      {/* Team Section */}
-      <section 
-        ref={teamRef as React.RefObject<HTMLDivElement>} 
-        className={`team-section section reveal reveal-fade ${teamVisible ? 'in-view' : ''}`}
-      >
-        <div className="glow-orb team-glow"></div>
-        <div className="container">
-          <div className="section-title">
-            <h2>Tim Ahli Kami</h2>
-            <p>Kolaborasi para profesional berpengalaman di bidang rekayasa sistem, desain, dan arsitektur server.</p>
-            <div className="accent-bar"></div>
-          </div>
-
-          <div className="team-grid">
-            {team.map((member, idx) => (
-              <div 
-                key={idx} 
-                className={`team-card reveal reveal-slide-up delay-${(idx + 1) * 100} ${teamVisible ? 'in-view' : ''}`}
-              >
-                <div className="team-img-box">
-                  <img src={member.image} alt={member.name} className="team-img" />
-                </div>
-                <div className="team-info card-glass">
-                  <h3>{member.name}</h3>
-                  <span className="team-role">{member.role}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <style>{`
         .vision-mission-section {
@@ -241,89 +185,6 @@ export default function AboutPage() {
           color: var(--text-secondary);
           font-size: 0.925rem;
           line-height: 1.6;
-        }
-
-        /* Team styling */
-        .team-glow {
-          bottom: 10%;
-          right: 5%;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.02) 0%, rgba(255, 255, 255, 0) 70%);
-        }
-
-        .team-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 32px;
-          position: relative;
-          z-index: 10;
-        }
-
-        @media (max-width: 991px) {
-          .team-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .team-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-          }
-        }
-
-        .team-card {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
-        }
-
-        .team-img-box {
-          width: 100%;
-          height: 280px;
-          border-radius: 16px;
-          overflow: hidden;
-          background-color: #f8fafc;
-          border: 1px solid var(--border);
-          margin-bottom: -40px;
-          z-index: 1;
-        }
-
-        .team-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: var(--transition-normal);
-          filter: grayscale(40%);
-        }
-
-        .team-card:hover .team-img {
-          transform: scale(1.03);
-          filter: grayscale(0%);
-        }
-
-        .team-info {
-          width: 90%;
-          padding: 20px 16px;
-          text-align: center;
-          z-index: 2;
-          position: relative;
-          border-color: var(--border);
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
-          background: #ffffff;
-        }
-
-        .team-info h3 {
-          font-size: 1.1rem;
-          color: var(--text-primary);
-          margin-bottom: 4px;
-        }
-
-        .team-role {
-          font-size: 0.825rem;
-          color: var(--primary);
-          font-weight: 600;
         }
       `}</style>
     </div>

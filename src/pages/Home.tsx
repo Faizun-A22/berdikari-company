@@ -9,15 +9,19 @@ import {
   ChevronDown,
   ChevronUp,
   Star,
-  Layers,
-  Cpu,
   Sparkles,
+  Calendar,
+  CheckCircle2,
+  Zap,
+  Bot,
+  Store,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export default function Home() {
   const [servicesRef, servicesVisible] = useScrollReveal();
   const [portfolioRef, portfolioVisible] = useScrollReveal();
+  const [newsRef, newsVisible] = useScrollReveal();
   const [guideRef, guideVisible] = useScrollReveal();
   const [calcRef, calcVisible] = useScrollReveal();
   const [faqRef, faqVisible] = useScrollReveal();
@@ -25,10 +29,12 @@ export default function Home() {
 
   const [ctaTitle, setCtaTitle] = useState('Siap Memulai Transformasi Digital?');
   const [ctaDesc, setCtaDesc] = useState(
-    'Konsultasikan ide produk digital atau sistem Anda bersama tim ahli kami secara gratis. Dapatkan estimasi biaya dan rancangan proyek dalam waktu singkat.'
+    'Konsultasikan ide produk digital atau sistem Anda bersama kami secara gratis. Dapatkan estimasi biaya dan rancangan proyek dalam waktu singkat.'
   );
 
   const [featuredProjects, setFeaturedProjects] = useState<any[]>([]);
+  const [recentNews, setRecentNews] = useState<any[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string>('Semua');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -54,68 +60,200 @@ export default function Home() {
         setFeaturedProjects(mapped);
       })
       .catch((err) => console.error('Gagal mengambil data portfolio untuk homepage:', err));
+
+    fetch('/api/activities')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setRecentNews(data.slice(0, 3));
+        } else {
+          // Default fallbacks if empty
+          setRecentNews([
+            {
+              id: '1',
+              title: 'Standar Arsitektur Cloud & Keamanan Berdikari Digital Nusantara',
+              category: 'Rilis',
+              date: '2026-09-15',
+              image_url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80',
+              short_desc: 'Implementasi isolasi server cloud generasi terbaru dengan sertifikasi SSL otomatis dan proteksi DDoS berkala.',
+            },
+            {
+              id: '2',
+              title: 'Akselerasi Digital UMKM Melalui Layanan Web Starter Hemat',
+              category: 'Berita',
+              date: '2026-09-10',
+              image_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=80',
+              short_desc: 'Program dukungan teknologi berkesinambungan bagi pelaku usaha kecil dan menengah untuk go digital tanpa beban biaya tinggi.',
+            },
+            {
+              id: '3',
+              title: 'Pemanfaatan Otomatisasi AI & Chatbot LLM untuk Efisiensi Bisnis',
+              category: 'Kegiatan',
+              date: '2026-09-02',
+              image_url: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=600&auto=format&fit=crop&q=80',
+              short_desc: 'Integrasi sistem AI cerdas 24/7 yang membantu automasi layanan pelanggan dan penyederhanaan alur kerja internal.',
+            },
+          ]);
+        }
+      })
+      .catch(() => {
+        setRecentNews([
+          {
+            id: '1',
+            title: 'Standar Arsitektur Cloud & Keamanan Berdikari Digital Nusantara',
+            category: 'Rilis',
+            date: '2026-09-15',
+            image_url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80',
+            short_desc: 'Implementasi isolasi server cloud generasi terbaru dengan sertifikasi SSL otomatis dan proteksi DDoS berkala.',
+          },
+          {
+            id: '2',
+            title: 'Akselerasi Digital UMKM Melalui Layanan Web Starter Hemat',
+            category: 'Berita',
+            date: '2026-09-10',
+            image_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=80',
+            short_desc: 'Program dukungan teknologi berkesinambungan bagi pelaku usaha kecil dan menengah untuk go digital tanpa beban biaya tinggi.',
+          },
+          {
+            id: '3',
+            title: 'Pemanfaatan Otomatisasi AI & Chatbot LLM untuk Efisiensi Bisnis',
+            category: 'Kegiatan',
+            date: '2026-09-02',
+            image_url: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=600&auto=format&fit=crop&q=80',
+            short_desc: 'Integrasi sistem AI cerdas 24/7 yang membantu automasi layanan pelanggan dan penyederhanaan alur kerja internal.',
+          },
+        ]);
+      });
   }, []);
 
-  const popularSolutions = [
+  const solutions = [
     {
-      title: 'Portal Web & Profil Bisnis',
-      category: 'Web Development',
+      id: 'web',
+      category: 'Website & Web App',
+      tag: 'Paling Populer',
+      icon: <Globe size={22} />,
+      title: 'Portal Web & Profil Bisnis Modern',
       rating: '4.9',
       image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=80',
       price: 'Mulai Rp 499rb',
-      desc: 'Arsitektur cloud super cepat dengan skor Lighthouse 95+.',
+      priceSubtitle: '+ Maint. Rp 50rb/bln',
+      desc: 'Website berkecepatan tinggi dengan skor audit Lighthouse 95+, responsif mobile, dan teroptimasi SEO mesin pencari.',
+      badges: ['Lighthouse 95+', 'Gratis SSL', 'SEO Ready'],
+      features: [
+        'Desain UI kustom bernuansa bersih & elegan',
+        'Hosting cloud terisolasi aman dari gangguan',
+        'Dukungan update konten rutin setiap bulan',
+      ],
+      whatsappMsg: 'Halo Berdikari Digital Nusantara, saya tertarik dengan layanan Website & Web App.',
     },
     {
-      title: 'Aplikasi Mobile Multiplatform',
-      category: 'Mobile Flutter & React Native',
-      rating: '4.8',
+      id: 'mobile',
+      category: 'Aplikasi Mobile',
+      tag: 'Multiplatform',
+      icon: <Smartphone size={22} />,
+      title: 'Aplikasi Mobile Android & iOS',
+      rating: '4.9',
       image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80',
       price: 'Mulai Rp 3.5jt',
-      desc: 'Aplikasi Android & iOS dari single codebase efisien dan stabil.',
+      priceSubtitle: 'Single Codebase Teruji',
+      desc: 'Aplikasi mobile berperforma native dengan Flutter & React Native untuk pengalaman pengguna yang halus dan responsif.',
+      badges: ['Dual OS', 'Fast Performance', 'Offline Cache'],
+      features: [
+        'Satu codebase efisien untuk Google Play & App Store',
+        'Integrasi Push Notification & Payment Gateway',
+        'Arsitektur aman dengan proteksi enkripsi data',
+      ],
+      whatsappMsg: 'Halo Berdikari Digital Nusantara, saya tertarik dengan layanan Aplikasi Mobile.',
     },
     {
+      id: 'ai',
+      category: 'AI & Otomatisasi',
+      tag: 'Inovasi Baru',
+      icon: <Bot size={22} />,
       title: 'AI Chatbot & Workflow Otomatis',
-      category: 'AI & Automasi',
       rating: '4.9',
       image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=600&auto=format&fit=crop&q=80',
       price: 'Mulai Rp 3.5jt',
-      desc: 'Integrasi LLM OpenAI, asisten virtual CS, dan alur kerja cerdas.',
+      priceSubtitle: 'Integrasi LLM OpenAI',
+      desc: 'Asisten virtual cerdas yang memahami konteks bisnis Anda, terhubung ke WhatsApp customer service, dan memangkas tugas repetitif.',
+      badges: ['OpenAI LLM', 'WhatsApp Bot', 'n8n Workflow'],
+      features: [
+        'Customer Service cerdas otomatis aktif 24 jam nonstop',
+        'Sinkronisasi otomatisasi alur kerja database internal',
+        'Pelatihan model khusus berdasarkan dokumen SOP bisnis',
+      ],
+      whatsappMsg: 'Halo Berdikari Digital Nusantara, saya tertarik dengan layanan AI Otomatisasi & Chatbot.',
     },
     {
-      title: 'Sistem SaaS Kasir & Manajemen',
-      category: 'Software Ready-to-Use',
+      id: 'saas',
+      category: 'Sistem SaaS & Kasir',
+      tag: 'Solusi Bisnis',
+      icon: <Store size={22} />,
+      title: 'Sistem SaaS Kasir & Manajemen Toko',
       rating: '4.8',
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=80',
       price: 'Mulai Rp 99rb/bln',
-      desc: 'Manajemen kasir, laporan penjualan, dan absensi terpusat.',
+      priceSubtitle: 'Ready-to-Use',
+      desc: 'Software terpadu untuk pencatatan transaksi kasir, inventaris gudang multi-outlet, dan laporan omzet real-time.',
+      badges: ['Multi Outlet', 'Real-time Report', 'Cetak Struk'],
+      features: [
+        'Dashboard analitik penjualan dan keuangan transparan',
+        'Peringatan otomatis saat stok barang mulai menipis',
+        'Akses multi-pengguna dengan pembagian hak akses aman',
+      ],
+      whatsappMsg: 'Halo Berdikari Digital Nusantara, saya tertarik dengan Sistem SaaS Kasir & Manajemen.',
     },
   ];
 
-  const categoryPills = [
-    { icon: <Globe size={15} />, label: 'Web Apps' },
-    { icon: <Smartphone size={15} />, label: 'Mobile Flutter' },
-    { icon: <Cpu size={15} />, label: 'AI Automasi' },
-    { icon: <Layers size={15} />, label: 'Cloud Server' },
-    { icon: <ShieldCheck size={15} />, label: 'Maintenance' },
-    { icon: <Sparkles size={15} />, label: 'UI/UX Design' },
-  ];
+  const filterCategories = ['Semua', 'Website & Web App', 'Aplikasi Mobile', 'AI & Otomatisasi', 'Sistem SaaS & Kasir'];
+
+  const displayedSolutions =
+    activeCategory === 'Semua'
+      ? solutions
+      : solutions.filter((s) => s.category === activeCategory);
+
+  const formatDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  const getCategoryBadgeClass = (category: string) => {
+    switch (category) {
+      case 'Rilis':
+        return 'cat-badge-rilis';
+      case 'Kegiatan':
+        return 'cat-badge-kegiatan';
+      case 'Pengumuman':
+        return 'cat-badge-pengumuman';
+      default:
+        return 'cat-badge-berita';
+    }
+  };
 
   const faqList = [
     {
       q: 'Apa itu Berdikari Digital Nusantara?',
-      a: 'Berdikari Digital Nusantara adalah perusahaan rekayasa perangkat lunak premium yang fokus pada pembuatan website kustom, mobile app, sistem kecerdasan buatan (AI) otomatisasi, serta produk digital siap guna berkualitas tinggi.',
+      a: 'Berdikari Digital Nusantara adalah perusahaan rekayasa perangkat lunak modern yang fokus pada pembuatan website kustom, mobile app, sistem kecerdasan buatan (AI) otomatisasi, serta produk digital siap guna berkualitas tinggi.',
     },
     {
       q: 'Bagaimana model pemesanan Produk Digital?',
-      a: 'Anda dapat melihat pilihan produk digital melalui menu Layanan, memilih paket yang sesuai kebutuhan, lalu memesannya secara langsung melalui integrasi WhatsApp kami untuk respons cepat.',
+      a: 'Anda dapat memilih paket yang sesuai kebutuhan pada katalog layanan kami, lalu berkonsultasi atau memesan secara langsung melalui integrasi WhatsApp untuk respons kilat dari tech lead kami.',
     },
     {
       q: 'Bagaimana metode pengerjaan proyek di Berdikari Digital Nusantara?',
-      a: 'Kami menggunakan metode agile interaktif: Analisis Kebutuhan, Prototipe Desain Figma, Pengodean Sistem, Quality Assurance (Audit Lighthouse 90+), Deployment ke Cloud Server, dan Garansi Bug-Free gratis 3 bulan.',
+      a: 'Kami menerapkan standar agile: Analisis Kebutuhan, Prototipe Desain Figma, Pengodean Bersih, Quality Assurance (Audit Lighthouse 95+), Deployment ke Cloud Server, serta Garansi Bug-Free 3 bulan.',
     },
     {
       q: 'Bagaimana penentuan biaya investasi proyek?',
-      a: 'Penentuan biaya investasi kami transparan dan rasional berdasarkan kebutuhan modul, performa sistem, serta skala fitur. Kami menawarkan paket Starter hemat mulai Rp 499.000 dengan opsi langganan pemeliharaan Rp 50.000/bln.',
+      a: 'Biaya investasi kami transparan dan rasional. Kami menyediakan paket Web Starter hemat mulai Rp 499.000 dengan maintenance terkelola Rp 50.000/bln, serta solusi kustom enterprise yang disesuaikan dengan skala modul bisnis Anda.',
     },
   ];
 
@@ -143,7 +281,7 @@ export default function Home() {
             <span>Figma Design</span>
             <span>AWS Server</span>
             <span>Supabase DB</span>
-            {/* Loop */}
+            {/* Duplicate track for seamless infinite scroll */}
             <span>React.js</span>
             <span>Next.js</span>
             <span>TypeScript</span>
@@ -154,113 +292,148 @@ export default function Home() {
             <span>OpenAI API</span>
             <span>n8n Automasi</span>
             <span>Figma Design</span>
+            <span>AWS Server</span>
+            <span>Supabase DB</span>
           </div>
         </div>
       </div>
 
-      {/* --- POPULAR SOLUTIONS GRID (Pomaii Style) --- */}
+      {/* --- CREATIVE PRODUCTS & SERVICES SHOWCASE --- */}
       <section
         ref={servicesRef as React.RefObject<HTMLDivElement>}
-        className={`section popular-solutions-section reveal reveal-fade ${servicesVisible ? 'in-view' : ''}`}
+        className={`section popular-solutions-section reveal reveal-fade ${
+          servicesVisible ? 'in-view' : ''
+        }`}
       >
         <div className="container">
-          <div className="editorial-section-header">
-            <div>
-              <span className="editorial-mini-tag">SOLUSI TERBAIK</span>
-              <h2 className="editorial-section-h2">Layanan & Produk Unggulan</h2>
+          <div className="solutions-header-wrap">
+            <div className="solutions-header-text">
+              <span className="editorial-mini-tag">KATALOG REKAYASA DIGITAL</span>
+              <h2 className="editorial-section-h2">Produk &amp; Layanan Unggulan</h2>
+              <p className="solutions-header-desc">
+                Dirancang presisi dengan arsitektur cloud berkecepatan tinggi, keamanan mutlak, dan desain antarmuka modern.
+              </p>
             </div>
             <a href="/services.html" className="editorial-see-all-btn">
-              <span>Lihat Semua Layanan</span>
+              <span>Jelajahi Semua Layanan</span>
               <ArrowRight size={15} />
             </a>
           </div>
 
-          <div className="editorial-cards-grid">
-            {popularSolutions.map((item, idx) => (
-              <div
+          {/* Interactive Category Filter Pills */}
+          <div className="solutions-filter-pills-row">
+            {filterCategories.map((cat, idx) => (
+              <button
                 key={idx}
-                className={`editorial-card reveal reveal-slide-up delay-${(idx + 1) * 100} ${
+                type="button"
+                className={`solution-filter-pill-btn ${activeCategory === cat ? 'active' : ''}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Creative Interactive Solution Cards Grid */}
+          <div className="creative-solutions-grid">
+            {displayedSolutions.map((item, idx) => (
+              <div
+                key={item.id}
+                className={`creative-card reveal reveal-slide-up delay-${(idx + 1) * 100} ${
                   servicesVisible ? 'in-view' : ''
                 }`}
               >
-                <div className="card-thumb-wrap">
-                  <img src={item.image} alt={item.title} className="card-thumb-img" />
-                  <div className="card-badge-rating">
-                    <Star size={12} fill="#ffffff" color="#ffffff" />
-                    <span>{item.rating}</span>
+                {/* Card Image Banner */}
+                <div className="creative-card-media">
+                  <img src={item.image} alt={item.title} className="creative-card-img" />
+                  <div className="media-overlay-gradient"></div>
+
+                  <div className="media-top-badges">
+                    <span className="creative-tag-pill">{item.tag}</span>
+                    <div className="rating-pill">
+                      <Star size={11} fill="#e53e3e" color="#e53e3e" />
+                      <span>{item.rating}</span>
+                    </div>
                   </div>
-                  <div className="card-price-overlay">
-                    <span className="price-tag-badge">{item.price}</span>
+
+                  <div className="media-bottom-price">
+                    <span className="media-price-text">{item.price}</span>
+                    <span className="media-price-sub">{item.priceSubtitle}</span>
                   </div>
                 </div>
 
-                <div className="card-text-wrap">
-                  <span className="card-category-label">{item.category}</span>
-                  <h3 className="card-item-title">{item.title}</h3>
-                  <p className="card-item-desc">{item.desc}</p>
+                {/* Card Body */}
+                <div className="creative-card-body">
+                  <div className="card-identity-row">
+                    <div className="creative-icon-circle">{item.icon}</div>
+                    <div>
+                      <span className="creative-cat-name">{item.category}</span>
+                      <h3 className="creative-card-title">{item.title}</h3>
+                    </div>
+                  </div>
+
+                  <p className="creative-card-desc">{item.desc}</p>
+
+                  {/* Micro Tech Badges */}
+                  <div className="micro-badges-row">
+                    {item.badges.map((badge, bIdx) => (
+                      <span key={bIdx} className="micro-badge">
+                        <Zap size={11} className="text-red" />
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Feature Bullet Points */}
+                  <div className="creative-features-list">
+                    {item.features.map((feat, fIdx) => (
+                      <div key={fIdx} className="creative-feature-item">
+                        <CheckCircle2 size={14} className="text-red flex-shrink-0" />
+                        <span>{feat}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Action Link Button */}
+                  <div className="creative-card-action">
+                    <a
+                      href={`https://wa.me/6281234567890?text=${encodeURIComponent(item.whatsappMsg)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="creative-cta-btn"
+                    >
+                      <span>Konsultasikan Solusi Ini</span>
+                      <ArrowRight size={15} />
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Horizontal Category Pill Filter Bar (Pomaii Style) */}
-          <div className="editorial-category-pill-row">
-            {categoryPills.map((pill, idx) => (
-              <a href="/services.html" key={idx} className="category-filter-pill">
-                <span className="pill-icon-circle">{pill.icon}</span>
-                <span className="pill-name">{pill.label}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- VALUE & STORY BANNER (Pomaii Guide Style) --- */}
-      <section
-        ref={guideRef as React.RefObject<HTMLDivElement>}
-        className={`section guide-story-section reveal reveal-fade ${guideVisible ? 'in-view' : ''}`}
-      >
-        <div className="container">
-          <div className="guide-card-container">
-            <div className="guide-text-col">
-              <span className="guide-mini-tag">STANDAR REKAYASA KAMI</span>
-              <h3 className="guide-heading">Mengapa Mitra Bisnis Memilih Berdikari?</h3>
-              <p className="guide-desc">
-                Kami membangun sistem digital bukan sekadar kode, melainkan aset bernilai tinggi dengan kecepatan maksimal, keamanan terproteksi, dan garansi penuh tanpa biaya tersembunyi.
-              </p>
-              <a href="/about.html" className="btn-guide-action">
-                <span>Pelajari Pendekatan Kami</span>
-                <ArrowRight size={15} />
-              </a>
+          {/* Assurance Highlights Strip */}
+          <div className="creative-assurance-strip">
+            <div className="assurance-box">
+              <ShieldCheck size={22} className="text-red" />
+              <div>
+                <strong>Garansi Bebas Bug</strong>
+                <p>3 bulan pendampingan purna jual gratis</p>
+              </div>
             </div>
-
-            <div className="guide-cards-col">
-              <div className="guide-mini-card">
-                <div className="mini-card-thumb">
-                  <img
-                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&auto=format&fit=crop&q=80"
-                    alt="Audit Kecepatan"
-                  />
-                </div>
-                <div className="mini-card-content">
-                  <h4>Audit Lighthouse 95+</h4>
-                  <p>Kecepatan akses tinggi memastikan pengunjung tidak beralih ke kompetitor.</p>
-                  <span className="mini-card-meta">3 menit baca</span>
-                </div>
+            <div className="assurance-divider"></div>
+            <div className="assurance-box">
+              <Zap size={22} className="text-red" />
+              <div>
+                <strong>Audit Lighthouse 95+</strong>
+                <p>Kecepatan akses kilat dan ramah SEO</p>
               </div>
-
-              <div className="guide-mini-card">
-                <div className="mini-card-thumb">
-                  <img
-                    src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&auto=format&fit=crop&q=80"
-                    alt="Keamanan Cloud"
-                  />
-                </div>
-                <div className="mini-card-content">
-                  <h4>Sertifikat SSL & Proteksi Cloud</h4>
-                  <p>Infrastruktur terisolasi, enkripsi data, dan backup berkala otomatis.</p>
-                  <span className="mini-card-meta">2 menit baca</span>
-                </div>
+            </div>
+            <div className="assurance-divider"></div>
+            <div className="assurance-box">
+              <Sparkles size={22} className="text-red" />
+              <div>
+                <strong>Infrastruktur Cloud SSL</strong>
+                <p>Server stabil dan aman dari serangan malware</p>
               </div>
             </div>
           </div>
@@ -270,7 +443,9 @@ export default function Home() {
       {/* --- RECENT PORTFOLIO SHOWCASE --- */}
       <section
         ref={portfolioRef as React.RefObject<HTMLDivElement>}
-        className={`section portfolio-preview-section reveal reveal-fade ${portfolioVisible ? 'in-view' : ''}`}
+        className={`section portfolio-preview-section reveal reveal-fade ${
+          portfolioVisible ? 'in-view' : ''
+        }`}
       >
         <div className="container">
           <div className="editorial-section-header">
@@ -307,15 +482,128 @@ export default function Home() {
         </div>
       </section>
 
+      {/* --- NEWS & ACTIVITIES SUMMARY SECTION (NEW!) --- */}
+      <section
+        ref={newsRef as React.RefObject<HTMLDivElement>}
+        className={`section home-news-section reveal reveal-fade ${
+          newsVisible ? 'in-view' : ''
+        }`}
+      >
+        <div className="container">
+          <div className="editorial-section-header">
+            <div>
+              <span className="editorial-mini-tag">AKTIVITAS &amp; WAWASAN</span>
+              <h2 className="editorial-section-h2">Kabar &amp; Artikel Terbaru</h2>
+            </div>
+            <a href="/news.html" className="editorial-see-all-btn">
+              <span>Lihat Semua Berita</span>
+              <ArrowRight size={15} />
+            </a>
+          </div>
+
+          <div className="home-news-grid">
+            {recentNews.map((news, idx) => (
+              <div
+                key={news.id || idx}
+                className={`card-glass home-news-card reveal reveal-slide-up delay-${(idx + 1) * 100} ${
+                  newsVisible ? 'in-view' : ''
+                }`}
+                onClick={() => {
+                  window.location.href = `/news-detail.html?id=${news.id}`;
+                }}
+              >
+                <div className="home-news-thumb-box">
+                  <img src={news.image_url} alt={news.title} className="home-news-img" />
+                  <span className={`home-news-category-badge ${getCategoryBadgeClass(news.category)}`}>
+                    {news.category || 'Berita'}
+                  </span>
+                </div>
+
+                <div className="home-news-content">
+                  <div className="home-news-meta">
+                    <Calendar size={13} className="text-red" />
+                    <span>{formatDate(news.date)}</span>
+                  </div>
+
+                  <h3 className="home-news-title">{news.title}</h3>
+                  <p className="home-news-desc">{news.short_desc}</p>
+
+                  <div className="home-news-read-more">
+                    <span>Baca Selengkapnya</span>
+                    <ArrowRight size={14} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- VALUE & STORY BANNER (Pomaii Guide Style) --- */}
+      <section
+        ref={guideRef as React.RefObject<HTMLDivElement>}
+        className={`section guide-story-section reveal reveal-fade ${
+          guideVisible ? 'in-view' : ''
+        }`}
+      >
+        <div className="container">
+          <div className="guide-card-container">
+            <div className="guide-text-col">
+              <span className="guide-mini-tag">STANDAR REKAYASA KAMI</span>
+              <h3 className="guide-heading">Mengapa Mitra Bisnis Memilih Berdikari?</h3>
+              <p className="guide-desc">
+                Kami membangun sistem digital bukan sekadar baris kode, melainkan aset bernilai tinggi dengan kecepatan maksimal, keamanan terproteksi, dan garansi penuh tanpa biaya tersembunyi.
+              </p>
+              <a href="/about.html" className="btn-guide-action">
+                <span>Pelajari Pendekatan Kami</span>
+                <ArrowRight size={15} />
+              </a>
+            </div>
+
+            <div className="guide-cards-col">
+              <div className="guide-mini-card">
+                <div className="mini-card-thumb">
+                  <img
+                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&auto=format&fit=crop&q=80"
+                    alt="Audit Kecepatan"
+                  />
+                </div>
+                <div className="mini-card-content">
+                  <h4>Audit Lighthouse 95+</h4>
+                  <p>Kecepatan akses tinggi memastikan pengunjung tidak beralih ke kompetitor.</p>
+                  <span className="mini-card-meta">3 menit baca</span>
+                </div>
+              </div>
+
+              <div className="guide-mini-card">
+                <div className="mini-card-thumb">
+                  <img
+                    src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&auto=format&fit=crop&q=80"
+                    alt="Keamanan Cloud"
+                  />
+                </div>
+                <div className="mini-card-content">
+                  <h4>Sertifikat SSL &amp; Proteksi Cloud</h4>
+                  <p>Infrastruktur terisolasi, enkripsi data, dan backup berkala otomatis.</p>
+                  <span className="mini-card-meta">2 menit baca</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* --- PRICING & RATIONAL COMPARISON SECTION --- */}
       <section
         ref={calcRef as React.RefObject<HTMLDivElement>}
-        className={`section pricing-section reveal reveal-fade ${calcVisible ? 'in-view' : ''}`}
+        className={`section pricing-section reveal reveal-fade ${
+          calcVisible ? 'in-view' : ''
+        }`}
       >
         <div className="container">
           <div className="section-title">
             <span className="editorial-mini-tag">INVESTASI TRANSPARAN</span>
-            <h2>Penawaran Harga & Nilai Layanan Rasional</h2>
+            <h2>Penawaran Harga &amp; Nilai Layanan Rasional</h2>
             <p>Perbandingan kompetitif dan transparan investasi teknologi Anda bersama Berdikari Digital Nusantara.</p>
             <div className="accent-bar"></div>
           </div>
@@ -330,11 +618,11 @@ export default function Home() {
                     <Globe size={24} />
                   </div>
                   <div>
-                    <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#334155', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Hemat & Praktis</span>
+                    <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#334155', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Hemat &amp; Praktis</span>
                     <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Web Starter (UMKM)</h3>
                   </div>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Cocok untuk UMKM, Landing Page Promosi, & Profil Bisnis Online.</p>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Cocok untuk UMKM, Landing Page Promosi, &amp; Profil Bisnis Online.</p>
 
                 <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '10px', borderLeft: '3px solid var(--primary)' }}>
                   <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Awal</div>
@@ -343,7 +631,7 @@ export default function Home() {
                 </div>
 
                 <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Hosting Cloud & SSL Terkelola</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Hosting Cloud &amp; SSL Terkelola</li>
                   <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Bebas Pusing Mati Server / Maintenance</li>
                   <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Update Konten Ringan Setiap Bulan</li>
                 </ul>
@@ -369,10 +657,10 @@ export default function Home() {
                   </div>
                   <div>
                     <span style={{ fontSize: '0.7rem', background: 'var(--primary)', color: '#fff', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Paling Populer</span>
-                    <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Web Kustom & System</h3>
+                    <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Web Kustom &amp; System</h3>
                   </div>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Company Profile, E-Commerce, & Dashboard Manajemen Data Kustom.</p>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Company Profile, E-Commerce, &amp; Dashboard Manajemen Data Kustom.</p>
 
                 <div style={{ margin: '20px 0', padding: '16px', background: '#ffffff', borderRadius: '10px', borderLeft: '3px solid var(--primary)', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
                   <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Awal</div>
@@ -381,9 +669,9 @@ export default function Home() {
                 </div>
 
                 <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Domain (.com/.id) & SSL 1 Tahun</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Domain (.com/.id) &amp; SSL 1 Tahun</li>
                   <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Speed Ultra Kencang (Lighthouse 90+)</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Garansi Bug-Free & Support Eksklusif</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Garansi Bug-Free &amp; Support Eksklusif</li>
                 </ul>
               </div>
 
@@ -407,10 +695,10 @@ export default function Home() {
                   </div>
                   <div>
                     <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#334155', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Advanced</span>
-                    <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Mobile App & AI</h3>
+                    <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Mobile App &amp; AI</h3>
                   </div>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Aplikasi Android/iOS Kustom & Chatbot AI Cerdas Bisnis.</p>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Aplikasi Android/iOS Kustom &amp; Chatbot AI Cerdas Bisnis.</p>
 
                 <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '10px', borderLeft: '3px solid var(--primary)' }}>
                   <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Awal</div>
@@ -420,7 +708,7 @@ export default function Home() {
 
                 <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Single Codebase Flutter / React Native</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Integrasi AI Chatbot & Agent n8n</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Integrasi AI Chatbot &amp; Agent n8n</li>
                   <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Opsi Managed Maintenance SLA High</li>
                 </ul>
               </div>
@@ -457,7 +745,7 @@ export default function Home() {
                   <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Hemat (Rp 499.000 + Rp 50.000/bln)</td>
                 </tr>
                 <tr>
-                  <td style={{ fontWeight: 600 }}>Perawatan & Server Down</td>
+                  <td style={{ fontWeight: 600 }}>Perawatan &amp; Server Down</td>
                   <td style={{ color: '#64748b' }}>Lepas tangan saat error</td>
                   <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Server dipantau 24/7, gratis perbaikan</td>
                 </tr>
@@ -469,7 +757,7 @@ export default function Home() {
                 <tr>
                   <td style={{ fontWeight: 600 }}>Keamanan</td>
                   <td style={{ color: '#64748b' }}>Mudah kena hack / script malware</td>
-                  <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>SSL & patching selalu diperbarui otomatis</td>
+                  <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>SSL &amp; patching selalu diperbarui otomatis</td>
                 </tr>
               </tbody>
             </table>
@@ -477,7 +765,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- SPECIAL OFFER BANNER (Pomaii Curved Promo Banner Style) --- */}
+      {/* --- SPECIAL OFFER BANNER (Curved Red Banner) --- */}
       <section className="section promo-banner-section">
         <div className="container">
           <div className="promo-curved-banner">
@@ -485,7 +773,7 @@ export default function Home() {
               <span className="promo-badge-tag">PENAWARAN SPESIAL</span>
               <h2 className="promo-banner-title">Wujudkan Transformasi Digital Anda Hari Ini</h2>
               <p className="promo-banner-desc">
-                Konsultasikan ide bisnis Anda bersama tim tech lead kami. Dapatkan arsitektur sistem awal, estimasi biaya transparan, dan jaminan purna jual tanpa komitmen rumit.
+                Konsultasikan ide bisnis Anda bersama kami. Dapatkan arsitektur sistem awal, estimasi biaya transparan, dan jaminan purna jual tanpa komitmen rumit.
               </p>
               <a href="/contact.html" className="btn-promo-action">
                 <span>Mulai Konsultasi Gratis</span>
@@ -496,7 +784,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- TRUST STATS ROW (Pomaii Bottom Stats Style, NO EMOJIS) --- */}
+      {/* --- TRUST STATS ROW (NO EMOJIS) --- */}
       <div className="editorial-bottom-stats-bar">
         <div className="container">
           <div className="stats-row-grid">
@@ -573,7 +861,7 @@ export default function Home() {
       </section>
 
       <style>{`
-        /* ===== Editorial Section Header ===== */
+        /* ===== Section Headers ===== */
         .editorial-section-header {
           display: flex;
           justify-content: space-between;
@@ -582,13 +870,32 @@ export default function Home() {
           text-align: left;
         }
 
+        .solutions-header-wrap {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          margin-bottom: 28px;
+          text-align: left;
+        }
+
+        .solutions-header-text {
+          max-width: 650px;
+        }
+
+        .solutions-header-desc {
+          color: #64748b;
+          font-size: 0.95rem;
+          margin-top: 8px;
+          line-height: 1.6;
+        }
+
         .editorial-mini-tag {
           font-size: 0.75rem;
           font-weight: 800;
           color: var(--primary);
           text-transform: uppercase;
           letter-spacing: 0.08em;
-          margin-bottom: 4px;
+          margin-bottom: 6px;
           display: inline-block;
         }
 
@@ -608,292 +915,331 @@ export default function Home() {
           font-weight: 700;
           color: var(--primary);
           transition: transform 0.2s ease;
+          flex-shrink: 0;
         }
 
         .editorial-see-all-btn:hover {
           transform: translateX(4px);
         }
 
-        /* ===== Editorial Cards Grid (Pomaii Popular Style) ===== */
-        .editorial-cards-grid {
+        /* ===== Solutions Filter Pills ===== */
+        .solutions-filter-pills-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-bottom: 32px;
+        }
+
+        .solution-filter-pill-btn {
+          border: 1px solid var(--border);
+          background: #ffffff;
+          color: #475569;
+          padding: 8px 18px;
+          border-radius: 100px;
+          font-size: 0.84rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .solution-filter-pill-btn:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+          background: #fff5f5;
+        }
+
+        .solution-filter-pill-btn.active {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: #ffffff;
+          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.28);
+        }
+
+        /* ===== Creative Solutions Grid ===== */
+        .creative-solutions-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
-          margin-bottom: 40px;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 30px;
+          margin-bottom: 36px;
         }
 
-        @media (max-width: 991px) {
-          .editorial-cards-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 576px) {
-          .editorial-cards-grid {
+        @media (max-width: 900px) {
+          .creative-solutions-grid {
             grid-template-columns: 1fr;
           }
         }
 
-        .editorial-card {
+        .creative-card {
           background: #ffffff;
           border: 1px solid var(--border);
-          border-radius: 20px;
+          border-radius: 24px;
           overflow: hidden;
           text-align: left;
           display: flex;
           flex-direction: column;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
-          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
         }
 
-        .editorial-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(229, 62, 62, 0.08);
-          border-color: rgba(229, 62, 62, 0.25);
+        .creative-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 45px rgba(229, 62, 62, 0.08);
+          border-color: rgba(229, 62, 62, 0.3);
         }
 
-        .card-thumb-wrap {
+        .creative-card-media {
           position: relative;
-          height: 200px;
-          background-color: #f1f5f9;
+          height: 220px;
           overflow: hidden;
+          background: #f1f5f9;
         }
 
-        .card-thumb-img {
+        .creative-card-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.5s ease;
+          transition: transform 0.6s ease;
         }
 
-        .editorial-card:hover .card-thumb-img {
-          transform: scale(1.06);
+        .creative-card:hover .creative-card-img {
+          transform: scale(1.05);
         }
 
-        .card-badge-rating {
+        .media-overlay-gradient {
           position: absolute;
-          top: 12px;
-          left: 12px;
-          background: rgba(15, 23, 42, 0.7);
-          backdrop-filter: blur(8px);
+          inset: 0;
+          background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.75) 100%);
+        }
+
+        .media-top-badges {
+          position: absolute;
+          top: 14px;
+          left: 14px;
+          right: 14px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 2;
+        }
+
+        .creative-tag-pill {
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(6px);
+          color: var(--primary);
+          font-size: 0.72rem;
+          font-weight: 800;
+          padding: 4px 12px;
+          border-radius: 100px;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
+
+        .rating-pill {
+          background: rgba(15, 23, 42, 0.75);
+          backdrop-filter: blur(6px);
           color: #ffffff;
           padding: 4px 10px;
           border-radius: 100px;
+          font-size: 0.75rem;
+          font-weight: 800;
           display: inline-flex;
           align-items: center;
           gap: 4px;
-          font-size: 0.75rem;
-          font-weight: 800;
         }
 
-        .card-price-overlay {
+        .media-bottom-price {
           position: absolute;
-          bottom: 12px;
-          right: 12px;
+          bottom: 14px;
+          left: 16px;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
         }
 
-        .price-tag-badge {
-          background: #ffffff;
-          color: var(--primary);
-          padding: 4px 10px;
-          border-radius: 100px;
+        .media-price-text {
+          font-size: 1.35rem;
+          font-weight: 900;
+          color: #ffffff;
+          letter-spacing: -0.01em;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .media-price-sub {
           font-size: 0.75rem;
-          font-weight: 800;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          color: #cbd5e1;
+          font-weight: 600;
         }
 
-        .card-text-wrap {
-          padding: 20px;
+        .creative-card-body {
+          padding: 26px;
           display: flex;
           flex-direction: column;
           flex: 1;
         }
 
-        .card-category-label {
+        .card-identity-row {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 12px;
+        }
+
+        .creative-icon-circle {
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+          background: #fff5f5;
+          border: 1px solid rgba(229, 62, 62, 0.16);
+          color: var(--primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          transition: transform 0.25s ease;
+        }
+
+        .creative-card:hover .creative-icon-circle {
+          transform: scale(1.08) rotate(3deg);
+          background: var(--primary);
+          color: #ffffff;
+        }
+
+        .creative-cat-name {
           font-size: 0.72rem;
           font-weight: 800;
           color: var(--primary);
           text-transform: uppercase;
-          letter-spacing: 0.04em;
-          margin-bottom: 6px;
+          letter-spacing: 0.05em;
+          display: block;
         }
 
-        .card-item-title {
-          font-size: 1.1rem;
+        .creative-card-title {
+          font-size: 1.22rem;
           font-weight: 800;
           color: #0f172a;
-          margin-bottom: 8px;
+          margin: 2px 0 0 0;
           line-height: 1.3;
         }
 
-        .card-item-desc {
-          font-size: 0.85rem;
+        .creative-card-desc {
+          font-size: 0.88rem;
           color: #64748b;
-          line-height: 1.5;
-          margin: 0;
+          line-height: 1.55;
+          margin: 0 0 16px 0;
         }
 
-        /* ===== Category Pill Filter Row ===== */
-        .editorial-category-pill-row {
+        .micro-badges-row {
           display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 14px;
           flex-wrap: wrap;
-          padding: 10px 0;
+          gap: 8px;
+          margin-bottom: 18px;
         }
 
-        .category-filter-pill {
+        .micro-badge {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          background: #ffffff;
-          border: 1px solid var(--border);
-          padding: 8px 18px;
-          border-radius: 100px;
+          gap: 5px;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
           color: #334155;
-          font-size: 0.85rem;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 0.75rem;
           font-weight: 700;
-          transition: all 0.25s ease;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
         }
 
-        .category-filter-pill:hover {
-          border-color: var(--primary);
-          color: var(--primary);
-          background: #fff5f5;
-          transform: translateY(-2px);
+        .creative-features-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 24px;
+          padding: 14px 0;
+          border-top: 1px solid #f1f5f9;
+          border-bottom: 1px solid #f1f5f9;
         }
 
-        .pill-icon-circle {
-          color: var(--primary);
+        .creative-feature-item {
           display: flex;
           align-items: center;
-        }
-
-        /* ===== Guide & Story Banner (Pomaii Style) ===== */
-        .guide-story-section {
-          background-color: #f8fafc;
-        }
-
-        .guide-card-container {
-          background: #ffffff;
-          border: 1px solid var(--border);
-          border-radius: 28px;
-          padding: 48px;
-          display: grid;
-          grid-template-columns: 1fr 1.25fr;
-          gap: 40px;
-          align-items: center;
-          text-align: left;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-        }
-
-        @media (max-width: 991px) {
-          .guide-card-container {
-            grid-template-columns: 1fr;
-            padding: 30px;
-          }
-        }
-
-        .guide-mini-tag {
-          font-size: 0.75rem;
-          font-weight: 800;
-          color: var(--primary);
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          margin-bottom: 8px;
-          display: inline-block;
-        }
-
-        .guide-heading {
-          font-size: 2rem;
-          font-weight: 900;
-          color: #0f172a;
-          line-height: 1.25;
-          margin-bottom: 16px;
-        }
-
-        .guide-desc {
-          font-size: 0.95rem;
-          color: #64748b;
-          line-height: 1.7;
-          margin-bottom: 28px;
-        }
-
-        .btn-guide-action {
-          display: inline-flex;
-          align-items: center;
           gap: 8px;
+          font-size: 0.85rem;
+          color: #475569;
+        }
+
+        .creative-card-action {
+          margin-top: auto;
+        }
+
+        .creative-cta-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
           background: #0f172a;
           color: #ffffff;
-          padding: 12px 24px;
-          border-radius: 100px;
+          padding: 12px 20px;
+          border-radius: 12px;
           font-size: 0.9rem;
           font-weight: 700;
           transition: all 0.25s ease;
         }
 
-        .btn-guide-action:hover {
+        .creative-cta-btn:hover {
           background: var(--primary);
+          color: #ffffff;
           transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(229, 62, 62, 0.25);
         }
 
-        .guide-cards-col {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-
-        .guide-mini-card {
+        /* ===== Assurance Strip ===== */
+        .creative-assurance-strip {
+          background: #ffffff;
+          border: 1px solid var(--border);
+          border-radius: 18px;
+          padding: 20px 32px;
           display: flex;
           align-items: center;
-          gap: 20px;
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 18px;
-          padding: 16px;
-          transition: transform 0.25s ease, border-color 0.25s ease;
+          justify-content: space-around;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
         }
 
-        .guide-mini-card:hover {
-          transform: translateX(4px);
-          border-color: rgba(229, 62, 62, 0.3);
-          background: #ffffff;
+        @media (max-width: 768px) {
+          .creative-assurance-strip {
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 20px;
+          }
+          .assurance-divider {
+            display: none;
+          }
         }
 
-        .mini-card-thumb {
-          width: 90px;
-          height: 90px;
-          border-radius: 14px;
-          overflow: hidden;
-          flex-shrink: 0;
+        .assurance-box {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          text-align: left;
         }
 
-        .mini-card-thumb img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .mini-card-content h4 {
-          font-size: 1.05rem;
-          font-weight: 800;
+        .assurance-box strong {
+          font-size: 0.9rem;
           color: #0f172a;
-          margin: 0 0 6px 0;
+          display: block;
         }
 
-        .mini-card-content p {
-          font-size: 0.85rem;
+        .assurance-box p {
+          font-size: 0.78rem;
           color: #64748b;
-          margin: 0 0 8px 0;
-          line-height: 1.45;
+          margin: 0;
         }
 
-        .mini-card-meta {
-          font-size: 0.75rem;
-          color: var(--primary);
-          font-weight: 700;
+        .assurance-divider {
+          width: 1px;
+          height: 32px;
+          background: #e2e8f0;
         }
 
         /* ===== Portfolio Preview Styles ===== */
@@ -966,7 +1312,270 @@ export default function Home() {
           line-height: 1.5;
         }
 
-        /* ===== Promo Curved Banner (Pomaii Style) ===== */
+        /* ===== Home News Summary Styles ===== */
+        .home-news-section {
+          background: #f8fafc;
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+        }
+
+        .home-news-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 26px;
+        }
+
+        @media (max-width: 991px) {
+          .home-news-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .home-news-card {
+          background: #ffffff;
+          border: 1px solid var(--border);
+          border-radius: 18px;
+          overflow: hidden;
+          text-align: left;
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .home-news-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+          border-color: rgba(229, 62, 62, 0.3);
+        }
+
+        .home-news-thumb-box {
+          position: relative;
+          height: 190px;
+          overflow: hidden;
+          background: #f1f5f9;
+        }
+
+        .home-news-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .home-news-card:hover .home-news-img {
+          transform: scale(1.06);
+        }
+
+        .home-news-category-badge {
+          position: absolute;
+          top: 12px;
+          left: 12px;
+          font-size: 0.72rem;
+          font-weight: 800;
+          color: #ffffff;
+          padding: 4px 10px;
+          border-radius: 100px;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
+
+        .cat-badge-rilis {
+          background: #10b850;
+        }
+
+        .cat-badge-kegiatan {
+          background: var(--primary);
+        }
+
+        .cat-badge-pengumuman {
+          background: #f59e0b;
+        }
+
+        .cat-badge-berita {
+          background: #3b82f6;
+        }
+
+        .home-news-content {
+          padding: 22px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .home-news-meta {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.78rem;
+          color: #64748b;
+          font-weight: 600;
+          margin-bottom: 10px;
+        }
+
+        .home-news-title {
+          font-size: 1.12rem;
+          font-weight: 800;
+          color: #0f172a;
+          line-height: 1.35;
+          margin: 0 0 10px 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .home-news-desc {
+          font-size: 0.85rem;
+          color: #64748b;
+          line-height: 1.5;
+          margin: 0 0 18px 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .home-news-read-more {
+          margin-top: auto;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.84rem;
+          font-weight: 700;
+          color: var(--primary);
+          transition: transform 0.2s ease;
+        }
+
+        .home-news-card:hover .home-news-read-more {
+          transform: translateX(4px);
+        }
+
+        /* ===== Guide & Story Banner ===== */
+        .guide-story-section {
+          background-color: #ffffff;
+        }
+
+        .guide-card-container {
+          background: #f8fafc;
+          border: 1px solid var(--border);
+          border-radius: 28px;
+          padding: 48px;
+          display: grid;
+          grid-template-columns: 1fr 1.25fr;
+          gap: 40px;
+          align-items: center;
+          text-align: left;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        @media (max-width: 991px) {
+          .guide-card-container {
+            grid-template-columns: 1fr;
+            padding: 30px;
+          }
+        }
+
+        .guide-mini-tag {
+          font-size: 0.75rem;
+          font-weight: 800;
+          color: var(--primary);
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          margin-bottom: 8px;
+          display: inline-block;
+        }
+
+        .guide-heading {
+          font-size: 2rem;
+          font-weight: 900;
+          color: #0f172a;
+          line-height: 1.25;
+          margin-bottom: 16px;
+        }
+
+        .guide-desc {
+          font-size: 0.95rem;
+          color: #64748b;
+          line-height: 1.7;
+          margin-bottom: 28px;
+        }
+
+        .btn-guide-action {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: #0f172a;
+          color: #ffffff;
+          padding: 12px 24px;
+          border-radius: 100px;
+          font-size: 0.9rem;
+          font-weight: 700;
+          transition: all 0.25s ease;
+        }
+
+        .btn-guide-action:hover {
+          background: var(--primary);
+          transform: translateY(-2px);
+        }
+
+        .guide-cards-col {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .guide-mini-card {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 18px;
+          padding: 16px;
+          transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .guide-mini-card:hover {
+          transform: translateX(4px);
+          border-color: rgba(229, 62, 62, 0.3);
+        }
+
+        .mini-card-thumb {
+          width: 90px;
+          height: 90px;
+          border-radius: 14px;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+
+        .mini-card-thumb img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .mini-card-content h4 {
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #0f172a;
+          margin: 0 0 6px 0;
+        }
+
+        .mini-card-content p {
+          font-size: 0.85rem;
+          color: #64748b;
+          margin: 0 0 8px 0;
+          line-height: 1.45;
+        }
+
+        .mini-card-meta {
+          font-size: 0.75rem;
+          color: var(--primary);
+          font-weight: 700;
+        }
+
+        /* ===== Promo Curved Banner ===== */
         .promo-banner-section {
           padding: 30px 0;
         }
@@ -1038,7 +1647,7 @@ export default function Home() {
           box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
         }
 
-        /* ===== Bottom Trust Stats Row (Pomaii Style, NO EMOJIS) ===== */
+        /* ===== Bottom Trust Stats Row (NO EMOJIS) ===== */
         .editorial-bottom-stats-bar {
           border-top: 1px solid var(--border);
           border-bottom: 1px solid var(--border);
