@@ -122,8 +122,8 @@ export default function Hero() {
               <span>Model Layanan</span>
             </label>
             <div className="bar-static-text">
-              <strong>Managed & Garansi</strong>
-              <span className="bar-sub-badge">Free 3 Bulan</span>
+              <strong>Managed & Support</strong>
+              <span className="bar-sub-badge">SLA Terkelola</span>
             </div>
           </div>
 
@@ -148,7 +148,7 @@ export default function Hero() {
             </div>
             <div className="trust-text">
               <h4>Teknologi Modern</h4>
-              <p>React, Next.js, & Flutter terkini dengan Lighthouse 95+.</p>
+              <p>React, Next.js, & Flutter dengan arsitektur performa tinggi.</p>
             </div>
           </div>
 
@@ -178,18 +178,18 @@ export default function Hero() {
             </div>
             <div className="trust-text">
               <h4>Dukungan Purnajual</h4>
-              <p>Garansi bebas bug 3 bulan dan respons cepat pemeliharaan.</p>
+              <p>Pemantauan server berkala dan respons cepat pemeliharaan.</p>
             </div>
           </div>
         </div>
       </div>
 
       <style>{`
-        /* ===== Hero Section Canvas ===== */
+        /* ===== Hero Section Canvas (Compact & Perfectly Spaced under Navbar) ===== */
         .hero-editorial-section {
           position: relative;
-          padding-top: 140px;
-          padding-bottom: 70px;
+          padding-top: 24px;
+          padding-bottom: 50px;
           background-color: #ffffff;
           overflow: hidden;
         }
@@ -199,7 +199,7 @@ export default function Hero() {
           top: 0;
           left: 0;
           right: 0;
-          height: 68%;
+          height: 100%;
           overflow: hidden;
           z-index: 1;
           pointer-events: none;
@@ -212,9 +212,9 @@ export default function Hero() {
           right: 0;
           bottom: 0;
           background: 
-            radial-gradient(ellipse at 85% 15%, rgba(229, 62, 62, 0.08) 0%, transparent 60%),
-            radial-gradient(ellipse at 15% 35%, rgba(229, 62, 62, 0.05) 0%, transparent 50%),
-            linear-gradient(180deg, #fff9f9 0%, #ffffff 100%);
+            radial-gradient(ellipse at 85% 10%, rgba(229, 62, 62, 0.08) 0%, transparent 60%),
+            radial-gradient(ellipse at 15% 30%, rgba(229, 62, 62, 0.05) 0%, transparent 50%),
+            linear-gradient(180deg, #fffafa 0%, #ffffff 100%);
         }
 
         .hero-curve-wave {
@@ -222,7 +222,7 @@ export default function Hero() {
           bottom: -2px;
           left: 0;
           right: 0;
-          height: 80px;
+          height: 60px;
           background: #ffffff;
           border-top-left-radius: 50% 100%;
           border-top-right-radius: 50% 100%;
@@ -236,7 +236,7 @@ export default function Hero() {
           flex-direction: column;
           align-items: center;
           text-align: center;
-          gap: 40px;
+          gap: 28px;
         }
 
         .hero-editorial-content {
@@ -248,7 +248,7 @@ export default function Hero() {
         .editorial-badge-row {
           display: flex;
           justify-content: center;
-          margin-bottom: 22px;
+          margin-bottom: 14px;
         }
 
         .editorial-pill-badge {
@@ -276,12 +276,12 @@ export default function Hero() {
 
         /* ===== Main Title ===== */
         .editorial-main-title {
-          font-size: 3.8rem;
+          font-size: 3.4rem;
           font-weight: 900;
-          line-height: 1.12;
-          letter-spacing: -0.035em;
+          line-height: 1.15;
+          letter-spacing: -0.03em;
           color: #0f172a;
-          margin-bottom: 24px;
+          margin-bottom: 18px;
         }
 
         .hero-highlight-curve {
@@ -294,9 +294,9 @@ export default function Hero() {
           content: '';
           position: absolute;
           left: 0;
-          bottom: 4px;
+          bottom: 3px;
           width: 100%;
-          height: 10px;
+          height: 8px;
           background: rgba(229, 62, 62, 0.12);
           border-radius: 6px;
           z-index: -1;
@@ -304,11 +304,11 @@ export default function Hero() {
         }
 
         .editorial-subtitle {
-          font-size: 1.15rem;
-          line-height: 1.75;
+          font-size: 1.05rem;
+          line-height: 1.65;
           color: #475569;
-          max-width: 720px;
-          margin: 0 auto 36px auto;
+          max-width: 700px;
+          margin: 0 auto 28px auto;
         }
 
         /* ===== Buttons ===== */
@@ -330,14 +330,14 @@ export default function Hero() {
           border-radius: 100px;
           font-weight: 700;
           font-size: 0.95rem;
-          box-shadow: 0 8px 24px rgba(229, 62, 62, 0.3);
+          box-shadow: 0 8px 24px rgba(229, 62, 62, 0.25);
           transition: all 0.25s ease;
         }
 
         .btn-pill-primary:hover {
           background: #dc2626;
           transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.4);
+          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.35);
         }
 
         .btn-icon-circle {
@@ -378,12 +378,12 @@ export default function Hero() {
         /* ===== Floating Solution Bar (Pomaii Style) ===== */
         .floating-solution-bar {
           width: 100%;
-          max-width: 980px;
+          max-width: 960px;
           background: #ffffff;
           border: 1px solid rgba(229, 62, 62, 0.16);
-          box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08);
+          box-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.07);
           border-radius: 100px;
-          padding: 12px 16px 12px 32px;
+          padding: 10px 14px 10px 28px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -393,7 +393,7 @@ export default function Hero() {
         }
 
         .floating-solution-bar:hover {
-          box-shadow: 0 24px 50px -10px rgba(229, 62, 62, 0.12);
+          box-shadow: 0 20px 45px -10px rgba(229, 62, 62, 0.12);
         }
 
         .solution-bar-col {
@@ -406,7 +406,7 @@ export default function Hero() {
           display: flex;
           align-items: center;
           gap: 6px;
-          font-size: 0.75rem;
+          font-size: 0.72rem;
           font-weight: 700;
           color: #64748b;
           text-transform: uppercase;
@@ -417,7 +417,7 @@ export default function Hero() {
         .bar-select {
           border: none;
           background: transparent;
-          font-size: 0.925rem;
+          font-size: 0.9rem;
           font-weight: 800;
           color: #0f172a;
           outline: none;
@@ -428,7 +428,7 @@ export default function Hero() {
 
         .bar-divider {
           width: 1px;
-          height: 38px;
+          height: 34px;
           background: #e2e8f0;
           flex-shrink: 0;
         }
@@ -437,7 +437,7 @@ export default function Hero() {
           display: flex;
           align-items: center;
           gap: 8px;
-          font-size: 0.925rem;
+          font-size: 0.9rem;
           color: #0f172a;
         }
 
@@ -460,10 +460,10 @@ export default function Hero() {
           gap: 8px;
           background: #0f172a;
           color: #ffffff;
-          padding: 14px 26px;
+          padding: 12px 24px;
           border-radius: 100px;
           font-weight: 700;
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           transition: all 0.25s ease;
         }
 
@@ -478,22 +478,22 @@ export default function Hero() {
         .editorial-trust-bar {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 28px;
+          gap: 24px;
           width: 100%;
-          max-width: 1100px;
-          padding-top: 15px;
+          max-width: 1060px;
+          padding-top: 8px;
           text-align: left;
         }
 
         .trust-item {
           display: flex;
           align-items: flex-start;
-          gap: 14px;
+          gap: 12px;
         }
 
         .trust-icon-box {
-          width: 44px;
-          height: 44px;
+          width: 42px;
+          height: 42px;
           border-radius: 12px;
           background: #fff5f5;
           border: 1px solid rgba(229, 62, 62, 0.15);
@@ -505,7 +505,7 @@ export default function Hero() {
         }
 
         .trust-item:hover .trust-icon-box {
-          transform: translateY(-3px);
+          transform: translateY(-2px);
           background: var(--primary);
           color: #ffffff;
         }
@@ -515,14 +515,14 @@ export default function Hero() {
         }
 
         .trust-text h4 {
-          font-size: 0.95rem;
+          font-size: 0.92rem;
           font-weight: 800;
           color: #0f172a;
-          margin: 0 0 4px 0;
+          margin: 0 0 3px 0;
         }
 
         .trust-text p {
-          font-size: 0.8rem;
+          font-size: 0.78rem;
           color: #64748b;
           line-height: 1.45;
           margin: 0;
@@ -531,14 +531,14 @@ export default function Hero() {
         /* ===== Responsive Queries ===== */
         @media (max-width: 991px) {
           .editorial-main-title {
-            font-size: 3rem;
+            font-size: 2.85rem;
           }
 
           .floating-solution-bar {
-            border-radius: 24px;
+            border-radius: 20px;
             flex-direction: column;
             align-items: stretch;
-            padding: 20px;
+            padding: 16px;
           }
 
           .bar-divider {
@@ -553,33 +553,33 @@ export default function Hero() {
 
           .editorial-trust-bar {
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 18px;
           }
         }
 
         @media (max-width: 768px) {
           .hero-editorial-section {
-            padding-top: 110px;
-            padding-bottom: 50px;
+            padding-top: 16px;
+            padding-bottom: 36px;
           }
 
           .editorial-main-title {
-            font-size: 2.35rem;
+            font-size: 2.2rem;
           }
 
           .editorial-subtitle {
-            font-size: 1rem;
+            font-size: 0.95rem;
           }
         }
 
         @media (max-width: 576px) {
           .editorial-main-title {
-            font-size: 1.95rem;
+            font-size: 1.9rem;
           }
 
           .editorial-trust-bar {
             grid-template-columns: 1fr;
-            gap: 18px;
+            gap: 14px;
           }
         }
       `}</style>

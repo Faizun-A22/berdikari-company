@@ -509,8 +509,8 @@ export default function Home() {
               <span className="stats-subtext">Pengguna Aktif</span>
             </div>
             <div className="stats-metric-item">
-              <span className="stats-number text-red">4.9/5.0</span>
-              <span className="stats-subtext">Skor Kepuasan Klien</span>
+              <span className="stats-number text-red">99.2%</span>
+              <span className="stats-subtext">Tingkat Kepuasan</span>
             </div>
             <div className="stats-metric-item">
               <span className="stats-number text-red">24/7</span>
