@@ -154,6 +154,10 @@ export default function AboutPage() {
       </section>
 
       <style>{`
+        .vision-mission-section {
+          padding-top: 40px !important;
+        }
+
         .vision-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);

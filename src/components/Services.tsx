@@ -237,6 +237,8 @@ export default function Services() {
           background-color: var(--bg-deep);
           position: relative;
           overflow: hidden;
+          padding-top: 40px;
+          padding-bottom: 80px;
         }
 
         .services-glow {

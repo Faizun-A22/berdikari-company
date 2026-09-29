@@ -43,7 +43,6 @@ export default function Navbar() {
     { name: 'Portofolio', to: '/portfolio.html' },
     { name: 'Berita', to: '/news.html' },
     { name: 'Tentang Kami', to: '/about.html' },
-    { name: 'Kontak', to: '/contact.html' },
   ];
 
   return (

@@ -153,6 +153,8 @@ export default function NewsSection() {
       <style>{`
         .news-section {
           background-color: var(--bg-dark);
+          padding-top: 40px !important;
+          padding-bottom: 80px !important;
         }
 
         .filter-bar {

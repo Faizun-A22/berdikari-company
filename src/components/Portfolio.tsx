@@ -200,6 +200,8 @@ export default function Portfolio() {
           background-color: var(--bg-dark);
           position: relative;
           overflow: hidden;
+          padding-top: 40px;
+          padding-bottom: 80px;
         }
 
         .portfolio-glow {
