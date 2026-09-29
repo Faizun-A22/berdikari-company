@@ -1,184 +1,316 @@
+import { Mail, Phone, MapPin, Clock, Heart } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="footer-section">
-      <div className="container footer-grid">
-        {/* Brand Info Column */}
+    <footer className="footer-creative-section">
+      <div className="container footer-content-grid">
+        {/* Brand & Mission Column */}
         <div className="footer-brand-col">
-          <a href="/index.html" className="footer-logo">
-            <img src="/logo.png" alt="Logo" className="logo-img" style={{ height: '36px', objectFit: 'contain', marginRight: '8px' }} />
-            <span>Berdikari<span className="text-red"> Digital Nusantara</span></span>
+          <a href="/index.html" className="footer-brand-logo">
+            <img src="/logo.png" alt="Berdikari Logo" className="footer-logo-img" />
+            <div className="footer-logo-text">
+              <span className="brand-name">Berdikari<span className="text-red">.</span></span>
+              <span className="brand-tag">Digital Nusantara</span>
+            </div>
           </a>
-          <p className="footer-about-text">
-            Berdikari Digital Nusantara menyediakan layanan rekayasa perangkat lunak, pembuatan website premium, 
-            aplikasi mobile berkualitas tinggi, otomasi kecerdasan buatan (AI), serta berbagai produk digital siap guna.
+
+          <p className="footer-mission-text">
+            Software house andal yang berdedikasi membangun kemandirian teknologi bangsa. Kami merancang website kilat, aplikasi mobile tangguh, dan otomatisasi cerdas berstandar industri.
           </p>
-          <div className="social-links-grid">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-circle-link" aria-label="GitHub">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+
+          <div className="footer-social-row">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-pill-btn" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-circle-link" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-pill-btn" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-circle-link" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-pill-btn" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-circle-link" aria-label="Twitter">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="social-pill-btn" aria-label="WhatsApp">
+              <Phone size={16} />
             </a>
           </div>
         </div>
 
-        {/* Navigation Column */}
-        <div className="footer-nav-col">
-          <h4 className="footer-heading">Peta Situs</h4>
-          <ul className="footer-links-list">
+        {/* Explore Links */}
+        <div className="footer-links-col">
+          <h4 className="footer-col-title">Jelajahi</h4>
+          <ul className="footer-nav-list">
             <li><a href="/index.html">Beranda</a></li>
-            <li><a href="/services.html">Layanan</a></li>
-            <li><a href="/portfolio.html">Portofolio</a></li>
-            <li><a href="/news.html">Berita &amp; Kegiatan</a></li>
-            <li><a href="/about.html">Tentang Kami</a></li>
-            <li><a href="/contact.html">Kontak</a></li>
+            <li><a href="/services.html">Layanan &amp; Solusi</a></li>
+            <li><a href="/portfolio.html">Koleksi Portofolio</a></li>
+            <li><a href="/index.html#pricing">Paket Investasi</a></li>
+            <li><a href="/news.html">Kabar &amp; Wawasan</a></li>
+            <li><a href="/about.html">Tentang Berdikari</a></li>
           </ul>
         </div>
 
-        {/* Services Column */}
-        <div className="footer-nav-col">
-          <h4 className="footer-heading">Layanan Kami</h4>
-          <ul className="footer-links-list">
-            <li><a href="/services.html">Website Development</a></li>
-            <li><a href="/services.html">Mobile App Development</a></li>
+        {/* Services Links */}
+        <div className="footer-links-col">
+          <h4 className="footer-col-title">Layanan Kami</h4>
+          <ul className="footer-nav-list">
+            <li><a href="/services.html">Jasa Pembuatan Website</a></li>
+            <li><a href="/services.html">Aplikasi Mobile iOS &amp; Android</a></li>
             <li><a href="/services.html">UI/UX Design Prototipe</a></li>
-            <li><a href="/services.html">AI Otomatisasi &amp; Agen Pintar</a></li>
-            <li><a href="/services.html">Produk Digital Mandiri</a></li>
+            <li><a href="/services.html">AI Chatbot &amp; Otomasi n8n</a></li>
+            <li><a href="/services.html">Cloud Server &amp; Pemeliharaan</a></li>
+            <li><a href="/contact.html">Konsultasi Khusus Proyek</a></li>
           </ul>
+        </div>
+
+        {/* Contact Info & Circular Seal Badge */}
+        <div className="footer-contact-col">
+          <h4 className="footer-col-title">Hubungi Kami</h4>
+          <div className="footer-contact-list">
+            <a href="mailto:kontak@berdikari.com" className="footer-contact-item">
+              <Mail size={16} className="contact-icon text-red" />
+              <span>kontak@berdikari.com</span>
+            </a>
+            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="footer-contact-item">
+              <Phone size={16} className="contact-icon text-red" />
+              <span>+62 812-3456-7890</span>
+            </a>
+            <div className="footer-contact-item">
+              <MapPin size={16} className="contact-icon text-red" />
+              <span>Jakarta Selatan, DKI Jakarta, ID</span>
+            </div>
+            <div className="footer-contact-item">
+              <Clock size={16} className="contact-icon text-red" />
+              <span>Sen - Jum: 09:00 - 18:00 WIB</span>
+            </div>
+          </div>
+
+          {/* Circular Seal Badge (Like the reference image) */}
+          <div className="footer-seal-card">
+            <div className="seal-circle">
+              <Heart size={20} className="seal-heart-icon" />
+              <span className="seal-text-top">BERDIKARI</span>
+              <span className="seal-text-sub">Merah Putih Membangun Negeri</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Copyright bar */}
+      {/* Bottom Bar */}
       <div className="footer-bottom-bar">
-        <div className="container bottom-container">
-          <span className="copyright-text">
+        <div className="container bottom-bar-container">
+          <div className="copyright-notice">
             &copy; {currentYear} Berdikari Digital Nusantara. Seluruh Hak Cipta Dilindungi.
-          </span>
-          <div className="bottom-links">
-            <a href="#privacy" className="bottom-link">Kebijakan Privasi</a>
-            <span className="divider-dot"></span>
-            <a href="#terms" className="bottom-link">Syarat &amp; Ketentuan</a>
+          </div>
+          <div className="legal-links">
+            <a href="/about.html">Kebijakan Privasi</a>
+            <span className="sep">•</span>
+            <a href="/contact.html">Syarat &amp; Ketentuan</a>
+            <span className="sep">•</span>
+            <a href="/about.html">Standar Mutu ISO Ready</a>
           </div>
         </div>
       </div>
 
       <style>{`
-        .footer-section {
-          background-color: #f8fafc;
-          border-top: 1px solid var(--border);
+        /* ===== Creative Footer Container ===== */
+        .footer-creative-section {
+          background-color: #0b1120;
+          color: #94a3b8;
           padding-top: 80px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
           position: relative;
           z-index: 10;
         }
 
-        .footer-grid {
+        .footer-content-grid {
           display: grid;
-          grid-template-columns: 1.5fr 1fr 1fr;
-          gap: 60px;
+          grid-template-columns: 1.4fr 0.9fr 1.1fr 1.2fr;
+          gap: 48px;
           margin-bottom: 60px;
           text-align: left;
         }
 
-        @media (max-width: 768px) {
-          .footer-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
-          }
-        }
-
-        /* Brand Column */
-        .footer-logo {
-          display: flex;
+        /* ===== Brand Column ===== */
+        .footer-brand-logo {
+          display: inline-flex;
           align-items: center;
           gap: 10px;
           text-decoration: none;
-          color: var(--text-primary);
-          font-family: var(--font-heading);
-          font-weight: 800;
-          font-size: 1.5rem;
-          margin-bottom: 20px;
+          margin-bottom: 18px;
         }
 
-        .footer-about-text {
-          font-size: 0.925rem;
-          color: var(--text-secondary);
-          line-height: 1.6;
-          margin-bottom: 24px;
-          max-width: 380px;
+        .footer-logo-img {
+          height: 38px;
+          object-fit: contain;
         }
 
-        .social-links-grid {
+        .footer-logo-text {
           display: flex;
+          flex-direction: column;
+          line-height: 1.1;
+        }
+
+        .brand-name {
+          font-family: var(--font-heading);
+          font-size: 1.4rem;
+          font-weight: 900;
+          color: #ffffff;
+        }
+
+        .brand-tag {
+          font-size: 0.65rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #64748b;
+        }
+
+        .footer-mission-text {
+          font-size: 0.9rem;
+          color: #94a3b8;
+          line-height: 1.65;
+          margin-bottom: 24px;
+          max-width: 360px;
+        }
+
+        .footer-social-row {
+          display: flex;
+          align-items: center;
           gap: 12px;
         }
 
-        .social-circle-link {
-          width: 38px;
-          height: 38px;
+        .social-pill-btn {
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
-          background: rgba(15, 23, 42, 0.02);
-          border: 1px solid var(--border);
-          color: var(--text-secondary);
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #cbd5e1;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: var(--transition-normal);
+          transition: all 0.25s ease;
           text-decoration: none;
         }
 
-        .social-circle-link:hover {
-          background-color: var(--primary);
-          color: var(--white);
+        .social-pill-btn:hover {
+          background: var(--primary);
+          color: #ffffff;
           border-color: var(--primary);
           transform: translateY(-3px);
-          box-shadow: 0 0 10px var(--primary-glow);
+          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.35);
         }
 
-        /* Nav Columns */
-        .footer-heading {
-          font-size: 1.1rem;
-          color: var(--text-primary);
-          margin-bottom: 24px;
-          font-weight: 700;
+        /* ===== Column Titles & Nav ===== */
+        .footer-col-title {
+          font-family: var(--font-heading);
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #ffffff;
+          margin-bottom: 22px;
           letter-spacing: -0.01em;
         }
 
-        .footer-links-list {
+        .footer-nav-list {
           list-style: none;
+          padding: 0;
+          margin: 0;
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
 
-        .footer-links-list a {
-          color: var(--text-secondary);
+        .footer-nav-list a {
+          color: #94a3b8;
           text-decoration: none;
           font-size: 0.9rem;
-          transition: var(--transition-fast);
+          transition: all 0.2s ease;
+          display: inline-block;
         }
 
-        .footer-links-list a:hover {
+        .footer-nav-list a:hover {
+          color: #ffffff;
+          transform: translateX(4px);
+        }
+
+        /* ===== Contact Column ===== */
+        .footer-contact-list {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          margin-bottom: 24px;
+        }
+
+        .footer-contact-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: #94a3b8;
+          text-decoration: none;
+          font-size: 0.88rem;
+          transition: color 0.2s ease;
+        }
+
+        .footer-contact-item:hover {
+          color: #ffffff;
+        }
+
+        .contact-icon {
+          flex-shrink: 0;
+        }
+
+        /* ===== Circular Seal Badge ===== */
+        .footer-seal-card {
+          margin-top: 10px;
+        }
+
+        .seal-circle {
+          background: rgba(229, 62, 62, 0.12);
+          border: 1.5px dashed rgba(229, 62, 62, 0.4);
+          border-radius: 20px;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 4px;
+          max-width: 240px;
+        }
+
+        .seal-heart-icon {
           color: var(--primary);
-          padding-left: 4px;
+          animation: heartBeat 2s infinite ease-in-out;
         }
 
-        /* Bottom Bar */
+        @keyframes heartBeat {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.15); }
+        }
+
+        .seal-text-top {
+          font-size: 0.72rem;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          color: #ffffff;
+          text-transform: uppercase;
+        }
+
+        .seal-text-sub {
+          font-family: var(--font-cursive);
+          font-size: 0.95rem;
+          color: #fca5a5;
+        }
+
+        /* ===== Bottom Bar ===== */
         .footer-bottom-bar {
-          border-top: 1px solid rgba(15, 23, 42, 0.04);
+          background: #070c18;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
           padding: 24px 0;
-          background-color: #f1f5f9;
+          font-size: 0.82rem;
+          color: #64748b;
         }
 
-        .bottom-container {
+        .bottom-bar-container {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -186,40 +318,44 @@ export default function Footer() {
           gap: 16px;
         }
 
-        @media (max-width: 480px) {
-          .bottom-container {
-            flex-direction: column;
-            text-align: center;
-          }
-        }
-
-        .copyright-text {
-          font-size: 0.85rem;
-          color: var(--text-muted);
-        }
-
-        .bottom-links {
+        .legal-links {
           display: flex;
           align-items: center;
           gap: 12px;
         }
 
-        .bottom-link {
-          color: var(--text-muted);
+        .legal-links a {
+          color: #64748b;
           text-decoration: none;
-          font-size: 0.85rem;
-          transition: var(--transition-fast);
+          transition: color 0.2s ease;
         }
 
-        .bottom-link:hover {
-          color: var(--primary);
+        .legal-links a:hover {
+          color: #ffffff;
         }
 
-        .divider-dot {
-          width: 4px;
-          height: 4px;
-          background-color: var(--text-muted);
-          border-radius: 50%;
+        .sep {
+          color: #334155;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 991px) {
+          .footer-content-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .footer-content-grid {
+            grid-template-columns: 1fr;
+            gap: 36px;
+          }
+
+          .bottom-bar-container {
+            flex-direction: column;
+            text-align: center;
+          }
         }
       `}</style>
     </footer>
