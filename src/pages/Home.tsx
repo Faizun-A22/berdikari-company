@@ -202,7 +202,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing & Competitor Comparison Section */}
+      {/* Pricing & Comparison Section */}
       <section 
         ref={calcRef as React.RefObject<HTMLDivElement>}
         className={`pricing-calculator-section section reveal reveal-fade ${calcVisible ? 'in-view' : ''}`}
@@ -215,27 +215,27 @@ export default function Home() {
             <div className="accent-bar"></div>
           </div>
 
-          <div className="pricing-comparison-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', margin: '0 auto 40px auto', maxWidth: '1100px' }}>
-            
-            {/* Card 1: Paket Starter & Langganan */}
-            <div className="card-glass" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border)', background: '#ffffff' }}>
+          {/* Pricing Cards */}
+          <div className="pricing-cards-grid">
+
+            {/* Card 1: Web Starter (UMKM) */}
+            <div className={`card-glass pricing-card reveal reveal-slide-up delay-100 ${calcVisible ? 'in-view' : ''}`}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ padding: '10px', borderRadius: '10px', background: 'rgba(229, 62, 62, 0.08)', color: 'var(--primary)' }}>
+                  <div style={{ padding: '10px', borderRadius: '12px', background: 'rgba(229, 62, 62, 0.08)', color: 'var(--primary)' }}>
                     <Globe size={24} />
                   </div>
                   <div>
                     <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#334155', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Hemat & Praktis</span>
-                    <h3 style={{ fontSize: '1.25rem', margin: '2px 0 0 0', fontWeight: '700' }}>Web Starter & Langganan</h3>
+                    <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Web Starter (UMKM)</h3>
                   </div>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Cocok untuk UMKM, Landing Page Promosi, & Web Instan hemat tanpa pusing maintenance.</p>
-                
-                <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
-                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Pembuatan Awal</div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Cocok untuk UMKM, Landing Page Promosi, & Profil Bisnis Online.</p>
+
+                <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '10px', borderLeft: '3px solid var(--primary)' }}>
+                  <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Awal</div>
                   <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)', margin: '4px 0' }}>Rp 499.000</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: '600', marginTop: '4px' }}>+ Maintenance & Server: Mulai Rp 50.000 / bulan</div>
-                  <div style={{ fontSize: '0.725rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Operator 500rb Lain: Tanpa garansi, lepas tangan saat server mati / kena hack.</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>+ Maintenance: Mulai Rp 50.000/bln</div>
                 </div>
 
                 <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -246,7 +246,7 @@ export default function Home() {
               </div>
 
               <a 
-                href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Digital%20Nusantara,%20saya%20tertarik%20dengan%20paket%20Web%20Starter%20Rp%20499rb%20%2B%20Langganan." 
+                href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Digital%20Nusantara,%20saya%20tertarik%20dengan%20paket%20Web%20Starter%20Rp%20499rb." 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="btn btn-secondary w-full"
@@ -256,24 +256,24 @@ export default function Home() {
               </a>
             </div>
 
-            {/* Card 2: Custom Web & Professional */}
-            <div className="card-glass glow-glow-card" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px solid rgba(229, 62, 62, 0.3)', background: '#fffcfc' }}>
+            {/* Card 2: Web Kustom & System — Popular */}
+            <div className={`card-glass pricing-card pricing-card--popular reveal reveal-slide-up delay-200 ${calcVisible ? 'in-view' : ''}`}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ padding: '10px', borderRadius: '10px', background: 'var(--primary)', color: '#ffffff' }}>
+                  <div style={{ padding: '10px', borderRadius: '12px', background: 'var(--primary)', color: '#ffffff' }}>
                     <Globe size={24} />
                   </div>
                   <div>
                     <span style={{ fontSize: '0.7rem', background: 'var(--primary)', color: '#fff', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Paling Populer</span>
-                    <h3 style={{ fontSize: '1.25rem', margin: '2px 0 0 0', fontWeight: '700' }}>Web Kustom & System</h3>
+                    <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Web Kustom & System</h3>
                   </div>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Website Perusahaan, E-Commerce, & Sistem Manajemen Data Kustom Full Hak Milik.</p>
-                
-                <div style={{ margin: '20px 0', padding: '16px', background: '#ffffff', borderRadius: '8px', borderLeft: '3px solid var(--primary)', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: '600' }}>Investasi Jual Putus</div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--primary)', margin: '4px 0' }}>Rp 1.500.000</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Full Source Code & Sistem Milik Anda Sepenuhnya (Opsional Maintenance Rp 150rb/bln)</div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Company Profile, E-Commerce, & Dashboard Manajemen Data Kustom.</p>
+
+                <div style={{ margin: '20px 0', padding: '16px', background: '#ffffff', borderRadius: '10px', borderLeft: '3px solid var(--primary)', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                  <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Awal</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)', margin: '4px 0' }}>Rp 1.500.000</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>Opsional Maintenance: Rp 100.000/bln</div>
                 </div>
 
                 <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -295,20 +295,23 @@ export default function Home() {
             </div>
 
             {/* Card 3: Mobile App & AI */}
-            <div className="card-glass" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border)', background: '#ffffff' }}>
+            <div className={`card-glass pricing-card reveal reveal-slide-up delay-300 ${calcVisible ? 'in-view' : ''}`}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ padding: '10px', borderRadius: '10px', background: 'rgba(229, 62, 62, 0.08)', color: 'var(--primary)' }}>
+                  <div style={{ padding: '10px', borderRadius: '12px', background: 'rgba(229, 62, 62, 0.08)', color: 'var(--primary)' }}>
                     <Smartphone size={24} />
                   </div>
-                  <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: '700' }}>Mobile App & AI</h3>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#334155', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Advanced</span>
+                    <h3 style={{ fontSize: '1.2rem', margin: '2px 0 0 0', fontWeight: 700 }}>Mobile App & AI</h3>
+                  </div>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Aplikasi Android/iOS Kustom & AI Automation Chatbot Cerdas Bisnis.</p>
-                
-                <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
-                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: '600' }}>Investasi Mulai</div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--primary)', margin: '4px 0' }}>Rp 3.500.000</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Termasuk Integrasi API & Pendampingan Deployment</div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Aplikasi Android/iOS Kustom & Chatbot AI Cerdas Bisnis.</p>
+
+                <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '10px', borderLeft: '3px solid var(--primary)' }}>
+                  <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Awal</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)', margin: '4px 0' }}>Rp 3.500.000</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>Opsional Maintenance: SLA</div>
                 </div>
 
                 <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -331,44 +334,42 @@ export default function Home() {
 
           </div>
 
-          {/* Tabel Perbandingan Nilai Tambah / Operator Lain */}
-          <div className="card-glass" style={{ padding: '32px', maxWidth: '1100px', margin: '0 auto', background: '#fafbfc' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>Mengapa Model Langganan / Maintenance Kami Lebih Menguntungkan?</h3>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '24px' }}>Perbandingan nyata antara Website Rp 500 Ribu Lepas Tangan vs Model Langganan Berdikari Digital Nusantara.</p>
-            
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid var(--border)', background: '#ffffff' }}>
-                    <th style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>Faktor Penentu</th>
-                    <th style={{ padding: '12px 16px', color: 'var(--text-muted)' }}>Jasa Web 500 Ribu (Lepas Tangan)</th>
-                    <th style={{ padding: '12px 16px', color: 'var(--primary)', fontWeight: 800 }}>Model Starter / Langganan BDN</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Biaya Awal (Upfront)</td>
-                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Rp 500.000 (Bayar Lunas)</td>
-                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>Hemat & Ringan (Rp 499.000 + Rp 50.000/bln)</td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Perawatan & Server Down</td>
-                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Bila error/mati, lepas tangan atau minta biaya baru lagi</td>
-                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>Server selalu dipantau 24/7, gratis perbaikan & garansi aktif</td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Update Konten & Tampilan</td>
-                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Harus edit sendiri / bayar joki lagi tiap kali ganti foto/teks</td>
-                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>Gratis bantuan edit konten ringan tiap bulan</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Keamanan & Malware</td>
-                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Mudah kena hacking / judi online karena tanpa update security</td>
-                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>SSL & patching keamanan selalu diperbarui secara otomatis</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          {/* Comparison Table */}
+          <div className={`card-glass comparison-table-wrapper reveal reveal-slide-up delay-400 ${calcVisible ? 'in-view' : ''}`} style={{ padding: '32px', background: '#fafbfc' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>Mengapa Model Starter BDN Lebih Menguntungkan?</h3>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '24px' }}>Perbandingan nyata antara jasa web Rp 500rb lain vs Model Starter Berdikari Digital Nusantara.</p>
+
+            <table className="comparison-table">
+              <thead>
+                <tr>
+                  <th style={{ color: 'var(--text-primary)' }}>Faktor</th>
+                  <th style={{ color: 'var(--text-muted)' }}>Jasa Web 500rb Lain</th>
+                  <th style={{ color: 'var(--primary)', fontWeight: 800 }}>Model Starter BDN</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ fontWeight: 600 }}>Biaya Awal</td>
+                  <td style={{ color: '#64748b' }}>Rp 500.000 (Lunas)</td>
+                  <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Hemat (Rp 499.000 + Rp 50.000/bln)</td>
+                </tr>
+                <tr>
+                  <td style={{ fontWeight: 600 }}>Perawatan & Server Down</td>
+                  <td style={{ color: '#64748b' }}>Lepas tangan saat error</td>
+                  <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Server dipantau 24/7, gratis perbaikan</td>
+                </tr>
+                <tr>
+                  <td style={{ fontWeight: 600 }}>Update Konten</td>
+                  <td style={{ color: '#64748b' }}>Harus edit sendiri / bayar joki</td>
+                  <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Gratis bantuan edit konten ringan tiap bulan</td>
+                </tr>
+                <tr>
+                  <td style={{ fontWeight: 600 }}>Keamanan</td>
+                  <td style={{ color: '#64748b' }}>Mudah kena hack / judi online</td>
+                  <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>SSL & patching selalu diperbarui otomatis</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -587,234 +588,84 @@ export default function Home() {
           margin-left: 50px;
         }
 
-        .calculator-container {
-          max-width: 1000px;
-          margin: 0 auto;
-          padding: 40px;
-          text-align: left;
-        }
-
-        @media (max-width: 576px) {
-          .calculator-container {
-            padding: 20px;
-          }
-        }
-
-        .calculator-grid {
+        /* Pricing cards grid */
+        .pricing-cards-grid {
           display: grid;
-          grid-template-columns: 1.25fr 0.75fr;
-          gap: 40px;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 28px;
+          margin: 0 auto 48px auto;
+          max-width: 1100px;
         }
 
         @media (max-width: 991px) {
-          .calculator-grid {
+          .pricing-cards-grid {
             grid-template-columns: 1fr;
-            gap: 30px;
+            max-width: 480px;
           }
         }
 
-        .calc-group {
-          margin-bottom: 28px;
-        }
-
-        .calc-label {
-          font-weight: 700;
-          font-size: 0.95rem;
-          color: var(--text-primary);
-          margin-bottom: 12px;
-          display: block;
-        }
-
-        .calc-label-row {
+        .pricing-card {
+          padding: 32px 24px;
           display: flex;
+          flex-direction: column;
           justify-content: space-between;
-          align-items: center;
-          margin-bottom: 12px;
-        }
-
-        .calc-value-badge {
-          background: rgba(229, 62, 62, 0.08);
-          color: var(--primary);
-          font-weight: 700;
-          font-size: 0.85rem;
-          padding: 4px 12px;
-          border-radius: 100px;
-        }
-
-        .calc-select-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 12px;
-        }
-
-        @media (max-width: 576px) {
-          .calc-select-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        .calc-select-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          padding: 12px;
-          border-radius: 8px;
           border: 1px solid var(--border);
           background: #ffffff;
-          cursor: pointer;
-          color: var(--text-secondary);
-          font-weight: 600;
-          font-family: var(--font-heading);
-          transition: all var(--transition-fast);
+          border-radius: 16px;
+          transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1);
         }
 
-        .calc-select-btn:hover {
-          border-color: var(--primary);
-          color: var(--primary);
-          background: rgba(229, 62, 62, 0.01);
+        .pricing-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.06);
         }
 
-        .calc-select-btn.active {
-          border-color: var(--primary);
-          background: rgba(229, 62, 62, 0.05);
-          color: var(--primary);
-          box-shadow: 0 4px 12px rgba(229, 62, 62, 0.06);
+        .pricing-card--popular {
+          border: 1.5px solid rgba(229, 62, 62, 0.35);
+          background: #fffcfc;
+          box-shadow: 0 0 30px rgba(229, 62, 62, 0.08), 0 0 60px rgba(229, 62, 62, 0.04);
+          position: relative;
         }
 
-        .calc-slider {
-          -webkit-appearance: none;
+        .pricing-card--popular:hover {
+          box-shadow: 0 0 40px rgba(229, 62, 62, 0.12), 0 20px 40px rgba(0,0,0,0.06);
+        }
+
+        /* Comparison table */
+        .comparison-table-wrapper {
+          max-width: 1100px;
+          margin: 0 auto;
+          overflow-x: auto;
+        }
+
+        .comparison-table {
           width: 100%;
-          height: 6px;
-          border-radius: 3px;
-          background: #e2e8f0;
-          outline: none;
-          margin: 16px 0 8px;
-        }
-
-        .calc-slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: var(--primary);
-          cursor: pointer;
-          transition: transform 0.1s ease;
-          box-shadow: 0 0 10px rgba(229, 62, 62, 0.3);
-        }
-
-        .calc-slider::-webkit-slider-thumb:hover {
-          transform: scale(1.2);
-        }
-
-        .slider-limits {
-          display: flex;
-          justify-content: space-between;
-          font-size: 0.8rem;
-          color: var(--text-muted);
-        }
-
-        .complexity-grid {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .complexity-btn {
-          padding: 16px;
-          border-radius: 8px;
-          border: 1px solid var(--border);
-          background: #ffffff;
-          text-align: left;
-          cursor: pointer;
-          transition: all var(--transition-fast);
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .complexity-btn:hover {
-          border-color: var(--primary);
-        }
-
-        .complexity-btn.active {
-          border-color: var(--primary);
-          background: rgba(229, 62, 62, 0.03);
-          box-shadow: 0 4px 12px rgba(229, 62, 62, 0.04);
-        }
-
-        .complexity-btn strong {
-          color: var(--text-primary);
-          font-size: 0.95rem;
-          font-weight: 700;
-        }
-
-        .complexity-btn.active strong {
-          color: var(--primary);
-        }
-
-        .complexity-btn span {
-          font-size: 0.8rem;
-          color: var(--text-secondary);
-        }
-
-        .calculator-output {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          padding: 32px;
-        }
-
-        .output-header {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          border-bottom: 1px solid rgba(229, 62, 62, 0.1);
-          padding-bottom: 16px;
-          margin-bottom: 24px;
-        }
-
-        .output-header h3 {
-          font-size: 1.2rem;
-          color: var(--text-primary);
-        }
-
-        .price-desc-small {
-          font-size: 0.85rem;
-          color: var(--text-secondary);
-          margin-bottom: 6px;
-        }
-
-        .price-large-display {
-          font-size: 2rem;
-          color: var(--primary);
-          font-weight: 900;
-          font-family: var(--font-heading);
-          margin-bottom: 30px;
-          letter-spacing: -0.02em;
-        }
-
-        @media (max-width: 480px) {
-          .price-large-display {
-            font-size: 1.6rem;
-          }
-        }
-
-        .output-details-list {
-          list-style: none;
-          margin-bottom: 36px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .output-details-list li {
-          display: flex;
-          align-items: center;
-          gap: 10px;
+          border-collapse: collapse;
           font-size: 0.875rem;
-          color: var(--text-secondary);
+          text-align: left;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+          padding: 14px 18px;
+        }
+
+        .comparison-table thead tr {
+          border-bottom: 2px solid var(--border);
+          background: #ffffff;
+        }
+
+        .comparison-table tbody tr {
+          border-bottom: 1px solid var(--border);
+          transition: background 0.2s ease;
+        }
+
+        .comparison-table tbody tr:hover {
+          background: rgba(229, 62, 62, 0.015);
+        }
+
+        .comparison-table tbody tr:last-child {
+          border-bottom: none;
         }
 
         /* FAQ accordion elements */
