@@ -6,13 +6,11 @@ import {
   Zap,
   Award,
   Star,
-  Sparkles,
   TrendingUp,
-  Wifi,
-  Battery,
   CheckCircle2,
   Globe,
   Smartphone,
+  Cpu,
 } from 'lucide-react';
 
 function useCountUp(target: number, duration = 2000, decimals = 0) {
@@ -25,7 +23,6 @@ function useCountUp(target: number, duration = 2000, decimals = 0) {
     const animate = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(parseFloat((eased * target).toFixed(decimals)));
       if (progress < 1) {
@@ -76,18 +73,20 @@ export default function Hero() {
 
   return (
     <section id="home" className="hero-section">
-      <div className="glow-orb hero-glow-1"></div>
-      <div className="glow-orb hero-glow-2"></div>
+      {/* Dynamic Ambient Background Glows */}
+      <div className="hero-glow-orb hero-glow-1"></div>
+      <div className="hero-glow-orb hero-glow-2"></div>
+      <div className="hero-glow-orb hero-glow-3"></div>
 
-      {/* Floating decorative ambient shapes */}
-      <div className="hero-float-shape hero-float-shape-1" aria-hidden="true" />
-      <div className="hero-float-shape hero-float-shape-2" aria-hidden="true" />
-      <div className="hero-float-shape hero-float-shape-3" aria-hidden="true" />
-      <div className="hero-float-shape hero-float-shape-4" aria-hidden="true" />
+      {/* Floating Animated Geometric Chips */}
+      <div className="ambient-shape shape-1" aria-hidden="true" />
+      <div className="ambient-shape shape-2" aria-hidden="true" />
+      <div className="ambient-shape shape-3" aria-hidden="true" />
 
       <div className="container hero-container">
-        {/* Hero Header Content */}
+        {/* Main Header Content */}
         <div className="hero-content">
+          {/* Animated Badge */}
           <div className="badge-wrapper hero-stagger hero-stagger-1">
             <span className="hero-badge">
               <span className="badge-dot"></span>
@@ -95,158 +94,87 @@ export default function Hero() {
             </span>
           </div>
 
+          {/* Heading */}
           <h1
             className="hero-title hero-stagger hero-stagger-2"
             dangerouslySetInnerHTML={{ __html: heroTitle }}
           ></h1>
 
+          {/* Subtitle */}
           <p className="hero-description hero-stagger hero-stagger-3">
             {heroDesc}
           </p>
 
+          {/* CTA Buttons */}
           <div className="hero-actions hero-stagger hero-stagger-4">
-            <a href="/contact.html" className="btn btn-primary">
-              Konsultasi Gratis <ArrowRight size={18} />
+            <a href="/contact.html" className="btn btn-primary hero-btn-cta">
+              <span>Konsultasi Gratis</span>
+              <ArrowRight size={18} className="btn-arrow" />
             </a>
-            <a href="/portfolio.html" className="btn btn-secondary">
+            <a href="/portfolio.html" className="btn btn-secondary hero-btn-secondary">
               Lihat Portofolio
             </a>
           </div>
         </div>
 
-        {/* Camplify-Inspired Animated Phone Showcase & Floating Cards */}
-        <div className="hero-device-showcase hero-stagger hero-stagger-5">
-          {/* Ambient Glow behind phone */}
-          <div className="phone-ambient-glow" aria-hidden="true" />
-
-          {/* Floating Badge Left (Ratings & Clients) */}
-          <div className="camplify-floating-badge badge-left">
-            <div className="badge-avatar-group">
-              <span className="badge-avatar">👨‍💻</span>
-              <span className="badge-avatar">👩‍💼</span>
-              <span className="badge-avatar">🚀</span>
+        {/* Lightweight Floating Feature Showcase (Modern Pinterest/Camplify Style without Phone Frame) */}
+        <div className="hero-floating-showcase hero-stagger hero-stagger-5">
+          {/* Card 1: Fast Delivery & Performance */}
+          <div className="showcase-card showcase-card-left float-card-1">
+            <div className="card-icon-pill bg-red-soft">
+              <TrendingUp size={18} className="text-red" />
             </div>
-            <div className="badge-content">
-              <div className="badge-stars">
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                <span className="badge-score">4.9/5.0</span>
-              </div>
-              <span className="badge-sub">150+ Mitra Bisnis Percaya</span>
+            <div className="card-body-text">
+              <span className="card-top-tag">Lighthouse 99+</span>
+              <h4 className="card-main-title">Performa Ultra Cepat</h4>
+              <p className="card-desc">React & Flutter Next-Gen Architecture</p>
             </div>
           </div>
 
-          {/* Floating Badge Right (Speed & Performance) */}
-          <div className="camplify-floating-badge badge-right">
-            <div className="badge-icon-box">
-              <Sparkles size={18} className="text-red" />
+          {/* Card 2: Interactive Rating & Client Trust */}
+          <div className="showcase-card showcase-card-center float-card-2">
+            <div className="rating-avatar-stack">
+              <span className="avatar-chip">👨‍💻</span>
+              <span className="avatar-chip">👩‍💼</span>
+              <span className="avatar-chip">🚀</span>
             </div>
-            <div className="badge-content">
-              <span className="badge-title">Ultra Fast & Secure</span>
-              <div className="badge-metric">
-                <TrendingUp size={13} color="#10b981" />
-                <span className="badge-metric-text">Lighthouse 99+ Speed</span>
+            <div className="card-body-text">
+              <div className="star-row">
+                <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                <span className="rating-num">4.9/5.0</span>
               </div>
+              <span className="card-sub-info">150+ Klien & Mitra Bisnis Percaya</span>
             </div>
           </div>
 
-          {/* Floating Mini Pill Bottom Right (Warranty) */}
-          <div className="camplify-floating-badge badge-bottom-right">
-            <ShieldCheck size={16} className="text-red" />
-            <span>Garansi Bug-Free 3 Bulan</span>
-          </div>
-
-          {/* Realistic Smartphone Mockup Frame */}
-          <div className="phone-mockup-frame">
-            {/* Dynamic Island / Notch */}
-            <div className="phone-notch">
-              <div className="camera-lens"></div>
-              <div className="speaker-slit"></div>
+          {/* Card 3: Security & 24/7 Monitoring */}
+          <div className="showcase-card showcase-card-right float-card-3">
+            <div className="card-icon-pill bg-red-soft">
+              <ShieldCheck size={18} className="text-red" />
             </div>
-
-            {/* Screen Display */}
-            <div className="phone-screen">
-              {/* Status Bar */}
-              <div className="phone-status-bar">
-                <span className="phone-time">09:41</span>
-                <div className="phone-status-icons">
-                  <Wifi size={12} />
-                  <Battery size={14} />
-                </div>
-              </div>
-
-              {/* App Bar */}
-              <div className="phone-app-header">
-                <div className="app-brand">
-                  <div className="app-logo-dot"></div>
-                  <div>
-                    <div className="app-name">Berdikari App</div>
-                    <div className="app-tagline">Solusi Digital Nusantara</div>
-                  </div>
-                </div>
-                <div className="app-badge-status">
-                  <span className="live-dot"></span> Online
-                </div>
-              </div>
-
-              {/* App Highlight Card */}
-              <div className="phone-app-card">
-                <div className="app-card-chip">🚀 Ekosistem Digital</div>
-                <h4 className="app-card-title">Wujudkan Sistem & Produk Impian Anda</h4>
-                <p className="app-card-p">Website responsif, mobile app kustom, dan sistem AI otomatisasi.</p>
-                <div className="app-card-action">
-                  <span>Lihat Demo Sistem</span>
-                  <ArrowRight size={12} />
-                </div>
-              </div>
-
-              {/* Mini Stats Inside Phone */}
-              <div className="phone-mini-grid">
-                <div className="phone-mini-card">
-                  <div className="mini-card-val text-red">99.9%</div>
-                  <div className="mini-card-lbl">Server Uptime</div>
-                </div>
-                <div className="phone-mini-card">
-                  <div className="mini-card-val text-red">3x</div>
-                  <div className="mini-card-lbl">Lebih Cepat</div>
-                </div>
-              </div>
-
-              {/* Activity Status Row */}
-              <div className="phone-activity-row">
-                <CheckCircle2 size={16} className="text-red" />
-                <div className="activity-info">
-                  <span className="activity-title">Automated Cloud Deploy</span>
-                  <span className="activity-sub">AWS & Vercel High-Performance</span>
-                </div>
-              </div>
-
-              {/* Bottom Nav Bar */}
-              <div className="phone-nav-bar">
-                <div className="nav-item active">
-                  <Globe size={14} />
-                  <span>Web</span>
-                </div>
-                <div className="nav-item">
-                  <Smartphone size={14} />
-                  <span>Mobile</span>
-                </div>
-                <div className="nav-item">
-                  <Zap size={14} />
-                  <span>AI Tech</span>
-                </div>
-              </div>
+            <div className="card-body-text">
+              <span className="card-top-tag text-green">
+                <span className="live-pulse-dot"></span> 99.9% Uptime
+              </span>
+              <h4 className="card-main-title">Garansi Bug-Free 3 Bulan</h4>
+              <p className="card-desc">Cloud Server & SSL Terproteksi Mandiri</p>
             </div>
-
-            {/* Glass reflection streak */}
-            <div className="phone-gloss-overlay"></div>
           </div>
         </div>
 
-        {/* Floating Stats Section Below Phone (Camplify Style) */}
+        {/* Live Technology Ticker Pills */}
+        <div className="hero-tech-pills hero-stagger hero-stagger-5">
+          <span className="tech-pill"><Globe size={14} /> Web Apps</span>
+          <span className="tech-pill"><Smartphone size={14} /> Mobile Flutter</span>
+          <span className="tech-pill"><Cpu size={14} /> AI Automasi</span>
+          <span className="tech-pill"><CheckCircle2 size={14} /> Cloud Scalable</span>
+        </div>
+
+        {/* Stats Grid with Counting Animation */}
         <div className="hero-stats-grid hero-stagger hero-stagger-6">
           {stats.map((stat, idx) => (
             <div key={idx} className="card-glass stat-card">
@@ -263,60 +191,53 @@ export default function Hero() {
       </div>
 
       <style>{`
-        /* ===== Keyframes ===== */
+        /* ===== Hardware-Accelerated Animations ===== */
         @keyframes heroFadeInUp {
           0% {
             opacity: 0;
-            transform: translateY(32px);
+            transform: translate3d(0, 28px, 0);
           }
           100% {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
 
-        @keyframes floatSlow {
+        @keyframes floatGentle1 {
           0%, 100% {
-            transform: translateY(0) rotate(0deg);
+            transform: translate3d(0, 0, 0);
           }
           50% {
-            transform: translateY(-15px) rotate(3deg);
+            transform: translate3d(0, -10px, 0);
           }
         }
 
-        @keyframes phoneFloat {
+        @keyframes floatGentle2 {
           0%, 100% {
-            transform: translateY(0px) rotate(0deg);
+            transform: translate3d(0, 0, 0);
           }
           50% {
-            transform: translateY(-12px) rotate(-0.5deg);
+            transform: translate3d(0, -14px, 0);
           }
         }
 
-        @keyframes floatBadgeLeft {
+        @keyframes floatGentle3 {
           0%, 100% {
-            transform: translateY(0px) rotate(-1deg);
+            transform: translate3d(0, 0, 0);
           }
           50% {
-            transform: translateY(-10px) rotate(1deg);
+            transform: translate3d(0, -8px, 0);
           }
         }
 
-        @keyframes floatBadgeRight {
+        @keyframes ambientPulse {
           0%, 100% {
-            transform: translateY(0px) rotate(1deg);
+            transform: scale(1);
+            opacity: 0.7;
           }
           50% {
-            transform: translateY(-14px) rotate(-1deg);
-          }
-        }
-
-        @keyframes floatBadgeBottom {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-8px);
+            transform: scale(1.15);
+            opacity: 0.95;
           }
         }
 
@@ -326,12 +247,12 @@ export default function Hero() {
             opacity: 1;
           }
           50% {
-            box-shadow: 0 0 18px var(--primary), 0 0 40px rgba(229, 62, 62, 0.3);
-            opacity: 0.8;
+            box-shadow: 0 0 16px var(--primary), 0 0 30px rgba(229, 62, 62, 0.35);
+            opacity: 0.85;
           }
         }
 
-        @keyframes gradientShift {
+        @keyframes backgroundShift {
           0% {
             background-position: 50% 0%;
           }
@@ -343,103 +264,98 @@ export default function Hero() {
           }
         }
 
-        /* ===== Hero Section ===== */
+        /* ===== Hero Section Container ===== */
         .hero-section {
-          min-height: 100vh;
+          min-height: 94vh;
           display: flex;
           align-items: center;
           justify-content: center;
           padding-top: 130px;
-          padding-bottom: 90px;
+          padding-bottom: 75px;
           position: relative;
           overflow: hidden;
-          background: radial-gradient(ellipse at 50% 0%, rgba(229, 62, 62, 0.06) 0%, transparent 60%),
-                      radial-gradient(ellipse at 80% 60%, rgba(229, 62, 62, 0.03) 0%, transparent 50%),
+          background: radial-gradient(ellipse at 50% -10%, rgba(229, 62, 62, 0.07) 0%, transparent 65%),
+                      radial-gradient(ellipse at 85% 70%, rgba(229, 62, 62, 0.035) 0%, transparent 50%),
                       var(--bg-dark);
-          background-size: 200% 200%;
-          animation: gradientShift 14s ease-in-out infinite;
+          background-size: 180% 180%;
+          animation: backgroundShift 14s ease-in-out infinite;
         }
 
-        /* ===== Glow orbs ===== */
+        /* Ambient Glow Orbs */
+        .hero-glow-orb {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          filter: blur(55px);
+          z-index: 1;
+        }
+
         .hero-glow-1 {
-          top: -10%;
-          left: 10%;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+          width: 420px;
+          height: 420px;
+          background: radial-gradient(circle, rgba(229, 62, 62, 0.12) 0%, transparent 70%);
+          top: -8%;
+          left: 15%;
+          animation: ambientPulse 8s ease-in-out infinite;
         }
 
         .hero-glow-2 {
+          width: 360px;
+          height: 360px;
+          background: radial-gradient(circle, rgba(229, 62, 62, 0.08) 0%, transparent 70%);
           bottom: 10%;
-          right: 5%;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.04) 0%, rgba(255, 255, 255, 0) 70%);
+          right: 12%;
+          animation: ambientPulse 9s ease-in-out infinite 2s;
         }
 
-        /* ===== Floating decorative shapes ===== */
-        .hero-float-shape {
+        .hero-glow-3 {
+          width: 280px;
+          height: 280px;
+          background: radial-gradient(circle, rgba(229, 62, 62, 0.06) 0%, transparent 70%);
+          top: 40%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          animation: ambientPulse 10s ease-in-out infinite 4s;
+        }
+
+        /* Ambient Decorative Shapes */
+        .ambient-shape {
           position: absolute;
-          z-index: 1;
           pointer-events: none;
-          animation: floatSlow 6s ease-in-out infinite;
+          z-index: 1;
         }
 
-        .hero-float-shape-1 {
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          background: rgba(229, 62, 62, 0.05);
-          top: 10%;
-          left: 5%;
-          animation-delay: 0s;
-          animation-duration: 7s;
-        }
-
-        .hero-float-shape-2 {
+        .shape-1 {
           width: 140px;
           height: 140px;
-          border-radius: 28px;
-          background: rgba(229, 62, 62, 0.06);
-          top: 18%;
-          right: 6%;
-          animation-delay: 1.5s;
-          animation-duration: 8.5s;
-        }
-
-        .hero-float-shape-3 {
-          width: 90px;
-          height: 90px;
           border-radius: 50%;
-          background: rgba(229, 62, 62, 0.05);
-          bottom: 22%;
-          left: 8%;
-          animation-delay: 3s;
-          animation-duration: 6.5s;
+          background: rgba(229, 62, 62, 0.035);
+          top: 15%;
+          left: 6%;
+          animation: floatGentle1 7s ease-in-out infinite;
         }
 
-        .hero-float-shape-4 {
-          width: 110px;
-          height: 110px;
+        .shape-2 {
+          width: 100px;
+          height: 100px;
           border-radius: 24px;
           background: rgba(229, 62, 62, 0.04);
-          bottom: 28%;
-          right: 10%;
-          animation-delay: 2s;
-          animation-duration: 9s;
-          transform: rotate(15deg);
+          top: 25%;
+          right: 7%;
+          animation: floatGentle2 8s ease-in-out infinite 1s;
         }
 
-        /* ===== Staggered fade-in ===== */
-        .hero-stagger {
-          opacity: 0;
-          animation: heroFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .shape-3 {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background: rgba(229, 62, 62, 0.04);
+          bottom: 22%;
+          left: 9%;
+          animation: floatGentle3 6.5s ease-in-out infinite 2s;
         }
 
-        .hero-stagger-1 { animation-delay: 0.1s; }
-        .hero-stagger-2 { animation-delay: 0.25s; }
-        .hero-stagger-3 { animation-delay: 0.4s; }
-        .hero-stagger-4 { animation-delay: 0.55s; }
-        .hero-stagger-5 { animation-delay: 0.7s; }
-        .hero-stagger-6 { animation-delay: 0.85s; }
-
-        /* ===== Hero Container ===== */
+        /* ===== Hero Content ===== */
         .hero-container {
           display: flex;
           flex-direction: column;
@@ -447,19 +363,33 @@ export default function Hero() {
           text-align: center;
           position: relative;
           z-index: 10;
-          gap: 48px;
+          gap: 36px;
           width: 100%;
         }
 
         .hero-content {
-          max-width: 860px;
+          max-width: 880px;
         }
 
-        /* ===== Badge ===== */
+        /* Staggered Animations */
+        .hero-stagger {
+          opacity: 0;
+          animation: heroFadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          will-change: transform, opacity;
+        }
+
+        .hero-stagger-1 { animation-delay: 0.08s; }
+        .hero-stagger-2 { animation-delay: 0.2s; }
+        .hero-stagger-3 { animation-delay: 0.32s; }
+        .hero-stagger-4 { animation-delay: 0.44s; }
+        .hero-stagger-5 { animation-delay: 0.56s; }
+        .hero-stagger-6 { animation-delay: 0.7s; }
+
+        /* Badge */
         .badge-wrapper {
           display: flex;
           justify-content: center;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
         }
 
         .hero-badge {
@@ -467,20 +397,21 @@ export default function Hero() {
           align-items: center;
           gap: 8px;
           background: rgba(229, 62, 62, 0.04);
-          border: 1px solid rgba(229, 62, 62, 0.12);
+          border: 1px solid rgba(229, 62, 62, 0.14);
           color: var(--text-primary);
           padding: 8px 20px;
           border-radius: 100px;
           font-size: 0.875rem;
           font-weight: 600;
           letter-spacing: 0.02em;
-          backdrop-filter: blur(8px);
+          backdrop-filter: blur(10px);
           transition: var(--transition-normal);
         }
 
         .hero-badge:hover {
-          border-color: rgba(229, 62, 62, 0.25);
-          background: rgba(229, 62, 62, 0.06);
+          border-color: rgba(229, 62, 62, 0.3);
+          background: rgba(229, 62, 62, 0.08);
+          transform: translateY(-1px);
         }
 
         .badge-dot {
@@ -493,13 +424,13 @@ export default function Hero() {
           animation: pulseGlow 2s infinite ease-in-out;
         }
 
-        /* ===== Title ===== */
+        /* Title */
         .hero-title {
-          font-size: 3.4rem;
+          font-size: 3.5rem;
           font-weight: 900;
           line-height: 1.15;
           letter-spacing: -0.03em;
-          margin-bottom: 24px;
+          margin-bottom: 22px;
           color: var(--text-primary);
         }
 
@@ -507,18 +438,18 @@ export default function Hero() {
           font-weight: 900;
         }
 
-        /* ===== Description ===== */
+        /* Description */
         .hero-description {
-          font-size: 1.125rem;
+          font-size: 1.15rem;
           color: var(--text-secondary);
-          margin-bottom: 36px;
+          margin-bottom: 34px;
           line-height: 1.7;
           max-width: 720px;
           margin-left: auto;
           margin-right: auto;
         }
 
-        /* ===== Actions ===== */
+        /* Action Buttons */
         .hero-actions {
           display: flex;
           justify-content: center;
@@ -526,471 +457,244 @@ export default function Hero() {
           flex-wrap: wrap;
         }
 
-        /* ===== Camplify Device Showcase ===== */
-        .hero-device-showcase {
-          position: relative;
-          width: 100%;
-          max-width: 580px;
-          margin: 10px auto 20px auto;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .phone-ambient-glow {
-          position: absolute;
-          width: 380px;
-          height: 480px;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.16) 0%, rgba(229, 62, 62, 0.03) 50%, transparent 75%);
-          filter: blur(40px);
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: 1;
-          pointer-events: none;
-        }
-
-        .phone-mockup-frame {
-          position: relative;
-          z-index: 5;
-          width: 310px;
-          height: 520px;
-          background: #0f172a;
-          border-radius: 44px;
-          padding: 10px;
-          box-shadow: 
-            0 25px 60px -12px rgba(0, 0, 0, 0.28),
-            0 0 0 1px rgba(255, 255, 255, 0.12) inset,
-            0 0 35px rgba(229, 62, 62, 0.15);
-          animation: phoneFloat 6s ease-in-out infinite;
-          overflow: hidden;
-          transition: transform 0.4s ease;
-        }
-
-        .phone-mockup-frame:hover {
-          transform: translateY(-8px) scale(1.02);
-        }
-
-        /* Dynamic Island / Notch */
-        .phone-notch {
-          position: absolute;
-          top: 14px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 96px;
-          height: 22px;
-          background: #000000;
-          border-radius: 14px;
-          z-index: 20;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 10px;
-        }
-
-        .camera-lens {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #1e293b;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .speaker-slit {
-          width: 38px;
-          height: 3px;
-          border-radius: 3px;
-          background: #1e293b;
-        }
-
-        /* Screen */
-        .phone-screen {
-          width: 100%;
-          height: 100%;
-          background: #ffffff;
-          border-radius: 36px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          padding: 12px 14px;
-          text-align: left;
-          position: relative;
-          color: var(--text-primary);
-        }
-
-        .phone-status-bar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 4px 6px 12px 6px;
-          font-size: 0.725rem;
-          font-weight: 700;
-          color: #0f172a;
-        }
-
-        .phone-status-icons {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          color: #0f172a;
-        }
-
-        /* App Header */
-        .phone-app-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-bottom: 12px;
-          border-bottom: 1px solid #f1f5f9;
-          margin-bottom: 12px;
-        }
-
-        .app-brand {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .app-logo-dot {
-          width: 24px;
-          height: 24px;
-          border-radius: 8px;
-          background: linear-gradient(135deg, var(--primary) 0%, #b91c1c 100%);
-          box-shadow: 0 2px 6px rgba(229, 62, 62, 0.35);
-        }
-
-        .app-name {
-          font-size: 0.8rem;
-          font-weight: 800;
-          line-height: 1.1;
-        }
-
-        .app-tagline {
-          font-size: 0.65rem;
-          color: var(--text-muted);
-        }
-
-        .app-badge-status {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 0.68rem;
-          font-weight: 700;
-          color: #10b981;
-          background: rgba(16, 185, 129, 0.1);
-          padding: 3px 8px;
-          border-radius: 100px;
-        }
-
-        .live-dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #10b981;
-          display: inline-block;
-        }
-
-        /* App Highlight Card */
-        .phone-app-card {
-          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-          color: #ffffff;
-          padding: 14px;
-          border-radius: 16px;
-          margin-bottom: 12px;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
-        }
-
-        .phone-app-card::before {
-          content: '';
-          position: absolute;
-          top: -20px;
-          right: -20px;
-          width: 80px;
-          height: 80px;
-          background: radial-gradient(circle, rgba(229, 62, 62, 0.4) 0%, transparent 70%);
-          border-radius: 50%;
-        }
-
-        .app-card-chip {
-          display: inline-block;
-          font-size: 0.65rem;
-          font-weight: 700;
-          color: #fca5a5;
-          margin-bottom: 6px;
-          text-transform: uppercase;
-          letter-spacing: 0.03em;
-        }
-
-        .app-card-title {
-          font-size: 0.85rem;
-          font-weight: 800;
-          line-height: 1.25;
-          margin-bottom: 4px;
-          color: #ffffff;
-        }
-
-        .app-card-p {
-          font-size: 0.68rem;
-          color: #94a3b8;
-          line-height: 1.35;
-          margin-bottom: 10px;
-        }
-
-        .app-card-action {
+        .hero-btn-cta {
+          padding: 14px 28px;
+          font-size: 1rem;
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          font-size: 0.7rem;
-          font-weight: 700;
-          color: var(--primary);
-          background: #ffffff;
-          padding: 4px 10px;
-          border-radius: 100px;
-        }
-
-        /* Mini Grid inside phone */
-        .phone-mini-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 8px;
-          margin-bottom: 12px;
-        }
-
-        .phone-mini-card {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          padding: 8px;
-          text-align: center;
-        }
-
-        .mini-card-val {
-          font-size: 0.95rem;
-          font-weight: 900;
-          line-height: 1.1;
-        }
-
-        .mini-card-lbl {
-          font-size: 0.65rem;
-          color: var(--text-secondary);
-        }
-
-        /* Activity Row inside phone */
-        .phone-activity-row {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          background: #f1f5f9;
-          border-radius: 12px;
-          padding: 8px 10px;
-          margin-bottom: auto;
-        }
-
-        .activity-info {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .activity-title {
-          font-size: 0.72rem;
-          font-weight: 700;
-          color: #0f172a;
-        }
-
-        .activity-sub {
-          font-size: 0.62rem;
-          color: #64748b;
-        }
-
-        /* Bottom Nav Bar */
-        .phone-nav-bar {
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          padding-top: 10px;
-          border-top: 1px solid #f1f5f9;
-          margin-top: 8px;
-        }
-
-        .nav-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 2px;
-          font-size: 0.62rem;
-          color: #94a3b8;
-          font-weight: 600;
-        }
-
-        .nav-item.active {
-          color: var(--primary);
-          font-weight: 800;
-        }
-
-        /* Gloss overlay */
-        .phone-gloss-overlay {
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 50%;
-          height: 100%;
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
-          pointer-events: none;
-          border-radius: 44px;
-        }
-
-        /* ===== Floating Badges (Camplify Style) ===== */
-        .camplify-floating-badge {
-          position: absolute;
-          z-index: 10;
-          background: rgba(255, 255, 255, 0.94);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(229, 62, 62, 0.15);
-          box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
-          border-radius: 16px;
-          padding: 10px 14px;
-          display: flex;
-          align-items: center;
           gap: 10px;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .hero-btn-cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(229, 62, 62, 0.3);
+        }
+
+        .hero-btn-cta:hover .btn-arrow {
+          transform: translateX(4px);
+        }
+
+        .btn-arrow {
+          transition: transform 0.2s ease;
+        }
+
+        .hero-btn-secondary {
+          padding: 14px 26px;
+          font-size: 1rem;
+          transition: transform 0.25s ease;
+        }
+
+        .hero-btn-secondary:hover {
+          transform: translateY(-2px);
+        }
+
+        /* ===== Lightweight Floating Feature Showcase (Camplify Style) ===== */
+        .hero-floating-showcase {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          width: 100%;
+          max-width: 980px;
+          margin: 12px auto 0 auto;
+        }
+
+        .showcase-card {
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(229, 62, 62, 0.12);
+          border-radius: 16px;
+          padding: 18px 20px;
           text-align: left;
-        }
-
-        /* Left Floating Badge */
-        .badge-left {
-          left: -40px;
-          top: 25%;
-          animation: floatBadgeLeft 5s ease-in-out infinite;
-        }
-
-        .badge-avatar-group {
           display: flex;
           align-items: center;
+          gap: 14px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+          will-change: transform;
         }
 
-        .badge-avatar {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
-          background: #fee2e2;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.75rem;
-          border: 2px solid #ffffff;
-          margin-left: -8px;
+        .showcase-card:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 16px 36px rgba(229, 62, 62, 0.1);
+          border-color: rgba(229, 62, 62, 0.3);
         }
 
-        .badge-avatar:first-child {
-          margin-left: 0;
+        .float-card-1 {
+          animation: floatGentle1 6s ease-in-out infinite;
         }
 
-        .badge-content {
-          display: flex;
-          flex-direction: column;
+        .float-card-2 {
+          animation: floatGentle2 7s ease-in-out infinite 0.5s;
         }
 
-        .badge-stars {
-          display: flex;
-          align-items: center;
-          gap: 2px;
+        .float-card-3 {
+          animation: floatGentle3 6.5s ease-in-out infinite 1s;
         }
 
-        .badge-score {
-          font-size: 0.75rem;
-          font-weight: 800;
-          color: #0f172a;
-          margin-left: 4px;
-        }
-
-        .badge-sub {
-          font-size: 0.68rem;
-          color: var(--text-secondary);
-        }
-
-        /* Right Floating Badge */
-        .badge-right {
-          right: -40px;
-          top: 35%;
-          animation: floatBadgeRight 6s ease-in-out infinite 0.5s;
-        }
-
-        .badge-icon-box {
-          width: 32px;
-          height: 32px;
-          border-radius: 10px;
+        .bg-red-soft {
           background: rgba(229, 62, 62, 0.08);
+        }
+
+        .card-icon-pill {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
         }
 
-        .badge-title {
-          font-size: 0.78rem;
-          font-weight: 800;
-          color: #0f172a;
-          line-height: 1.1;
+        .card-body-text {
+          display: flex;
+          flex-direction: column;
         }
 
-        .badge-metric {
+        .card-top-tag {
+          font-size: 0.72rem;
+          font-weight: 800;
+          color: var(--primary);
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
           display: flex;
           align-items: center;
-          gap: 4px;
-          margin-top: 2px;
+          gap: 5px;
         }
 
-        .badge-metric-text {
-          font-size: 0.68rem;
-          font-weight: 700;
+        .card-top-tag.text-green {
           color: #10b981;
         }
 
-        /* Bottom Right Pill Badge */
-        .badge-bottom-right {
-          right: -10px;
-          bottom: 12%;
-          padding: 8px 12px;
-          border-radius: 100px;
-          font-size: 0.75rem;
-          font-weight: 700;
+        .live-pulse-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #10b981;
+          display: inline-block;
+          animation: pulseGlow 1.8s infinite;
+        }
+
+        .card-main-title {
+          font-size: 0.95rem;
+          font-weight: 800;
           color: var(--text-primary);
-          animation: floatBadgeBottom 4.5s ease-in-out infinite 1s;
+          margin: 2px 0;
+          line-height: 1.25;
+        }
+
+        .card-desc {
+          font-size: 0.78rem;
+          color: var(--text-secondary);
+          margin: 0;
+          line-height: 1.35;
+        }
+
+        .rating-avatar-stack {
+          display: flex;
+          align-items: center;
+        }
+
+        .avatar-chip {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: #fee2e2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+          border: 2px solid #ffffff;
+          margin-left: -10px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        .avatar-chip:first-child {
+          margin-left: 0;
+        }
+
+        .star-row {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+        }
+
+        .rating-num {
+          font-size: 0.8rem;
+          font-weight: 800;
+          color: var(--text-primary);
+          margin-left: 4px;
+        }
+
+        .card-sub-info {
+          font-size: 0.75rem;
+          color: var(--text-secondary);
+          margin-top: 2px;
+        }
+
+        /* Tech Pills */
+        .hero-tech-pills {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .tech-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: rgba(255, 255, 255, 0.8);
+          border: 1px solid var(--border);
+          padding: 6px 14px;
+          border-radius: 100px;
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--text-secondary);
+          backdrop-filter: blur(8px);
+          transition: all 0.25s ease;
+        }
+
+        .tech-pill:hover {
+          color: var(--primary);
+          border-color: rgba(229, 62, 62, 0.3);
+          background: rgba(229, 62, 62, 0.04);
+          transform: translateY(-2px);
         }
 
         /* ===== Stats Grid ===== */
         .hero-stats-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
+          gap: 20px;
           width: 100%;
-          max-width: 1100px;
-          margin-top: 10px;
+          max-width: 1050px;
+          margin-top: 6px;
         }
 
         .stat-card {
           display: flex;
           align-items: center;
-          gap: 16px;
-          padding: 24px;
+          gap: 14px;
+          padding: 22px;
           text-align: left;
           border-radius: 14px;
           background: #ffffff;
           border: 1px solid var(--border);
-          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
           will-change: transform;
         }
 
         .stat-card:hover {
-          transform: scale(1.045) translateY(-4px);
-          box-shadow: 0 12px 32px rgba(229, 62, 62, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06);
+          transform: scale(1.04) translateY(-4px);
+          box-shadow: 0 12px 28px rgba(229, 62, 62, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
           border-color: rgba(229, 62, 62, 0.25);
         }
 
         .stat-icon-wrapper {
-          width: 48px;
-          height: 48px;
+          width: 46px;
+          height: 46px;
           border-radius: 12px;
           background: rgba(229, 62, 62, 0.05);
           border: 1px solid rgba(229, 62, 62, 0.1);
@@ -1028,27 +732,24 @@ export default function Hero() {
         /* ===== Responsive Media Queries ===== */
         @media (max-width: 991px) {
           .hero-title {
-            font-size: 2.8rem;
+            font-size: 2.85rem;
+          }
+
+          .hero-floating-showcase {
+            grid-template-columns: 1fr;
+            max-width: 520px;
           }
 
           .hero-stats-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-          }
-
-          .badge-left {
-            left: -10px;
-          }
-
-          .badge-right {
-            right: -10px;
+            gap: 16px;
           }
         }
 
         @media (max-width: 768px) {
           .hero-section {
             padding-top: 110px;
-            padding-bottom: 60px;
+            padding-bottom: 55px;
           }
 
           .hero-title {
@@ -1060,31 +761,11 @@ export default function Hero() {
           }
 
           .hero-container {
-            gap: 36px;
+            gap: 28px;
           }
 
-          .phone-mockup-frame {
-            width: 280px;
-            height: 470px;
-          }
-
-          .camplify-floating-badge {
-            transform: scale(0.9);
-          }
-
-          .badge-left {
-            left: 0;
-            top: 15%;
-          }
-
-          .badge-right {
-            right: 0;
-            top: 25%;
-          }
-
-          .badge-bottom-right {
-            right: 0;
-            bottom: 5%;
+          .ambient-shape {
+            display: none;
           }
         }
 
@@ -1093,26 +774,18 @@ export default function Hero() {
             font-size: 1.95rem;
           }
 
-          .hero-device-showcase {
-            margin: 0 auto;
-          }
-
-          .phone-mockup-frame {
-            width: 260px;
-            height: 440px;
-          }
-
-          .camplify-floating-badge {
-            display: none; /* Hide floating badges on very narrow screens to prevent overlap */
-          }
-
           .hero-stats-grid {
             grid-template-columns: 1fr;
-            gap: 14px;
+            gap: 12px;
           }
 
-          .hero-float-shape {
-            display: none;
+          .hero-tech-pills {
+            gap: 8px;
+          }
+
+          .tech-pill {
+            font-size: 0.75rem;
+            padding: 5px 12px;
           }
         }
       `}</style>
