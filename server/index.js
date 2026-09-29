@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import multer from 'multer';
+import bcrypt from 'bcrypt';
 import { supabase } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,10 +31,12 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Initial storage files checking
 if (!fs.existsSync(usersStorePath)) {
+  const initialAdminPass = process.env.ADMIN_PASSWORD || 'berdikariadmin';
+  const hashedPassword = bcrypt.hashSync(initialAdminPass, 10);
   fs.writeFileSync(usersStorePath, JSON.stringify([{
     id: "admin-id-12345",
     username: 'admin',
-    password_hash: process.env.ADMIN_PASSWORD || 'berdikariadmin',
+    password_hash: hashedPassword,
     role: 'admin',
     created_at: new Date().toISOString()
   }], null, 2));
@@ -116,6 +119,15 @@ function requireAdmin(req, res, next) {
   }
 }
 
+// Helper untuk perbandingan password aman (bcrypt dengan fallback plaintext)
+async function verifyPassword(inputPassword, storedHash) {
+  if (!storedHash) return false;
+  if (storedHash.startsWith('$2a$') || storedHash.startsWith('$2b$') || storedHash.startsWith('$2y$')) {
+    return await bcrypt.compare(inputPassword, storedHash);
+  }
+  return inputPassword === storedHash;
+}
+
 // =========================================================================
 // 1. AUTHENTICATION & REGISTRATION ENDPOINTS
 // =========================================================================
@@ -146,8 +158,9 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Username atau kata sandi salah.' });
     }
 
-    // Verifikasi kata sandi
-    if (user.password_hash === password) {
+    // Verifikasi kata sandi aman
+    const isPasswordValid = await verifyPassword(password, user.password_hash);
+    if (isPasswordValid) {
       const token = jwt.sign({ id: user.id, username: user.username, role: user.role || 'admin' }, JWT_SECRET, { expiresIn: '24h' });
       return res.json({ success: true, token });
     } else {
@@ -157,7 +170,7 @@ app.post('/api/auth/login', async (req, res) => {
     // Fallback lokal jika database mengalami masalah
     const users = getLocalUsers();
     const user = users.find(u => u.username === username);
-    if (user && user.password_hash === password) {
+    if (user && await verifyPassword(password, user.password_hash)) {
       const token = jwt.sign({ id: user.id, username: user.username, role: user.role || 'admin' }, JWT_SECRET, { expiresIn: '24h' });
       return res.json({ success: true, token });
     }
@@ -209,12 +222,11 @@ app.post('/api/auth/send-otp', async (req, res) => {
 
     console.log(`[OTP SENT] Phone: ${phone_number} | Code: ${code} (Expires: ${expiresAt})`);
 
-    // Mengembalikan OTP dalam JSON untuk kemudahan pengembangan/testing.
-    // Di produksi, kode ini dikirim melalui provider SMS seperti Twilio atau Whatapp API.
+    const isProd = process.env.NODE_ENV === 'production';
     res.json({
       success: true,
-      message: 'Kode OTP berhasil dikirim (simulasi).',
-      code: code
+      message: 'Kode OTP berhasil dikirim.',
+      ...(isProd ? {} : { code: code })
     });
   } catch (err) {
     console.warn('Supabase error saving OTP, using local fallback:', err.message);
@@ -227,10 +239,11 @@ app.post('/api/auth/send-otp', async (req, res) => {
 
     console.log(`[OTP SENT - LOCAL FALLBACK] Phone: ${phone_number} | Code: ${code} (Expires: ${expiresAt})`);
 
+    const isProd = process.env.NODE_ENV === 'production';
     res.json({
       success: true,
-      message: 'Kode OTP berhasil dikirim secara lokal (simulasi).',
-      code: code
+      message: 'Kode OTP berhasil dikirim secara lokal.',
+      ...(isProd ? {} : { code: code })
     });
   }
 });
@@ -423,7 +436,9 @@ app.post('/api/auth/register', upload.single('profile_picture'), async (req, res
     try {
       await supabase.from('otp_codes').delete().eq('phone_number', phone_number);
     } catch (otpCleanupErr) {
-      // Abaikan error cleanup OTP
+      // Cleanup lokal sebagai fallback
+      const otps = getLocalOtps().filter(o => o.phone_number !== phone_number);
+      saveLocalOtps(otps);
     }
 
     // 5. Buat token JWT untuk sesi masuk pengguna

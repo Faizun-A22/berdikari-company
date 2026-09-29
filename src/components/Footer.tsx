@@ -38,7 +38,7 @@ export default function Footer() {
             <li><a href="/index.html">Beranda</a></li>
             <li><a href="/services.html">Layanan</a></li>
             <li><a href="/portfolio.html">Portofolio</a></li>
-            <li><a href="/index.html#activities-section">Berita &amp; Kegiatan</a></li>
+            <li><a href="/news.html">Berita &amp; Kegiatan</a></li>
             <li><a href="/about.html">Tentang Kami</a></li>
             <li><a href="/contact.html">Kontak</a></li>
           </ul>
