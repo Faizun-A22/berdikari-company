@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
-import { ArrowRight, Globe, Smartphone, FolderKanban, Brain, Calculator, ShieldCheck, Heart, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, Globe, Smartphone, FolderKanban, Brain, ShieldCheck, ChevronDown, ChevronUp } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export default function Home() {
@@ -17,43 +17,8 @@ export default function Home() {
 
   const [featuredProjects, setFeaturedProjects] = useState<any[]>([]);
 
-  // Kalkulator Estimasi Proyek States
-  const [calcService, setCalcService] = useState<'web' | 'mobile' | 'ai' | 'undangan' | 'ebook'>('web');
-  const [calcPages, setCalcPages] = useState<number>(3);
-  const [calcComplexity, setCalcComplexity] = useState<'standard' | 'medium' | 'premium'>('standard');
-  const [calcResult, setCalcResult] = useState<number>(0);
-
   // FAQ Accordion State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    // Calculate Project Estimate
-    let base = 0;
-    if (calcService === 'web') {
-      base = 1500000;
-      base += calcPages * 300000;
-      if (calcComplexity === 'medium') base += 1200000;
-      if (calcComplexity === 'premium') base += 3500000;
-    } else if (calcService === 'mobile') {
-      base = 4500000;
-      base += calcPages * 500000;
-      if (calcComplexity === 'medium') base += 2500000;
-      if (calcComplexity === 'premium') base += 6500000;
-    } else if (calcService === 'ai') {
-      base = 3500000;
-      if (calcComplexity === 'medium') base += 2500000;
-      if (calcComplexity === 'premium') base += 7500000;
-    } else if (calcService === 'undangan') {
-      base = 99000;
-      if (calcComplexity === 'medium') base += 50000;
-      if (calcComplexity === 'premium') base += 150000;
-    } else if (calcService === 'ebook') {
-      base = 49000;
-      if (calcComplexity === 'medium') base += 20000;
-      if (calcComplexity === 'premium') base += 50000;
-    }
-    setCalcResult(base);
-  }, [calcService, calcPages, calcComplexity]);
 
   useEffect(() => {
     // Fetch configs
@@ -114,28 +79,10 @@ export default function Home() {
       a: 'Kami menggunakan metode agile interaktif yang meliputi: Konsultasi & Analisis Kebutuhan, Pembuatan Prototipe Desain Figma, Pengodean Sistem, Quality Assurance (Audit Lighthouse 90+), Deployment ke Cloud Server, dan Garansi Bug-Free gratis 3 bulan.'
     },
     {
-      q: 'Apakah harga di kalkulator estimasi di atas bersifat mutlak?',
-      a: 'Harga di kalkulator estimasi bersifat perkiraan awal berdasarkan benchmark industri standar. Harga final bisa lebih rendah atau menyesuaikan kebutuhan modul spesifik Anda setelah sesi diskusi bersama tim analis kami.'
+      q: 'Bagaimana penentuan biaya investasi proyek?',
+      a: 'Penentuan biaya investasi kami sangat transparan dan rasional berdasarkan kebutuhan modul, performa sistem, serta skala fitur. Silakan lihat paket penawaran dan perbandingan rasional kami di atas.'
     }
   ];
-
-  const formatRupiah = (num: number) => {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
-  };
-
-  const getCalcWhatsAppLink = () => {
-    const serviceName = 
-      calcService === 'web' ? 'Website Development' :
-      calcService === 'mobile' ? 'Mobile App Development' :
-      calcService === 'ai' ? 'AI Otomatisasi & Chatbot' :
-      calcService === 'undangan' ? 'Undangan Digital' : 'E-Book Premium';
-
-    const complexityText = calcComplexity === 'standard' ? 'Sederhana / Standar' : calcComplexity === 'medium' ? 'Menengah' : 'Kompleks / Premium';
-    const detailText = calcService === 'web' || calcService === 'mobile' ? ` dengan estimasi halaman: ${calcPages}` : '';
-    const text = `Halo Berdikari Digital Nusantara, saya ingin bertanya tentang perkiraan biaya layanan:\n- Layanan: ${serviceName}\n- Kompleksitas: ${complexityText}${detailText}\n- Estimasi Harga: ${formatRupiah(calcResult)}\n\nMohon informasi tindak lanjutnya, terima kasih.`;
-    
-    return `https://wa.me/6281234567890?text=${encodeURIComponent(text)}`;
-  };
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(prev => prev === index ? null : index);
@@ -255,7 +202,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Calculator Section */}
+      {/* Pricing & Competitor Comparison Section */}
       <section 
         ref={calcRef as React.RefObject<HTMLDivElement>}
         className={`pricing-calculator-section section reveal reveal-fade ${calcVisible ? 'in-view' : ''}`}
@@ -263,134 +210,164 @@ export default function Home() {
       >
         <div className="container">
           <div className="section-title">
-            <h2>Kalkulator Estimasi Proyek</h2>
-            <p>Dapatkan gambaran kasar nilai investasi produk digital Anda secara instan dan interaktif.</p>
+            <h2>Penawaran Harga & Nilai Layanan Transparan</h2>
+            <p>Perbandingan rasional dan kompetitif investasi teknologi Anda bersama Berdikari Digital Nusantara.</p>
             <div className="accent-bar"></div>
           </div>
 
-          <div className="calculator-container card-glass custom-widget-card glow-glow-card animate-float-delay-1">
-            <div className="calculator-grid">
-              <div className="calculator-inputs">
-                {/* Service Selector */}
-                <div className="calc-group">
-                  <label className="calc-label">Pilih Jenis Layanan / Produk:</label>
-                  <div className="calc-select-grid">
-                    <button 
-                      className={`calc-select-btn ${calcService === 'web' ? 'active' : ''}`}
-                      onClick={() => { setCalcService('web'); setCalcPages(3); }}
-                    >
-                      <Globe size={16} />
-                      <span>Website / Web App</span>
-                    </button>
-                    <button 
-                      className={`calc-select-btn ${calcService === 'mobile' ? 'active' : ''}`}
-                      onClick={() => { setCalcService('mobile'); setCalcPages(5); }}
-                    >
-                      <Smartphone size={16} />
-                      <span>Mobile App</span>
-                    </button>
-                    <button 
-                      className={`calc-select-btn ${calcService === 'ai' ? 'active' : ''}`}
-                      onClick={() => setCalcService('ai')}
-                    >
-                      <Brain size={16} />
-                      <span>AI Otomatisasi</span>
-                    </button>
-                    <button 
-                      className={`calc-select-btn ${calcService === 'undangan' ? 'active' : ''}`}
-                      onClick={() => setCalcService('undangan')}
-                    >
-                      <Heart size={16} />
-                      <span>Undangan Digital</span>
-                    </button>
-                    <button 
-                      className={`calc-select-btn ${calcService === 'ebook' ? 'active' : ''}`}
-                      onClick={() => setCalcService('ebook')}
-                    >
-                      <FolderKanban size={16} />
-                      <span>E-Book Premium</span>
-                    </button>
+          <div className="pricing-comparison-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', margin: '0 auto 40px auto', maxWidth: '1100px' }}>
+            
+            {/* Card 1: Paket Starter & Langganan */}
+            <div className="card-glass" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border)', background: '#ffffff' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ padding: '10px', borderRadius: '10px', background: 'rgba(229, 62, 62, 0.08)', color: 'var(--primary)' }}>
+                    <Globe size={24} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#334155', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Hemat & Praktis</span>
+                    <h3 style={{ fontSize: '1.25rem', margin: '2px 0 0 0', fontWeight: '700' }}>Web Starter & Langganan</h3>
                   </div>
                 </div>
-
-                {/* Page Slider */}
-                {(calcService === 'web' || calcService === 'mobile') && (
-                  <div className="calc-group">
-                    <div className="calc-label-row">
-                      <label className="calc-label">Jumlah Halaman / Modul:</label>
-                      <span className="calc-value-badge">{calcPages} Halaman</span>
-                    </div>
-                    <input 
-                      type="range" 
-                      min="1" 
-                      max="15" 
-                      value={calcPages}
-                      onChange={(e) => setCalcPages(parseInt(e.target.value))}
-                      className="calc-slider"
-                    />
-                    <div className="slider-limits">
-                      <span>1 Halaman</span>
-                      <span>15 Halaman</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Complexity Options */}
-                <div className="calc-group">
-                  <label className="calc-label">Tingkat Kompleksitas Fitur:</label>
-                  <div className="complexity-grid">
-                    <button 
-                      className={`complexity-btn ${calcComplexity === 'standard' ? 'active' : ''}`}
-                      onClick={() => setCalcComplexity('standard')}
-                    >
-                      <strong>Standar</strong>
-                      <span>Fitur dasar, desain informatif & modern</span>
-                    </button>
-                    <button 
-                      className={`complexity-btn ${calcComplexity === 'medium' ? 'active' : ''}`}
-                      onClick={() => setCalcComplexity('medium')}
-                    >
-                      <strong>Menengah</strong>
-                      <span>Ada integrasi database, manajemen data, responsif ekstra</span>
-                    </button>
-                    <button 
-                      className={`complexity-btn ${calcComplexity === 'premium' ? 'active' : ''}`}
-                      onClick={() => setCalcComplexity('premium')}
-                    >
-                      <strong>Premium / Custom</strong>
-                      <span>Desain kustom Figma, integrasi API, performa skala besar</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Calculator Output */}
-              <div className="calculator-output card-glass" style={{ border: '1.5px dashed var(--primary-glow-intense)', background: '#fff9f9' }}>
-                <div className="output-header">
-                  <Calculator className="text-red animate-float-delay-2" size={28} />
-                  <h3>Perkiraan Investasi</h3>
-                </div>
-                <div className="output-body">
-                  <p className="price-desc-small">Biaya pengembangan diestimasi sebesar:</p>
-                  <h2 className="price-large-display">{formatRupiah(calcResult)}</h2>
-                  
-                  <ul className="output-details-list">
-                    <li><ShieldCheck size={16} className="text-red" /> <span>Desain UI/UX eksklusif kustom</span></li>
-                    <li><ShieldCheck size={16} className="text-red" /> <span>Gratis domain & SSL selama 1 tahun</span></li>
-                    <li><ShieldCheck size={16} className="text-red" /> <span>Garansi bug-free pemeliharaan 3 bulan</span></li>
-                  </ul>
-                </div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Cocok untuk UMKM, Landing Page Promosi, & Web Instan hemat tanpa pusing maintenance.</p>
                 
-                <a 
-                  href={getCalcWhatsAppLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary w-full"
-                  style={{ gap: '10px', padding: '16px 20px', borderRadius: '10px' }}
-                >
-                  Konsultasikan Hasil Estimasi Ini <ArrowRight size={18} />
-                </a>
+                <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
+                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Biaya Pembuatan Awal</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--primary)', margin: '4px 0' }}>Rp 499.000</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: '600', marginTop: '4px' }}>+ Maintenance & Server: Mulai Rp 50.000 / bulan</div>
+                  <div style={{ fontSize: '0.725rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Operator 500rb Lain: Tanpa garansi, lepas tangan saat server mati / kena hack.</div>
+                </div>
+
+                <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Hosting Cloud & SSL Terkelola</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Bebas Pusing Mati Server / Maintenance</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Update Konten Ringan Setiap Bulan</li>
+                </ul>
               </div>
+
+              <a 
+                href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Digital%20Nusantara,%20saya%20tertarik%20dengan%20paket%20Web%20Starter%20Rp%20499rb%20%2B%20Langganan." 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-secondary w-full"
+                style={{ textAlign: 'center', marginTop: '16px' }}
+              >
+                Pilih Paket Starter <ArrowRight size={16} />
+              </a>
+            </div>
+
+            {/* Card 2: Custom Web & Professional */}
+            <div className="card-glass glow-glow-card" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1.5px solid rgba(229, 62, 62, 0.3)', background: '#fffcfc' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ padding: '10px', borderRadius: '10px', background: 'var(--primary)', color: '#ffffff' }}>
+                    <Globe size={24} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', background: 'var(--primary)', color: '#fff', padding: '2px 8px', borderRadius: '100px', textTransform: 'uppercase', fontWeight: 'bold' }}>Paling Populer</span>
+                    <h3 style={{ fontSize: '1.25rem', margin: '2px 0 0 0', fontWeight: '700' }}>Web Kustom & System</h3>
+                  </div>
+                </div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Website Perusahaan, E-Commerce, & Sistem Manajemen Data Kustom Full Hak Milik.</p>
+                
+                <div style={{ margin: '20px 0', padding: '16px', background: '#ffffff', borderRadius: '8px', borderLeft: '3px solid var(--primary)', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: '600' }}>Investasi Jual Putus</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--primary)', margin: '4px 0' }}>Rp 1.500.000</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Full Source Code & Sistem Milik Anda Sepenuhnya (Opsional Maintenance Rp 150rb/bln)</div>
+                </div>
+
+                <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Gratis Domain (.com/.id) & SSL 1 Tahun</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Speed Ultra Kencang (Lighthouse 90+)</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Garansi Bug-Free & Support Eksklusif</li>
+                </ul>
+              </div>
+
+              <a 
+                href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Digital%20Nusantara,%20saya%20tertarik%20dengan%20layanan%20Web%20Kustom." 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-primary w-full"
+                style={{ textAlign: 'center', marginTop: '16px' }}
+              >
+                Konsultasikan Web Kustom <ArrowRight size={16} />
+              </a>
+            </div>
+
+            {/* Card 3: Mobile App & AI */}
+            <div className="card-glass" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border)', background: '#ffffff' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ padding: '10px', borderRadius: '10px', background: 'rgba(229, 62, 62, 0.08)', color: 'var(--primary)' }}>
+                    <Smartphone size={24} />
+                  </div>
+                  <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: '700' }}>Mobile App & AI</h3>
+                </div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>Aplikasi Android/iOS Kustom & AI Automation Chatbot Cerdas Bisnis.</p>
+                
+                <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(248, 250, 252, 0.8)', borderRadius: '8px', borderLeft: '3px solid var(--primary)' }}>
+                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: '600' }}>Investasi Mulai</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--primary)', margin: '4px 0' }}>Rp 3.500.000</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Termasuk Integrasi API & Pendampingan Deployment</div>
+                </div>
+
+                <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Single Codebase Flutter / React Native</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Integrasi AI Chatbot & Agent n8n</li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ShieldCheck size={16} className="text-red" /> Opsi Managed Maintenance SLA High</li>
+                </ul>
+              </div>
+
+              <a 
+                href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Digital%20Nusantara,%20saya%20tertarik%20dengan%20layanan%20Mobile%20App%20/%20AI." 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-secondary w-full"
+                style={{ textAlign: 'center', marginTop: '16px' }}
+              >
+                Konsultasikan App / AI <ArrowRight size={16} />
+              </a>
+            </div>
+
+          </div>
+
+          {/* Tabel Perbandingan Nilai Tambah / Operator Lain */}
+          <div className="card-glass" style={{ padding: '32px', maxWidth: '1100px', margin: '0 auto', background: '#fafbfc' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>Mengapa Model Langganan / Maintenance Kami Lebih Menguntungkan?</h3>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '24px' }}>Perbandingan nyata antara Website Rp 500 Ribu Lepas Tangan vs Model Langganan Berdikari Digital Nusantara.</p>
+            
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid var(--border)', background: '#ffffff' }}>
+                    <th style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>Faktor Penentu</th>
+                    <th style={{ padding: '12px 16px', color: 'var(--text-muted)' }}>Jasa Web 500 Ribu (Lepas Tangan)</th>
+                    <th style={{ padding: '12px 16px', color: 'var(--primary)', fontWeight: 800 }}>Model Starter / Langganan BDN</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Biaya Awal (Upfront)</td>
+                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Rp 500.000 (Bayar Lunas)</td>
+                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>Hemat & Ringan (Rp 499.000 + Rp 50.000/bln)</td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Perawatan & Server Down</td>
+                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Bila error/mati, lepas tangan atau minta biaya baru lagi</td>
+                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>Server selalu dipantau 24/7, gratis perbaikan & garansi aktif</td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Update Konten & Tampilan</td>
+                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Harus edit sendiri / bayar joki lagi tiap kali ganti foto/teks</td>
+                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>Gratis bantuan edit konten ringan tiap bulan</td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '12px 16px', fontWeight: '600' }}>Keamanan & Malware</td>
+                    <td style={{ padding: '12px 16px', color: '#64748b' }}>Mudah kena hacking / judi online karena tanpa update security</td>
+                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: '600' }}>SSL & patching keamanan selalu diperbarui secara otomatis</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
