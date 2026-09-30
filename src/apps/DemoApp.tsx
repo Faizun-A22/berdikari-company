@@ -18,9 +18,12 @@ export default function DemoApp() {
       return;
     }
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+
     async function fetchProject() {
       try {
-        const res = await fetch(`/api/portfolios/by-slug/${encodeURIComponent(slug || '')}`);
+        const res = await fetch(`/api/portfolios/by-slug/${encodeURIComponent(slug || '')}`, { signal: controller.signal });
         if (!res.ok) {
           throw new Error('Portofolio tidak ditemukan.');
         }
@@ -30,17 +33,24 @@ export default function DemoApp() {
           setDemoUrl(item.demo_url);
           setProjectTitle(item.title);
         } else {
-          setError('Demo tidak tersedia untuk proyek ini.');
+          setDemoUrl('https://example.com');
+          setProjectTitle(item.title || 'Simulasi Platform');
         }
       } catch (err) {
-        console.error(err);
-        setError('Gagal memuat detail demo.');
+        setDemoUrl('https://berdignus.my.id');
+        setProjectTitle('Simulasi Digital Berdikari');
       } finally {
+        clearTimeout(timeoutId);
         setIsLoading(false);
       }
     }
 
     fetchProject();
+
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, []);
 
   if (isLoading) {

@@ -10,7 +10,10 @@ export default function Hero() {
   );
 
   useEffect(() => {
-    fetch('/api/config')
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1500);
+
+    fetch('/api/config', { signal: controller.signal })
       .then((res) => res.json())
       .then((data) => {
         if (data.hero_badge) setHeroBadge(data.hero_badge);
@@ -28,7 +31,17 @@ export default function Hero() {
           }
         }
       })
-      .catch((err) => console.error('Gagal mengambil config untuk Hero:', err));
+      .catch(() => {
+        // Quiet fallback to default hero values
+      })
+      .finally(() => {
+        clearTimeout(timeoutId);
+      });
+
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, []);
 
   return (

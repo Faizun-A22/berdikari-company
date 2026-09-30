@@ -27,15 +27,25 @@ else
     curl -4 -sSL "https://raw.githubusercontent.com/Faizun-A22/berdikari-company/main/index.html?v=$TS" -o index.html
 fi
 
+echo "===> Menyiapkan konfigurasi backend..."
+if [ ! -f server/.env ] && [ -f server/.env.example ]; then
+    echo "===> Menyalin server/.env dari template..."
+    cp server/.env.example server/.env
+fi
+
 echo "===> Membersihkan cache build lama..."
 rm -rf dist node_modules/.vite
 
 echo "===> Membangun frontend Vite..."
 npm run build
 
-echo "===> Merestart Nginx & Service..."
+echo "===> Memastikan izin berkas web server..."
+chown -R www-data:www-data dist 2>/dev/null || true
+chmod -R 755 dist 2>/dev/null || true
+
+echo "===> Merestart Nginx & Service Backend..."
 systemctl restart nginx
-pm2 restart all 2>/dev/null || true
+pm2 restart all 2>/dev/null || pm2 start server/index.js --name "berdikari-api" 2>/dev/null || true
 
 # Daftarkan perintah saklek update-web secara permanen
 cat << 'INNER_EOF' > /usr/local/bin/update-web
