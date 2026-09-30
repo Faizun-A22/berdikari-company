@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
 import {
   ArrowRight,
@@ -20,7 +20,7 @@ import {
   Smartphone,
   Cpu,
   Palette,
-  ExternalLink,
+  X,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -33,34 +33,20 @@ export default function Home() {
   const [faqRef, faqVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  // Service-First Interactive Showcase state (Inspired by Haruki Murakami Sliding Interaction)
+  // Service-First Interactive Showcase state & Modal Popup
   type ServiceType = 'web' | 'erp' | 'mobile' | 'uiux';
-  const [activeService, setActiveService] = useState<ServiceType>('web');
-  const [animKey, setAnimKey] = useState(0);
+  const [activeModalService, setActiveModalService] = useState<ServiceType | null>(null);
 
-  const serviceOrder: ServiceType[] = ['web', 'erp', 'mobile', 'uiux'];
-
-  const handleSelectService = (id: ServiceType) => {
-    if (activeService === id) return;
-    setActiveService(id);
-    setAnimKey((prev) => prev + 1);
-  };
-
-  const handlePrevService = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const currentIndex = serviceOrder.indexOf(activeService);
-    const prevIndex = (currentIndex - 1 + serviceOrder.length) % serviceOrder.length;
-    setActiveService(serviceOrder[prevIndex]);
-    setAnimKey((prev) => prev + 1);
-  };
-
-  const handleNextService = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const currentIndex = serviceOrder.indexOf(activeService);
-    const nextIndex = (currentIndex + 1) % serviceOrder.length;
-    setActiveService(serviceOrder[nextIndex]);
-    setAnimKey((prev) => prev + 1);
-  };
+  // Close modal when Escape key is pressed
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveModalService(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Testimonial slider state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -78,7 +64,7 @@ export default function Home() {
   const [formMessage, setFormMessage] = useState('');
   const [formSent, setFormSent] = useState(false);
 
-  // Berdikari Services Collection (Interactive Pillars)
+  // Berdikari Services Collection (Kotak-Kotak Layanan)
   const servicesList = [
     {
       id: 'web' as ServiceType,
@@ -87,10 +73,15 @@ export default function Home() {
       shortName: 'Website & Toko Online',
       tagline: 'Website Modern, Cepat & Terindeks Google',
       desc: 'Website bisnis ultra-responsif, toko online kilat dengan payment gateway Midtrans otomatis, dan arsitektur SEO mutakhir.',
-      icon: <Globe size={20} />,
+      icon: <Globe size={24} />,
       badge: 'Paling Populer',
       badgeColor: '#e53e3e',
       highlights: 'Lighthouse 98+ • Konversi Naik 3x • Payment Midtrans Otomatis',
+      bullets: [
+        'Audit Google Lighthouse 98+ (Super Cepat)',
+        'Integrasi Payment Gateway & WhatsApp Otomatis',
+        'Desain Kustom Responsif Sesuai Identitas Brand',
+      ],
     },
     {
       id: 'erp' as ServiceType,
@@ -99,10 +90,15 @@ export default function Home() {
       shortName: 'Sistem ERP & Database',
       tagline: 'Otomasi Operasional Bisnis Terintegrasi',
       desc: 'Sistem pergudangan multi-cabang, barcode inventaris, automasi presensi karyawan, dan dashboard keuangan real-time.',
-      icon: <Cpu size={20} />,
+      icon: <Cpu size={24} />,
       badge: 'Efisiensi Tinggi',
       badgeColor: '#0284c7',
       highlights: 'Hemat 15 Jam Kerja/Mgg • 99.9% Uptime Cloud • Multi-Cabang',
+      bullets: [
+        'Hemat 15 Jam Kerja Manual Staf Setiap Minggu',
+        'Pencatatan Stok & Barcode Multi-Cabang Akurat',
+        'Dashboard Keuangan & Laporan Otomatis Real-time',
+      ],
     },
     {
       id: 'mobile' as ServiceType,
@@ -111,10 +107,15 @@ export default function Home() {
       shortName: 'Aplikasi Mobile Apps',
       tagline: 'Aplikasi Native & Cross-Platform (Flutter)',
       desc: 'Aplikasi smartphone performa tinggi dengan autentikasi biometrik aman, transaksi QRIS instan, notifikasi push, dan mode offline.',
-      icon: <Smartphone size={20} />,
+      icon: <Smartphone size={24} />,
       badge: 'Multiplatform',
       badgeColor: '#16a34a',
       highlights: '50k+ Active Users • QRIS 0.8 Detik • Notifikasi Realtime',
+      bullets: [
+        'Multiplatform Android & iOS dengan Flutter',
+        'Autentikasi Biometrik Aman & QRIS Instan',
+        'Push Notification & Caching Mode Offline',
+      ],
     },
     {
       id: 'uiux' as ServiceType,
@@ -123,10 +124,15 @@ export default function Home() {
       shortName: 'Desain UI/UX & Riset',
       tagline: 'Desain Antarmuka Interaktif & Sistem Desain',
       desc: 'Wireframing mendalam, prototipe interaktif Figma standar perbankan, micro-interactions halus, dan pengujian kegunaan nyata.',
-      icon: <Palette size={20} />,
+      icon: <Palette size={24} />,
       badge: 'Eksklusif Figma',
       badgeColor: '#9333ea',
       highlights: '80+ Komponen Figma • Standar WCAG AAA • SUS Skor 89/100',
+      bullets: [
+        '80+ Komponen Figma Desain Sistem Teruji',
+        'Prototipe Interaktif Layaknya Aplikasi Asli',
+        'Uji Kegunaan Pengguna (SUS Skor Tinggi)',
+      ],
     },
   ];
 
@@ -349,9 +355,6 @@ export default function Home() {
     },
   ];
 
-  // Strictly maximum 4 projects for the active service
-  const displayedProjects = allProjects.filter((p) => p.serviceType === activeService).slice(0, 4);
-
   // News / Insights (Simplified, High-Value, Non-media blog)
   const newsList = [
     {
@@ -541,7 +544,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 3. MURAKAMI-INSPIRED SLIDING SERVICE & PORTFOLIO ACCORDION SHOWCASE */}
+      {/* 3. KOTAK-KOTAK LAYANAN & MODAL PORTOFOLIO INTERAKTIF (Pinterest Inspired) */}
       <section
         id="portfolio"
         ref={portfolioRef as React.RefObject<HTMLDivElement>}
@@ -553,210 +556,210 @@ export default function Home() {
             <div className="showcase-badge-wrap">
               <span className="badge-tag-pill">
                 <Sparkles size={13} className="text-red inline-icon" />
-                INTERAKTIF LAYANAN &amp; KARYA UNGGULAN
+                LAYANAN &amp; PORTOFOLIO UNGGULAN
               </span>
             </div>
             <h2 className="section-heading-bold">
-              Keahlian Berdikari &amp; <span className="hero-cursive-highlight">Karya Nyata</span>
+              Layanan Utama &amp; <span className="hero-cursive-highlight">Karya Nyata</span>
             </h2>
             <p className="section-subtext">
-              Pilih bidang layanan yang Anda butuhkan di bawah ini. Panel akan bergeser secara dinamis menampilkan portofolio dan studi kasus terbaik di setiap kategori.
+              Pilih dan klik salah satu kotak layanan di bawah ini. Modal interaktif akan terbuka menampilkan ringkasan portofolio mini dan studi kasus terbaik di setiap bidang.
             </p>
-
-            {/* Murakami Track Dial / Top Category Shifter Bar */}
-            <div className="murakami-track-nav">
-              {servicesList.map((service) => {
-                const isActive = activeService === service.id;
-                return (
-                  <button
-                    key={service.id}
-                    type="button"
-                    className={`murakami-track-btn ${isActive ? 'is-active' : ''}`}
-                    onClick={() => handleSelectService(service.id)}
-                    aria-label={`Buka layanan ${service.name}`}
-                  >
-                    <span className="track-num">{service.num}</span>
-                    <span className="track-name">{service.name}</span>
-                    {isActive && <span className="track-active-pill">Aktif</span>}
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
-          {/* MAIN STAGE: SLIDING ACCORDION PANELS */}
-          <div className="murakami-accordion-stage">
-            {servicesList.map((service) => {
-              const isExpanded = activeService === service.id;
-
-              return (
-                <div
-                  key={service.id}
-                  className={`murakami-pillar ${isExpanded ? 'is-expanded' : 'is-collapsed'}`}
-                  onClick={() => {
-                    if (!isExpanded) handleSelectService(service.id);
-                  }}
-                  role={isExpanded ? 'region' : 'button'}
-                  tabIndex={isExpanded ? -1 : 0}
-                  aria-label={isExpanded ? `Showcase ${service.name}` : `Klik untuk membuka ${service.name}`}
-                  onKeyDown={(e) => {
-                    if (!isExpanded && (e.key === 'Enter' || e.key === ' ')) {
-                      handleSelectService(service.id);
-                    }
-                  }}
-                >
-                  {/* === INACTIVE COLLAPSED PILLAR VIEW === */}
-                  {!isExpanded && (
-                    <div className="collapsed-pillar-content">
-                      <div className="pillar-top-num">
-                        <span className="pillar-index">{service.num}</span>
-                        <div className="pillar-icon-circle">{service.icon}</div>
-                      </div>
-
-                      <div className="pillar-vertical-title-wrap">
-                        <span className="pillar-vertical-title">{service.name}</span>
-                      </div>
-
-                      <div className="pillar-bottom-info">
-                        <span className="pillar-count-tag">4 Proyek</span>
-                        <div className="pillar-click-hint">
-                          <ArrowRight size={14} />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* === ACTIVE EXPANDED STAGE VIEW === */}
-                  {isExpanded && (
-                    <div className="expanded-stage-content" key={animKey}>
-                      {/* Active Stage Header */}
-                      <div className="stage-header-row">
-                        <div className="stage-header-left">
-                          <div className="stage-badge-line">
-                            <span className="stage-num-badge">{service.num} / 04</span>
-                            <span className="stage-category-pill" style={{ color: service.badgeColor }}>
-                              {service.badge}
-                            </span>
-                            <span className="stage-highlight-text">{service.highlights}</span>
-                          </div>
-                          <h3 className="stage-title">{service.name}</h3>
-                          <p className="stage-desc">{service.desc}</p>
-                        </div>
-
-                        {/* Slider Prev / Next Controls */}
-                        <div className="stage-nav-controls">
-                          <button
-                            type="button"
-                            className="stage-nav-btn prev"
-                            onClick={handlePrevService}
-                            title="Layanan Sebelumnya"
-                            aria-label="Layanan Sebelumnya"
-                          >
-                            <ArrowLeft size={16} />
-                          </button>
-                          <span className="stage-nav-counter">
-                            {service.num} <span className="counter-sep">/</span> 04
-                          </span>
-                          <button
-                            type="button"
-                            className="stage-nav-btn next"
-                            onClick={handleNextService}
-                            title="Layanan Selanjutnya"
-                            aria-label="Layanan Selanjutnya"
-                          >
-                            <ArrowRight size={16} />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* 4 Cards Showcase Deck */}
-                      <div className="stage-cards-grid animate-cards-glide">
-                        {displayedProjects.map((item, index) => (
-                          <div
-                            key={`${item.id}-${animKey}`}
-                            className="murakami-project-card"
-                            style={{ animationDelay: `${index * 70}ms` }}
-                            onClick={() => {
-                              window.location.href = `/portfolio-detail.html?slug=${encodeURIComponent(item.slug)}`;
-                            }}
-                          >
-                            {/* Card Media */}
-                            <div className="project-card-media">
-                              <img src={item.image} alt={item.title} className="project-card-img" loading="lazy" />
-                              <div className="project-card-overlay">
-                                <span className="project-overlay-pill">
-                                  <span>Lihat Studi Kasus</span>
-                                  <ExternalLink size={14} />
-                                </span>
-                              </div>
-                              <span className="project-category-chip">{item.categoryLabel}</span>
-                              <span className="project-client-chip">{item.client}</span>
-                            </div>
-
-                            {/* Card Body */}
-                            <div className="project-card-body">
-                              <div className="project-metric-pill">
-                                <Zap size={12} className="text-red" />
-                                <span>{item.metrics}</span>
-                              </div>
-                              <h4 className="project-title">{item.title}</h4>
-                              <p className="project-desc">{item.shortDesc}</p>
-
-                              {/* Tech Stack */}
-                              <div className="project-tech-row">
-                                {item.tech.slice(0, 3).map((t, idx) => (
-                                  <span key={idx} className="tech-badge-item">
-                                    {t}
-                                  </span>
-                                ))}
-                                {item.tech.length > 3 && (
-                                  <span className="tech-badge-item more">+{item.tech.length - 3}</span>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Card Footer */}
-                            <div className="project-card-footer">
-                              <span className="footer-action-text">Detail Produk &amp; Demo</span>
-                              <div className="footer-arrow-circle">
-                                <ArrowRight size={15} />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Stage Bottom Action Bar */}
-                      <div className="stage-footer-cta">
-                        <div className="stage-cta-buttons">
-                          <a href="/portfolio.html" className="btn-showcase-primary">
-                            <span>Lihat Seluruh Portofolio &amp; Produk Kami</span>
-                            <div className="btn-circle-icon">
-                              <ArrowRight size={15} />
-                            </div>
-                          </a>
-
-                          <a
-                            href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech,%20saya%20tertarik%20konsultasi%20layanan%20proyek."
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-showcase-secondary"
-                          >
-                            <MessageSquare size={16} className="text-red" />
-                            <span>Konsultasikan Kebutuhan Anda</span>
-                          </a>
-                        </div>
-                        <p className="stage-cta-guarantee">
-                          ✓ Garansi Pemeliharaan Sistem • ✓ 100% Hak Milik Source Code • ✓ Audit Google Lighthouse 95+
-                        </p>
-                      </div>
-                    </div>
-                  )}
+          {/* KOTAK-KOTAK LAYANAN (4 Grid Boxes) */}
+          <div className="service-boxes-grid">
+            {servicesList.map((service) => (
+              <div
+                key={service.id}
+                className="service-box-card"
+                onClick={() => setActiveModalService(service.id)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Buka portofolio layanan ${service.name}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setActiveModalService(service.id);
+                  }
+                }}
+              >
+                {/* Top Number & Tag */}
+                <div className="box-top-row">
+                  <span className="box-num-badge">{service.num}</span>
+                  <span className="box-badge-tag" style={{ color: service.badgeColor }}>
+                    {service.badge}
+                  </span>
                 </div>
-              );
-            })}
+
+                {/* Icon Bubble */}
+                <div className="box-icon-wrap">
+                  {service.icon}
+                </div>
+
+                {/* Title & Tagline */}
+                <h3 className="box-title">{service.name}</h3>
+                <p className="box-tagline">{service.tagline}</p>
+                <p className="box-desc">{service.desc}</p>
+
+                {/* Bullets */}
+                <ul className="box-bullets">
+                  {service.bullets.map((b, idx) => (
+                    <li key={idx}>
+                      <CheckCircle2 size={13} className="text-red flex-shrink-0" />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Box Footer Button */}
+                <div className="box-action-footer">
+                  <span className="box-action-text">Lihat Portofolio</span>
+                  <div className="box-action-arrow">
+                    <ArrowRight size={15} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* BOTTOM REDIRECT TO FULL PORTFOLIO */}
+          <div className="service-boxes-bottom">
+            <a href="/portfolio.html" className="btn-showcase-primary">
+              <span>Buka Seluruh Portofolio &amp; Katalog Lengkap</span>
+              <div className="btn-circle-icon">
+                <ArrowRight size={15} />
+              </div>
+            </a>
+            <p className="boxes-bottom-sub">
+              ✓ Garansi Pemeliharaan Sistem • ✓ 100% Hak Milik Source Code • ✓ Audit Google Lighthouse 95+
+            </p>
           </div>
         </div>
+
+        {/* MODAL OVERLAY (Smooth Popup with Mini-Portfolio Cards) */}
+        {activeModalService && (() => {
+          const currentService = servicesList.find((s) => s.id === activeModalService) || servicesList[0];
+          const modalProjects = allProjects.filter((p) => p.serviceType === activeModalService).slice(0, 4);
+
+          return (
+            <div
+              className="service-modal-backdrop"
+              onClick={() => setActiveModalService(null)}
+              role="dialog"
+              aria-modal="true"
+            >
+              <div
+                className="service-modal-dialog"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Header */}
+                <div className="modal-header">
+                  <div className="modal-header-info">
+                    <div className="modal-icon-bubble">
+                      {currentService.icon}
+                    </div>
+                    <div>
+                      <div className="modal-badge-row">
+                        <span className="modal-num-tag">{currentService.num}</span>
+                        <span className="modal-category-tag">{currentService.name}</span>
+                        <span className="modal-count-pill">4 Portofolio Terpilih</span>
+                      </div>
+                      <h3 className="modal-title">{currentService.tagline}</h3>
+                      <p className="modal-subtitle">
+                        Klik kartu portofolio kecil di bawah untuk diarahkan ke halaman portofolio kami:
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Close Button */}
+                  <button
+                    type="button"
+                    className="modal-close-btn"
+                    onClick={() => setActiveModalService(null)}
+                    aria-label="Tutup Modal"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Modal Body: 4 Mini Portfolio Cards */}
+                <div className="modal-body">
+                  <div className="mini-cards-grid">
+                    {modalProjects.map((item, index) => (
+                      <div
+                        key={item.id}
+                        className="mini-portfolio-card"
+                        style={{ animationDelay: `${index * 60}ms` }}
+                        onClick={() => {
+                          // Mengarahkan ke navigasi portfolio sesuai instruksi!
+                          window.location.href = '/portfolio.html';
+                        }}
+                        title={`Buka ${item.title} di halaman portofolio`}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            window.location.href = '/portfolio.html';
+                          }
+                        }}
+                      >
+                        {/* Thumbnail Image */}
+                        <div className="mini-card-thumb-wrap">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="mini-card-img"
+                            loading="lazy"
+                          />
+                          <span className="mini-card-category-badge">{item.categoryLabel}</span>
+                        </div>
+
+                        {/* Content */}
+                        <div className="mini-card-info">
+                          <div className="mini-card-metric-pill">
+                            <Zap size={11} className="text-red" />
+                            <span>{item.metrics}</span>
+                          </div>
+
+                          <h4 className="mini-card-title">{item.title}</h4>
+                          <p className="mini-card-desc">{item.shortDesc}</p>
+
+                          <div className="mini-card-bottom-row">
+                            <span className="mini-card-client">{item.client}</span>
+                            <span className="mini-card-link-prompt">
+                              <span>Buka di Portofolio</span>
+                              <ArrowRight size={13} />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className="modal-footer">
+                  <div className="modal-footer-actions">
+                    <a href="/portfolio.html" className="btn-modal-primary">
+                      <span>Buka Halaman Navigasi Portofolio Lengkap</span>
+                      <ArrowRight size={15} />
+                    </a>
+
+                    <a
+                      href={`https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech,%20saya%20tertarik%20dengan%20layanan%20${encodeURIComponent(currentService.name)}.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-modal-secondary"
+                    >
+                      <MessageSquare size={15} className="text-red" />
+                      <span>Konsultasikan Kebutuhan Anda</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </section>
 
       {/* 4. SERVICES & PACKAGES (Styled like reference image) */}
@@ -1400,751 +1403,593 @@ export default function Home() {
         .service-showcase-header {
           text-align: center;
           max-width: 820px;
-          margin: 0 auto 36px auto;
+          margin: 0 auto 40px auto;
         }
 
         .showcase-badge-wrap {
           display: flex;
           justify-content: center;
-          margin-bottom: 8px;
+          margin-bottom: 10px;
         }
 
         .service-showcase-header .section-subtext {
           margin: 0 auto;
         }
 
-        /* Top Murakami Shifter / Track Nav Bar */
-        .murakami-track-nav {
-          display: inline-flex;
-          align-items: center;
-          background: #f1f5f9;
-          padding: 6px;
-          border-radius: 100px;
-          gap: 6px;
-          margin-top: 24px;
-          border: 1px solid #e2e8f0;
-          max-width: 100%;
-          overflow-x: auto;
-          scrollbar-width: none;
+        /* ===== KOTAK-KOTAK LAYANAN (4 Grid Boxes) ===== */
+        .service-boxes-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
+          margin-bottom: 40px;
         }
 
-        .murakami-track-nav::-webkit-scrollbar {
-          display: none;
+        @media (max-width: 1200px) {
+          .service-boxes-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+          }
         }
 
-        .murakami-track-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 9px 18px;
-          border-radius: 100px;
-          border: none;
-          background: transparent;
+        @media (max-width: 640px) {
+          .service-boxes-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+        }
+
+        .service-box-card {
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 24px;
+          padding: 26px 22px;
+          display: flex;
+          flex-direction: column;
           cursor: pointer;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+          position: relative;
+          user-select: none;
+          text-align: left;
+        }
+
+        .service-box-card:hover {
+          transform: translateY(-8px);
+          border-color: rgba(229, 62, 62, 0.5);
+          box-shadow: 0 18px 40px rgba(229, 62, 62, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .box-top-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 16px;
+        }
+
+        .box-num-badge {
           font-family: var(--font-heading);
           font-size: 0.85rem;
-          font-weight: 700;
-          color: #64748b;
-          white-space: nowrap;
-          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          font-weight: 900;
+          color: #94a3b8;
+          background: #f1f5f9;
+          padding: 2px 8px;
+          border-radius: 6px;
+          transition: all 0.25s ease;
         }
 
-        .murakami-track-btn:hover {
-          color: #0f172a;
-          background: rgba(255, 255, 255, 0.6);
-        }
-
-        .murakami-track-btn.is-active {
-          background: #ffffff;
+        .service-box-card:hover .box-num-badge {
+          background: #fff1f2;
           color: var(--primary);
-          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.15);
         }
 
-        .track-num {
+        .box-badge-tag {
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          background: rgba(15, 23, 42, 0.04);
+          padding: 3px 9px;
+          border-radius: 100px;
+        }
+
+        .box-icon-wrap {
+          width: 50px;
+          height: 50px;
+          border-radius: 16px;
+          background: #fff1f2;
+          color: var(--primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 16px;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .service-box-card:hover .box-icon-wrap {
+          background: var(--primary);
+          color: #ffffff;
+          transform: scale(1.08) rotate(-4deg);
+          box-shadow: 0 6px 18px rgba(229, 62, 62, 0.35);
+        }
+
+        .box-title {
+          font-family: var(--font-heading);
+          font-size: 1.15rem;
+          font-weight: 900;
+          color: #0f172a;
+          margin-bottom: 4px;
+          line-height: 1.3;
+          transition: color 0.25s ease;
+        }
+
+        .service-box-card:hover .box-title {
+          color: var(--primary);
+        }
+
+        .box-tagline {
+          font-size: 0.76rem;
+          font-weight: 700;
+          color: var(--primary);
+          margin-bottom: 10px;
+        }
+
+        .box-desc {
+          font-size: 0.82rem;
+          color: #64748b;
+          line-height: 1.5;
+          margin-bottom: 16px;
+          flex-grow: 1;
+        }
+
+        .box-bullets {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 20px 0;
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+          border-top: 1px dashed #e2e8f0;
+          padding-top: 14px;
+        }
+
+        .box-bullets li {
+          font-size: 0.76rem;
+          color: #475569;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 7px;
+        }
+
+        .box-action-footer {
+          margin-top: auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 14px;
+          border-top: 1px solid #f1f5f9;
+        }
+
+        .box-action-text {
+          font-family: var(--font-heading);
+          font-size: 0.82rem;
+          font-weight: 800;
+          color: #334155;
+          transition: color 0.25s ease;
+        }
+
+        .service-box-card:hover .box-action-text {
+          color: var(--primary);
+        }
+
+        .box-action-arrow {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          color: #64748b;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.25s ease;
+        }
+
+        .service-box-card:hover .box-action-arrow {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: #ffffff;
+          transform: translateX(4px);
+        }
+
+        /* Bottom Section Button */
+        .service-boxes-bottom {
+          text-align: center;
+          margin-top: 10px;
+        }
+
+        .boxes-bottom-sub {
+          font-size: 0.8rem;
+          color: #94a3b8;
+          font-weight: 600;
+          margin-top: 12px;
+        }
+
+        /* ===== MODAL OVERLAY & POPUP (Pinterest Inspired) ===== */
+        .service-modal-backdrop {
+          position: fixed;
+          inset: 0;
+          z-index: 99999;
+          background: rgba(15, 23, 42, 0.65);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes modalFadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .service-modal-dialog {
+          background: #ffffff;
+          border-radius: 28px;
+          width: 100%;
+          max-width: 860px;
+          max-height: 90vh;
+          overflow-y: auto;
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(229, 62, 62, 0.15);
+          display: flex;
+          flex-direction: column;
+          animation: modalPopIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+          text-align: left;
+        }
+
+        @keyframes modalPopIn {
+          from {
+            opacity: 0;
+            transform: scale(0.92) translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        /* Modal Header */
+        .modal-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          padding: 24px 28px 20px 28px;
+          border-bottom: 1px solid #f1f5f9;
+          background: linear-gradient(180deg, #fffafa 0%, #ffffff 100%);
+          gap: 16px;
+        }
+
+        .modal-header-info {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .modal-icon-bubble {
+          width: 52px;
+          height: 52px;
+          border-radius: 16px;
+          background: #fff1f2;
+          color: var(--primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.2);
+        }
+
+        .modal-badge-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 6px;
+          flex-wrap: wrap;
+        }
+
+        .modal-num-tag {
           font-family: var(--font-heading);
           font-size: 0.75rem;
           font-weight: 800;
-          opacity: 0.7;
-          background: rgba(229, 62, 62, 0.08);
+          background: #fff1f2;
           color: var(--primary);
+          padding: 2px 7px;
+          border-radius: 5px;
+        }
+
+        .modal-category-tag {
+          font-size: 0.8rem;
+          font-weight: 800;
+          color: #0f172a;
+        }
+
+        .modal-count-pill {
+          font-size: 0.68rem;
+          font-weight: 700;
+          color: #0284c7;
+          background: #f0f9ff;
+          padding: 2px 8px;
+          border-radius: 100px;
+        }
+
+        .modal-title {
+          font-family: var(--font-heading);
+          font-size: 1.25rem;
+          font-weight: 800;
+          color: #0f172a;
+          margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+          font-size: 0.84rem;
+          color: #64748b;
+          margin: 0;
+          line-height: 1.45;
+        }
+
+        .modal-close-btn {
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          border: 1px solid #e2e8f0;
+          background: #ffffff;
+          color: #64748b;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          flex-shrink: 0;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-close-btn:hover {
+          background: #fee2e2;
+          color: var(--primary);
+          border-color: #fca5a5;
+          transform: rotate(90deg);
+        }
+
+        /* Modal Body: Mini Portfolio Cards */
+        .modal-body {
+          padding: 24px 28px;
+          flex-grow: 1;
+        }
+
+        .mini-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+          .mini-cards-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .mini-portfolio-card {
+          display: flex;
+          gap: 14px;
+          background: #f8fafc;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 18px;
+          padding: 14px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          animation: miniCardSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+          text-align: left;
+        }
+
+        @keyframes miniCardSlideUp {
+          from {
+            opacity: 0;
+            transform: translateY(14px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .mini-portfolio-card:hover {
+          background: #ffffff;
+          border-color: rgba(229, 62, 62, 0.45);
+          transform: translateY(-4px);
+          box-shadow: 0 10px 24px rgba(229, 62, 62, 0.12), 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .mini-card-thumb-wrap {
+          width: 95px;
+          height: 95px;
+          border-radius: 12px;
+          overflow: hidden;
+          position: relative;
+          background: #e2e8f0;
+          flex-shrink: 0;
+        }
+
+        .mini-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+        }
+
+        .mini-portfolio-card:hover .mini-card-img {
+          transform: scale(1.08);
+        }
+
+        .mini-card-category-badge {
+          position: absolute;
+          bottom: 4px;
+          left: 4px;
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(4px);
+          color: #ffffff;
+          font-size: 0.58rem;
+          font-weight: 700;
           padding: 2px 6px;
           border-radius: 4px;
         }
 
-        .track-name {
-          letter-spacing: -0.01em;
-        }
-
-        .track-active-pill {
-          font-size: 0.65rem;
-          font-weight: 800;
-          background: var(--primary);
-          color: #ffffff;
-          padding: 1px 7px;
-          border-radius: 100px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        /* ===== MAIN STAGE: SLIDING ACCORDION PANELS ===== */
-        .murakami-accordion-stage {
-          display: flex;
-          gap: 16px;
-          align-items: stretch;
-          width: 100%;
-          min-height: 680px;
-          margin-bottom: 20px;
-        }
-
-        .murakami-pillar {
-          border-radius: 26px;
-          overflow: hidden;
-          position: relative;
-          transition: flex 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-                      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                      border-color 0.3s ease,
-                      box-shadow 0.4s ease,
-                      background-color 0.3s ease;
-        }
-
-        /* Inactive Collapsed Pillar (Stands vertically and slides aside) */
-        .murakami-pillar.is-collapsed {
-          flex: 0 0 88px;
-          background: #ffffff;
-          border: 1.5px solid #e2e8f0;
-          cursor: pointer;
+        .mini-card-info {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: space-between;
-          padding: 24px 12px;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
-          user-select: none;
-        }
-
-        .murakami-pillar.is-collapsed:hover {
-          background: #fff9f9;
-          border-color: rgba(229, 62, 62, 0.45);
-          transform: translateY(-4px);
-          box-shadow: 0 12px 28px rgba(229, 62, 62, 0.1);
-        }
-
-        .collapsed-pillar-content {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: space-between;
-          height: 100%;
-          width: 100%;
-        }
-
-        .pillar-top-num {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .pillar-index {
-          font-family: var(--font-heading);
-          font-size: 1.15rem;
-          font-weight: 900;
-          color: #94a3b8;
-          transition: color 0.25s ease;
-        }
-
-        .murakami-pillar.is-collapsed:hover .pillar-index {
-          color: var(--primary);
-        }
-
-        .pillar-icon-circle {
-          width: 42px;
-          height: 42px;
-          border-radius: 50%;
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          color: #475569;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-        }
-
-        .murakami-pillar.is-collapsed:hover .pillar-icon-circle {
-          background: var(--primary);
-          color: #ffffff;
-          border-color: var(--primary);
-          transform: scale(1.08);
-          box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
-        }
-
-        .pillar-vertical-title-wrap {
           flex-grow: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px 0;
+          min-width: 0;
         }
 
-        .pillar-vertical-title {
-          writing-mode: vertical-rl;
-          transform: rotate(180deg);
-          font-family: var(--font-heading);
-          font-size: 1rem;
-          font-weight: 800;
-          color: #334155;
-          letter-spacing: 0.03em;
-          white-space: nowrap;
-          transition: color 0.25s ease;
-        }
-
-        .murakami-pillar.is-collapsed:hover .pillar-vertical-title {
-          color: var(--primary);
-        }
-
-        .pillar-bottom-info {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .pillar-count-tag {
-          font-size: 0.68rem;
-          font-weight: 700;
-          color: #64748b;
-          background: #f1f5f9;
-          padding: 3px 8px;
-          border-radius: 100px;
-          white-space: nowrap;
-        }
-
-        .pillar-click-hint {
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          color: #94a3b8;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.25s ease;
-        }
-
-        .murakami-pillar.is-collapsed:hover .pillar-click-hint {
-          background: var(--primary);
-          border-color: var(--primary);
-          color: #ffffff;
-          transform: translateX(2px);
-        }
-
-        /* Active Expanded Stage (Expands wide with portfolio inside) */
-        .murakami-pillar.is-expanded {
-          flex: 1 1 0;
-          background: #ffffff;
-          border: 2px solid rgba(229, 62, 62, 0.3);
-          border-radius: 28px;
-          box-shadow: 0 20px 50px rgba(229, 62, 62, 0.08), 0 4px 18px rgba(0, 0, 0, 0.03);
-          padding: 32px;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-        }
-
-        .expanded-stage-content {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          animation: murakamiStageFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        @keyframes murakamiStageFade {
-          from {
-            opacity: 0;
-            transform: translateX(16px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        /* Active Stage Header */
-        .stage-header-row {
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          padding-bottom: 20px;
-          border-bottom: 1px solid #f1f5f9;
-          margin-bottom: 24px;
-          gap: 20px;
-          flex-wrap: wrap;
-        }
-
-        .stage-header-left {
-          max-width: 680px;
-        }
-
-        .stage-badge-line {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 8px;
-          flex-wrap: wrap;
-        }
-
-        .stage-num-badge {
-          font-family: var(--font-heading);
-          font-size: 0.8rem;
-          font-weight: 800;
-          background: #fff1f2;
-          color: var(--primary);
-          padding: 3px 10px;
-          border-radius: 6px;
-        }
-
-        .stage-category-pill {
-          font-size: 0.72rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
-          background: rgba(15, 23, 42, 0.04);
-          padding: 3px 10px;
-          border-radius: 100px;
-        }
-
-        .stage-highlight-text {
-          font-size: 0.78rem;
-          font-weight: 600;
-          color: #64748b;
-        }
-
-        .stage-title {
-          font-family: var(--font-heading);
-          font-size: 1.55rem;
-          font-weight: 900;
-          color: #0f172a;
-          margin-bottom: 6px;
-          line-height: 1.25;
-        }
-
-        .stage-desc {
-          font-size: 0.9rem;
-          color: #475569;
-          line-height: 1.55;
-          margin: 0;
-        }
-
-        /* Prev / Next Shifter Controls */
-        .stage-nav-controls {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          padding: 6px 12px;
-          border-radius: 100px;
-          align-self: flex-start;
-        }
-
-        .stage-nav-btn {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: none;
-          background: #ffffff;
-          color: #0f172a;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-          transition: all 0.2s ease;
-        }
-
-        .stage-nav-btn:hover {
-          background: var(--primary);
-          color: #ffffff;
-          transform: scale(1.06);
-        }
-
-        .stage-nav-counter {
-          font-family: var(--font-heading);
-          font-size: 0.82rem;
-          font-weight: 800;
-          color: #0f172a;
-          padding: 0 4px;
-        }
-
-        .stage-nav-counter .counter-sep {
-          color: #94a3b8;
-          font-weight: 400;
-        }
-
-        /* 4 Cards Showcase Deck Grid */
-        .stage-cards-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
-          margin-bottom: 28px;
-        }
-
-        @media (min-width: 1400px) {
-          .stage-cards-grid {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-          }
-        }
-
-        .animate-cards-glide .murakami-project-card {
-          animation: murakamiCardGlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        @keyframes murakamiCardGlide {
-          from {
-            opacity: 0;
-            transform: translateY(18px) scale(0.97);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        .murakami-project-card {
-          background: #ffffff;
-          border: 1.5px solid #e2e8f0;
-          border-radius: 20px;
-          overflow: hidden;
-          cursor: pointer;
-          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-          display: flex;
-          flex-direction: column;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
-          text-align: left;
-          position: relative;
-        }
-
-        .murakami-project-card:hover {
-          transform: translateY(-7px) scale(1.015);
-          border-color: rgba(229, 62, 62, 0.45);
-          box-shadow: 0 16px 36px rgba(229, 62, 62, 0.14), 0 3px 8px rgba(0, 0, 0, 0.04);
-        }
-
-        .project-card-media {
-          position: relative;
-          height: 175px;
-          overflow: hidden;
-          background: #f1f5f9;
-        }
-
-        .project-card-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .murakami-project-card:hover .project-card-img {
-          transform: scale(1.08);
-        }
-
-        .project-card-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.65) 100%);
-          opacity: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: opacity 0.3s ease;
-        }
-
-        .murakami-project-card:hover .project-card-overlay {
-          opacity: 1;
-        }
-
-        .project-overlay-pill {
-          background: rgba(255, 255, 255, 0.96);
-          color: #0f172a;
-          padding: 8px 16px;
-          border-radius: 100px;
-          font-size: 0.8rem;
-          font-weight: 800;
+        .mini-card-metric-pill {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-          transform: translateY(6px);
-          transition: transform 0.3s ease;
-        }
-
-        .murakami-project-card:hover .project-overlay-pill {
-          transform: translateY(0);
-        }
-
-        .project-category-chip {
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          background: rgba(255, 255, 255, 0.94);
-          backdrop-filter: blur(6px);
-          color: var(--primary);
-          font-size: 0.65rem;
-          font-weight: 800;
-          padding: 3px 9px;
-          border-radius: 100px;
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .project-client-chip {
-          position: absolute;
-          bottom: 10px;
-          left: 10px;
-          background: rgba(15, 23, 42, 0.78);
-          backdrop-filter: blur(6px);
-          color: #ffffff;
-          font-size: 0.65rem;
-          font-weight: 600;
-          padding: 2px 8px;
-          border-radius: 5px;
-        }
-
-        .project-card-body {
-          padding: 18px;
-          flex-grow: 1;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .project-metric-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
+          gap: 4px;
           background: #fff1f2;
           color: #b91c1c;
-          font-size: 0.7rem;
+          font-size: 0.65rem;
           font-weight: 700;
-          padding: 2px 9px;
-          border-radius: 5px;
-          margin-bottom: 8px;
+          padding: 2px 7px;
+          border-radius: 4px;
+          margin-bottom: 6px;
           align-self: flex-start;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
         }
 
-        .project-title {
+        .mini-card-title {
           font-family: var(--font-heading);
-          font-size: 1.05rem;
+          font-size: 0.92rem;
           font-weight: 800;
           color: #0f172a;
-          margin-bottom: 6px;
-          line-height: 1.35;
+          margin-bottom: 4px;
+          line-height: 1.3;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           transition: color 0.2s ease;
         }
 
-        .murakami-project-card:hover .project-title {
+        .mini-portfolio-card:hover .mini-card-title {
           color: var(--primary);
         }
 
-        .project-desc {
-          font-size: 0.8rem;
+        .mini-card-desc {
+          font-size: 0.74rem;
           color: #64748b;
-          line-height: 1.5;
+          line-height: 1.4;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          margin: 0 0 12px 0;
+          margin: 0 0 8px 0;
           flex-grow: 1;
         }
 
-        .project-tech-row {
-          display: flex;
-          gap: 5px;
-          flex-wrap: wrap;
-        }
-
-        .tech-badge-item {
-          background: #f1f5f9;
-          color: #475569;
-          font-size: 0.68rem;
-          font-weight: 600;
-          padding: 2px 7px;
-          border-radius: 4px;
-        }
-
-        .tech-badge-item.more {
-          background: #e2e8f0;
-          color: #334155;
-          font-weight: 700;
-        }
-
-        .project-card-footer {
-          padding: 12px 18px;
-          border-top: 1px solid #f1f5f9;
+        .mini-card-bottom-row {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          font-size: 0.7rem;
+          padding-top: 6px;
+          border-top: 1px dashed #e2e8f0;
+        }
+
+        .mini-card-client {
+          color: #94a3b8;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 110px;
+        }
+
+        .mini-card-link-prompt {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font-weight: 800;
+          color: var(--primary);
+          transition: gap 0.2s ease;
+        }
+
+        .mini-portfolio-card:hover .mini-card-link-prompt {
+          gap: 7px;
+        }
+
+        /* Modal Footer */
+        .modal-footer {
+          padding: 18px 28px 24px 28px;
+          border-top: 1px solid #f1f5f9;
           background: #fafbfc;
         }
 
-        .footer-action-text {
-          font-size: 0.78rem;
-          font-weight: 700;
-          color: #475569;
-          transition: color 0.2s ease;
-        }
-
-        .murakami-project-card:hover .footer-action-text {
-          color: var(--primary);
-        }
-
-        .footer-arrow-circle {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          color: var(--primary);
+        .modal-footer-actions {
           display: flex;
           align-items: center;
-          justify-content: center;
-          transition: all 0.25s ease;
-        }
-
-        .murakami-project-card:hover .footer-arrow-circle {
-          background: var(--primary);
-          border-color: var(--primary);
-          color: #ffffff;
-          transform: rotate(-35deg);
-        }
-
-        /* Stage Bottom Action Bar */
-        .stage-footer-cta {
-          margin-top: auto;
-          padding-top: 16px;
-          border-top: 1px solid #f1f5f9;
-          text-align: center;
-        }
-
-        .stage-cta-buttons {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 16px;
+          justify-content: space-between;
+          gap: 14px;
           flex-wrap: wrap;
-          margin-bottom: 12px;
         }
 
-        .btn-showcase-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          background: var(--primary);
-          color: #ffffff;
-          font-family: var(--font-heading);
-          font-size: 0.95rem;
-          font-weight: 800;
-          text-decoration: none;
-          padding: 13px 26px;
-          border-radius: 100px;
-          box-shadow: 0 8px 24px rgba(229, 62, 62, 0.32);
-          transition: all 0.25s ease;
-        }
-
-        .btn-showcase-primary:hover {
-          background: #c53030;
-          transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.42);
-        }
-
-        .btn-showcase-primary .btn-circle-icon {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: transform 0.25s ease;
-        }
-
-        .btn-showcase-primary:hover .btn-circle-icon {
-          transform: translateX(3px);
-        }
-
-        .btn-showcase-secondary {
+        .btn-modal-primary {
           display: inline-flex;
           align-items: center;
           gap: 10px;
+          background: var(--primary);
+          color: #ffffff;
+          font-family: var(--font-heading);
+          font-size: 0.9rem;
+          font-weight: 800;
+          text-decoration: none;
+          padding: 12px 24px;
+          border-radius: 100px;
+          box-shadow: 0 6px 18px rgba(229, 62, 62, 0.3);
+          transition: all 0.25s ease;
+        }
+
+        .btn-modal-primary:hover {
+          background: #c53030;
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px rgba(229, 62, 62, 0.4);
+        }
+
+        .btn-modal-secondary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
           background: #ffffff;
           border: 1.5px solid #e2e8f0;
           color: #0f172a;
           font-family: var(--font-heading);
-          font-size: 0.92rem;
+          font-size: 0.88rem;
           font-weight: 700;
           text-decoration: none;
-          padding: 12px 22px;
+          padding: 11px 20px;
           border-radius: 100px;
           transition: all 0.25s ease;
         }
 
-        .btn-showcase-secondary:hover {
+        .btn-modal-secondary:hover {
           border-color: var(--primary);
           color: var(--primary);
           transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .stage-cta-guarantee {
-          font-size: 0.78rem;
-          color: #94a3b8;
-          font-weight: 600;
-          margin: 0;
-        }
-
-        /* ===== Mobile Responsive Adaptation (< 992px) ===== */
-        @media (max-width: 991px) {
-          .murakami-accordion-stage {
-            display: block;
-            min-height: auto;
-          }
-
-          .murakami-pillar.is-collapsed {
-            display: none;
-          }
-
-          .murakami-pillar.is-expanded {
-            padding: 20px 16px;
-            border-radius: 22px;
-          }
-
-          .stage-header-row {
-            flex-direction: column;
-            gap: 14px;
-          }
-
-          .stage-nav-controls {
-            align-self: flex-start;
-          }
-
-          .stage-cards-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-          }
-
-          .stage-cta-buttons {
-            flex-direction: column;
-            width: 100%;
-          }
-
-          .btn-showcase-primary,
-          .btn-showcase-secondary {
-            width: 100%;
-            justify-content: center;
-          }
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
         }
 
         /* ===== 4. Services & Packages ===== */
