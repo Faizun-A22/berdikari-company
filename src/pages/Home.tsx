@@ -32,28 +32,24 @@ export default function Home() {
   const [faqRef, faqVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  // In-Page Sliding Service Showcase state (No modal, ultra-smooth card slide)
+  // In-Page Sliding Service Showcase state (Zero-flicker, dual-panel sliding stage)
   type ServiceType = 'web' | 'erp' | 'mobile' | 'uiux';
-  const [selectedService, setSelectedService] = useState<ServiceType | null>(null);
-  const [isReturning, setIsReturning] = useState(false);
+  const [activeService, setActiveService] = useState<ServiceType>('web');
+  const [isServiceOpen, setIsServiceOpen] = useState(false);
   const showcaseStageRef = useRef<HTMLDivElement | null>(null);
 
   const handleOpenService = (id: ServiceType) => {
-    setSelectedService(id);
+    setActiveService(id);
+    setIsServiceOpen(true);
   };
 
   const handleBackToServices = () => {
-    if (isReturning) return;
-    setIsReturning(true);
-    setTimeout(() => {
-      setSelectedService(null);
-      setIsReturning(false);
-    }, 320);
+    setIsServiceOpen(false);
   };
 
   // Close back to all services when clicking outside the active stage or pressing Escape
   useEffect(() => {
-    if (!selectedService) return;
+    if (!isServiceOpen) return;
 
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
       const target = e.target as HTMLElement | null;
@@ -76,7 +72,7 @@ export default function Home() {
     const timer = setTimeout(() => {
       document.addEventListener('mousedown', handlePointerDown);
       document.addEventListener('touchstart', handlePointerDown, { passive: true });
-    }, 60);
+    }, 80);
 
     window.addEventListener('keydown', handleKeyDown);
 
@@ -86,7 +82,7 @@ export default function Home() {
       document.removeEventListener('touchstart', handlePointerDown);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedService, isReturning]);
+  }, [isServiceOpen]);
 
   // Testimonial slider state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -603,17 +599,17 @@ export default function Home() {
               Layanan Utama &amp; <span className="hero-cursive-highlight">Karya Nyata</span>
             </h2>
             <p className="section-subtext">
-              {selectedService
-                ? 'Berikut portofolio pilihan untuk layanan ini. Klik tombol "Kembali" untuk melihat kembali seluruh kotak layanan.'
+              {isServiceOpen
+                ? 'Berikut portofolio pilihan untuk layanan ini. Klik tombol "Kembali" atau klik di luar kartu untuk melihat kembali seluruh kotak layanan.'
                 : 'Pilih dan klik salah satu kotak layanan di bawah ini. Kartu akan bergeser mulus ke samping dan menampilkan daftar portofolio terkait.'}
             </p>
           </div>
 
-          {/* SLIDING STAGE CONTAINER */}
-          <div className={`sliding-showcase-container ${selectedService ? 'is-service-active' : 'is-default-grid'}`}>
-            {/* VIEW 1: 4 SERVICE BOXES (When not selected) */}
-            {!selectedService ? (
-              <div className={`service-boxes-row ${isReturning ? 'animate-boxes-return' : 'animate-boxes-entry'}`}>
+          {/* SLIDING STAGE CONTAINER (Persistent Dual-Panel, Zero-Flicker Continuous Horizontal Slide) */}
+          <div className={`sliding-showcase-container ${isServiceOpen ? 'is-service-active' : 'is-default-grid'}`}>
+            {/* PANEL 1: 4 SERVICE BOXES (Smooth Slide Out to Left when Open) */}
+            <div className={`showcase-panel showcase-boxes-panel ${isServiceOpen ? 'panel-shifted-left' : 'panel-active'}`}>
+              <div className="service-boxes-row">
                 {servicesList.map((service) => (
                   <div
                     key={service.id}
@@ -666,17 +662,20 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-            ) : (
-              /* VIEW 2: SLIDING PORTFOLIO STAGE (When service is selected) */
-              (() => {
-                const activeData = servicesList.find((s) => s.id === selectedService) || servicesList[0];
-                const activeProjects = allProjects.filter((p) => p.serviceType === selectedService).slice(0, 4);
+            </div>
 
-                return (
-                  <div
-                    ref={showcaseStageRef}
-                    className={`service-shifted-stage ${isReturning ? 'animate-shift-out' : 'animate-shift-in'}`}
-                  >
+            {/* PANEL 2: SLIDING PORTFOLIO STAGE (Smooth Slide In from Right when Open) */}
+            {(() => {
+              const activeData = servicesList.find((s) => s.id === activeService) || servicesList[0];
+              const activeProjects = allProjects.filter((p) => p.serviceType === activeService).slice(0, 4);
+
+              return (
+                <div
+                  ref={showcaseStageRef}
+                  className={`showcase-panel showcase-portfolio-panel ${isServiceOpen ? 'panel-active' : 'panel-shifted-right'}`}
+                  aria-hidden={!isServiceOpen}
+                >
+                  <div className="service-shifted-stage">
                     {/* Top Action & Navigation Bar */}
                     <div className="shifted-stage-topbar">
                       <div className="topbar-left-group">
@@ -701,8 +700,8 @@ export default function Home() {
                           <button
                             key={s.id}
                             type="button"
-                            className={`quick-service-pill ${selectedService === s.id ? 'is-active' : ''}`}
-                            onClick={() => setSelectedService(s.id)}
+                            className={`quick-service-pill ${activeService === s.id ? 'is-active' : ''}`}
+                            onClick={() => setActiveService(s.id)}
                           >
                             <span>{s.num}. {s.shortName}</span>
                           </button>
@@ -838,13 +837,13 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                );
-              })()
-            )}
+                </div>
+              );
+            })()}
           </div>
 
           {/* BOTTOM REDIRECT WHEN IN DEFAULT VIEW */}
-          {!selectedService && (
+          {!isServiceOpen && (
             <div className="service-boxes-bottom">
               <a href="/portfolio.html" className="btn-showcase-primary">
                 <span>Buka Seluruh Portofolio &amp; Katalog Lengkap</span>
@@ -1520,13 +1519,63 @@ export default function Home() {
           width: 100%;
           min-height: 480px;
           margin-bottom: 40px;
-          transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+          overflow: hidden;
+          transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .sliding-showcase-container.is-service-active {
           background: radial-gradient(circle at 50% 10%, rgba(229, 62, 62, 0.035) 0%, transparent 70%);
           border-radius: 32px;
           padding: 8px 4px;
+        }
+
+        /* Persistent Dual Panels (Zero-Flicker Continuous Horizontal Slide) */
+        .showcase-panel {
+          width: 100%;
+          transition: transform 0.55s cubic-bezier(0.19, 1, 0.22, 1),
+                      opacity 0.45s cubic-bezier(0.19, 1, 0.22, 1),
+                      visibility 0.55s;
+          will-change: transform, opacity;
+        }
+
+        /* Panel 1 (Boxes) - Active */
+        .showcase-boxes-panel.panel-active {
+          position: relative;
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
+
+        /* Panel 1 (Boxes) - Glides smoothly out to the left */
+        .showcase-boxes-panel.panel-shifted-left {
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform: translate3d(-100px, 0, 0);
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+        }
+
+        /* Panel 2 (Portfolio) - Waiting off-screen to the right */
+        .showcase-portfolio-panel.panel-shifted-right {
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform: translate3d(100px, 0, 0);
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+        }
+
+        /* Panel 2 (Portfolio) - Glides smoothly in from the right */
+        .showcase-portfolio-panel.panel-active {
+          position: relative;
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
         }
 
         .service-boxes-row,
@@ -1550,39 +1599,6 @@ export default function Home() {
           .service-boxes-grid {
             grid-template-columns: 1fr;
             gap: 16px;
-          }
-        }
-
-        /* Entry & Return animations with Staggered Wave (Ultra Smooth) */
-        .animate-boxes-entry .service-box-card:nth-child(1) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.04s both; }
-        .animate-boxes-entry .service-box-card:nth-child(2) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.09s both; }
-        .animate-boxes-entry .service-box-card:nth-child(3) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.14s both; }
-        .animate-boxes-entry .service-box-card:nth-child(4) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.19s both; }
-
-        .animate-boxes-return .service-box-card:nth-child(1) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.03s both; }
-        .animate-boxes-return .service-box-card:nth-child(2) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.08s both; }
-        .animate-boxes-return .service-box-card:nth-child(3) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.13s both; }
-        .animate-boxes-return .service-box-card:nth-child(4) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.18s both; }
-
-        @keyframes boxCardEntry {
-          0% {
-            opacity: 0;
-            transform: translate3d(0, 28px, 0) scale(0.97);
-          }
-          100% {
-            opacity: 1;
-            transform: translate3d(0, 0, 0) scale(1);
-          }
-        }
-
-        @keyframes boxCardReturn {
-          0% {
-            opacity: 0;
-            transform: translate3d(-35px, 0, 0) scale(0.97);
-          }
-          100% {
-            opacity: 1;
-            transform: translate3d(0, 0, 0) scale(1);
           }
         }
 
@@ -1768,37 +1784,6 @@ export default function Home() {
         .service-shifted-stage {
           width: 100%;
           text-align: left;
-          will-change: transform, opacity;
-        }
-
-        .animate-shift-in {
-          animation: stageShiftIn 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
-        }
-
-        .animate-shift-out {
-          animation: stageShiftOut 0.32s cubic-bezier(0.19, 1, 0.22, 1) both;
-        }
-
-        @keyframes stageShiftIn {
-          0% {
-            opacity: 0;
-            transform: translate3d(45px, 0, 0);
-          }
-          100% {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-          }
-        }
-
-        @keyframes stageShiftOut {
-          0% {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-          }
-          100% {
-            opacity: 0;
-            transform: translate3d(45px, 0, 0);
-          }
         }
 
         /* Top Bar: Return Button & Quick Service Pills */
