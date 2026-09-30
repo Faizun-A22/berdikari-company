@@ -43,8 +43,9 @@ echo "===> Memastikan izin berkas web server..."
 chown -R www-data:www-data dist 2>/dev/null || true
 chmod -R 755 dist 2>/dev/null || true
 
-echo "===> Merestart Nginx & Service Backend..."
-systemctl restart nginx
+echo "===> Merestart Web Server (Caddy / Nginx) & Service Backend..."
+systemctl reload caddy 2>/dev/null || systemctl restart caddy 2>/dev/null || true
+systemctl restart nginx 2>/dev/null || true
 pm2 restart all 2>/dev/null || pm2 start server/index.js --name "berdikari-api" 2>/dev/null || true
 
 # Daftarkan perintah saklek update-web secara permanen
