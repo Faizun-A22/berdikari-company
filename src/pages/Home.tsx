@@ -20,7 +20,6 @@ import {
   Smartphone,
   Cpu,
   Palette,
-  Layers,
   ExternalLink,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -34,10 +33,34 @@ export default function Home() {
   const [faqRef, faqVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  // Service-First Interactive Showcase state
-  type ServiceType = 'all' | 'web' | 'erp' | 'mobile' | 'uiux';
-  const [selectedService, setSelectedService] = useState<ServiceType>('all');
+  // Service-First Interactive Showcase state (Inspired by Haruki Murakami Sliding Interaction)
+  type ServiceType = 'web' | 'erp' | 'mobile' | 'uiux';
+  const [activeService, setActiveService] = useState<ServiceType>('web');
   const [animKey, setAnimKey] = useState(0);
+
+  const serviceOrder: ServiceType[] = ['web', 'erp', 'mobile', 'uiux'];
+
+  const handleSelectService = (id: ServiceType) => {
+    if (activeService === id) return;
+    setActiveService(id);
+    setAnimKey((prev) => prev + 1);
+  };
+
+  const handlePrevService = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const currentIndex = serviceOrder.indexOf(activeService);
+    const prevIndex = (currentIndex - 1 + serviceOrder.length) % serviceOrder.length;
+    setActiveService(serviceOrder[prevIndex]);
+    setAnimKey((prev) => prev + 1);
+  };
+
+  const handleNextService = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const currentIndex = serviceOrder.indexOf(activeService);
+    const nextIndex = (currentIndex + 1) % serviceOrder.length;
+    setActiveService(serviceOrder[nextIndex]);
+    setAnimKey((prev) => prev + 1);
+  };
 
   // Testimonial slider state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -55,62 +78,61 @@ export default function Home() {
   const [formMessage, setFormMessage] = useState('');
   const [formSent, setFormSent] = useState(false);
 
-  // Berdikari Services Collection (Initial View)
+  // Berdikari Services Collection (Interactive Pillars)
   const servicesList = [
     {
-      id: 'all' as ServiceType,
-      name: 'Semua Layanan',
-      shortName: 'Semua Bidang',
-      tagline: 'Katalog Portofolio Terpadu',
-      desc: 'Eksplorasi seluruh karya terbaik dari website modern, mobile app, hingga sistem automasi ERP.',
-      icon: <Layers size={22} />,
-      badge: 'Solusi Lengkap',
-      badgeColor: '#e53e3e',
-    },
-    {
       id: 'web' as ServiceType,
+      num: '01',
       name: 'Website & E-Commerce',
-      shortName: 'Website Kustom',
-      tagline: 'Website Modern & Toko Online',
-      desc: 'Website ultra-responsif, SEO Google teroptimasi, dan integrasi payment gateway otomatis.',
-      icon: <Globe size={22} />,
+      shortName: 'Website & Toko Online',
+      tagline: 'Website Modern, Cepat & Terindeks Google',
+      desc: 'Website bisnis ultra-responsif, toko online kilat dengan payment gateway Midtrans otomatis, dan arsitektur SEO mutakhir.',
+      icon: <Globe size={20} />,
       badge: 'Paling Populer',
       badgeColor: '#e53e3e',
+      highlights: 'Lighthouse 98+ • Konversi Naik 3x • Payment Midtrans Otomatis',
     },
     {
       id: 'erp' as ServiceType,
+      num: '02',
       name: 'Sistem Informasi & ERP',
-      shortName: 'Sistem ERP',
-      tagline: 'Otomasi & Manajemen Terpusat',
-      desc: 'Platform ERP pergudangan, sistem antrean, dan manajemen operasional bisnis real-time.',
-      icon: <Cpu size={22} />,
+      shortName: 'Sistem ERP & Database',
+      tagline: 'Otomasi Operasional Bisnis Terintegrasi',
+      desc: 'Sistem pergudangan multi-cabang, barcode inventaris, automasi presensi karyawan, dan dashboard keuangan real-time.',
+      icon: <Cpu size={20} />,
       badge: 'Efisiensi Tinggi',
       badgeColor: '#0284c7',
+      highlights: 'Hemat 15 Jam Kerja/Mgg • 99.9% Uptime Cloud • Multi-Cabang',
     },
     {
       id: 'mobile' as ServiceType,
+      num: '03',
       name: 'Mobile Apps Android & iOS',
-      shortName: 'Mobile App',
-      tagline: 'Aplikasi Smartphone Modern',
-      desc: 'Aplikasi native & Flutter dengan login biometrik, pembayaran QRIS, dan UI responsif.',
-      icon: <Smartphone size={22} />,
+      shortName: 'Aplikasi Mobile Apps',
+      tagline: 'Aplikasi Native & Cross-Platform (Flutter)',
+      desc: 'Aplikasi smartphone performa tinggi dengan autentikasi biometrik aman, transaksi QRIS instan, notifikasi push, dan mode offline.',
+      icon: <Smartphone size={20} />,
       badge: 'Multiplatform',
       badgeColor: '#16a34a',
+      highlights: '50k+ Active Users • QRIS 0.8 Detik • Notifikasi Realtime',
     },
     {
       id: 'uiux' as ServiceType,
+      num: '04',
       name: 'UI/UX Design & Prototype',
-      shortName: 'Desain UI/UX',
-      tagline: 'Riset & Desain Antarmuka',
-      desc: 'Prototipe interaktif Figma, rancangan arsitektur informasi, dan sistem desain standar industri.',
-      icon: <Palette size={22} />,
+      shortName: 'Desain UI/UX & Riset',
+      tagline: 'Desain Antarmuka Interaktif & Sistem Desain',
+      desc: 'Wireframing mendalam, prototipe interaktif Figma standar perbankan, micro-interactions halus, dan pengujian kegunaan nyata.',
+      icon: <Palette size={20} />,
       badge: 'Eksklusif Figma',
       badgeColor: '#9333ea',
+      highlights: '80+ Komponen Figma • Standar WCAG AAA • SUS Skor 89/100',
     },
   ];
 
-  // Data Collections with Service References
+  // Data Collections: Exactly 4 Top Projects Per Service (Strict 4 Cards Maximum)
   const allProjects = [
+    // --- 01. WEBSITE & E-COMMERCE ---
     {
       id: 1,
       title: 'Bloom & Wild Flora E-Commerce',
@@ -121,67 +143,164 @@ export default function Home() {
       shortDesc: 'Platform toko online dengan sistem checkout kilat, integrasi payment gateway Midtrans otomatis, dan analitik real-time.',
       client: 'PT Bloom Flora Nusantara',
       tech: ['Next.js', 'PostgreSQL', 'Midtrans Gateway', 'Tailwind CSS'],
-      metrics: 'Konversi Naik 310% • Audit Lighthouse 98/100',
+      metrics: 'Konversi Naik 310% • Lighthouse 98/100',
       slug: 'bloom-wild-flora',
     },
     {
       id: 2,
-      title: 'Northline Studio Cloud & Logistics ERP',
-      serviceType: 'erp',
-      category: 'Sistem Web',
-      categoryLabel: 'Sistem ERP Pergudangan',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
-      shortDesc: 'Sistem ERP terpadu untuk pencatatan pergudangan multi-cabang, inventaris barcode, dan pelaporan keuangan konsolidasi.',
-      client: 'Northline Creative Group',
-      tech: ['React.js', 'Node.js', 'Docker', 'AWS Cloud'],
-      metrics: 'Hemat 15 Jam Kerja/Minggu • 99.9% Uptime',
-      slug: 'northline-studio-cloud',
+      title: 'Kriya Nusantara Craft Marketplace',
+      serviceType: 'web',
+      category: 'E-Commerce',
+      categoryLabel: 'Marketplace Multi-Vendor',
+      image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Marketplace produk kerajinan nusantara dengan integrasi ongkir kurir instan, payment gateway, dan dashboard toko multi-vendor.',
+      client: 'PT Kriya Digital Nusantara',
+      tech: ['React', 'Node.js', 'Redis', 'Tailwind CSS'],
+      metrics: '12.000+ Transaksi • Rating 4.9★',
+      slug: 'bloom-wild-flora',
     },
     {
       id: 3,
-      title: 'Pure Balance Fintech & E-Wallet App',
-      serviceType: 'mobile',
-      category: 'Mobile App',
-      categoryLabel: 'Fintech & Mobile App',
-      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80',
-      shortDesc: 'Aplikasi mobile multiplatform (Android & iOS) dengan enkripsi data berlapis, login biometrik, dan transaksi QRIS instan.',
-      client: 'PT Nusantara Pay Sejahtera',
-      tech: ['Flutter', 'Firebase', 'WebSocket', 'QRIS API'],
-      metrics: '50.000+ Pengguna Aktif • Kecepatan Transaksi 0.8s',
-      slug: 'pure-balance-fintech',
+      title: 'Bimasena Energy Portal & Investor Relations',
+      serviceType: 'web',
+      category: 'Web Korporat',
+      categoryLabel: 'Portal Korporat & ESG',
+      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Portal profil resmi korporasi energi nasional dengan laporan tahunan interaktif, kepatuhan ESG, dan data saham real-time.',
+      client: 'Bimasena Energy Group',
+      tech: ['TypeScript', 'Next.js', 'Headless CMS', 'Tailwind'],
+      metrics: 'Keamanan Grade A+ • Peringkat #1 SEO',
+      slug: 'bloom-wild-flora',
     },
     {
       id: 4,
-      title: 'Medika Farmasi Resep Digital',
+      title: 'Ruang Seduh Artisan Coffee Roastery Web',
+      serviceType: 'web',
+      category: 'Web & Order',
+      categoryLabel: 'Pemesanan Kafe & Toko Online',
+      image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Website interaktif dengan pesanan meja mandiri (QR order), langganan biji kopi bulanan, dan integrasi WhatsApp CS instan.',
+      client: 'Ruang Seduh Roastery',
+      tech: ['Vite', 'React', 'WhatsApp API', 'Supabase'],
+      metrics: 'Antrean Berkurang 45% • Rating 4.9★',
+      slug: 'bloom-wild-flora',
+    },
+
+    // --- 02. SISTEM INFORMASI & ERP ---
+    {
+      id: 5,
+      title: 'Northline Studio Cloud & Logistics ERP',
+      serviceType: 'erp',
+      category: 'Sistem ERP',
+      categoryLabel: 'Sistem ERP Pergudangan',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Sistem ERP terpadu untuk pencatatan pergudangan multi-cabang, inventaris barcode otomatis, dan pelaporan keuangan konsolidasi.',
+      client: 'Northline Creative Group',
+      tech: ['React.js', 'Node.js', 'Docker', 'PostgreSQL'],
+      metrics: 'Hemat 15 Jam Kerja/Mgg • 99.9% Uptime',
+      slug: 'northline-studio-cloud',
+    },
+    {
+      id: 6,
+      title: 'Medika Farmasi Resep Digital & Rekam Medis',
       serviceType: 'erp',
       category: 'Sistem Web',
       categoryLabel: 'Portal Kesehatan Digital',
       image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80',
-      shortDesc: 'Sistem reservasi konsultasi dokter, manajemen resep digital farmasi, dan sinkronisasi data kesehatan SatuSehat.',
+      shortDesc: 'Sistem reservasi konsultasi dokter, manajemen resep digital farmasi, dan sinkronisasi data kesehatan SatuSehat Kemenkes.',
       client: 'Medika Hospital Network',
       tech: ['React', 'TypeScript', 'Supabase DB', 'SatuSehat API'],
-      metrics: 'Antrean Berkurang 70% • Keamanan Data Medis',
+      metrics: 'Antrean Turun 70% • Enkripsi Medis Teruji',
       slug: 'medika-farmasi-digital',
     },
     {
-      id: 5,
-      title: 'Kriya Nusantara Craft Marketplace',
-      serviceType: 'web',
-      category: 'E-Commerce',
-      categoryLabel: 'Marketplace E-Commerce',
-      image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&auto=format&fit=crop&q=80',
-      shortDesc: 'Marketplace produk kerajinan kriya nusantara dengan integrasi kurir instan, payment gateway, dan manajemen toko multi-vendor.',
-      client: 'PT Kriya Digital Nusantara',
-      tech: ['Next.js', 'PostgreSQL', 'Midtrans Gateway', 'Tailwind CSS'],
-      metrics: '12.000+ Transaksi • Rating Kepuasan 4.9★',
-      slug: 'bloom-wild-flora',
+      id: 7,
+      title: 'Karya Mandiri POS Kasir & Inventaris Multi-Cabang',
+      serviceType: 'erp',
+      category: 'Sistem Kasir',
+      categoryLabel: 'Point of Sale & Multi-Branch',
+      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Aplikasi kasir desktop & cloud dengan dukungan offline-first saat internet terputus, cetak struk termal, dan stok otomatis.',
+      client: 'PT Karya Mandiri Sentosa',
+      tech: ['Electron', 'React', 'SQLite Offline', 'Node.js'],
+      metrics: 'Audit Stok Akurat 99.8% • Transaksi Kilat',
+      slug: 'northline-studio-cloud',
     },
     {
-      id: 6,
-      title: 'Aura Brand Design System & UI Kit',
+      id: 8,
+      title: 'Sinergi HRM Presensi & Otomasi Payroll Karyawan',
+      serviceType: 'erp',
+      category: 'Sistem HRM',
+      categoryLabel: 'HRM & Otomasi Penggajian',
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Platform manajemen 500+ karyawan dengan presensi GPS radius kantor, pengajuan cuti instan, dan perhitungan pajak PPh 21 otomatis.',
+      client: 'Sinergi Corpora Indonesia',
+      tech: ['Vue.js', 'Express.js', 'PostgreSQL', 'Redis'],
+      metrics: 'Payroll Selesai 2 Jam • Tanpa Human Error',
+      slug: 'northline-studio-cloud',
+    },
+
+    // --- 03. MOBILE APPS ANDROID & IOS ---
+    {
+      id: 9,
+      title: 'Pure Balance Fintech & E-Wallet App',
+      serviceType: 'mobile',
+      category: 'Mobile App',
+      categoryLabel: 'Fintech & E-Wallet',
+      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Aplikasi mobile multiplatform (Android & iOS) dengan enkripsi data berlapis, login biometrik sidik jari/wajah, dan pembayaran QRIS.',
+      client: 'PT Nusantara Pay Sejahtera',
+      tech: ['Flutter', 'Firebase', 'WebSocket', 'QRIS API'],
+      metrics: '50.000+ Pengguna • Transaksi 0.8 Detik',
+      slug: 'pure-balance-fintech',
+    },
+    {
+      id: 10,
+      title: 'Sahabat Sehat Telemedicine & Konsultasi Dokter',
+      serviceType: 'mobile',
+      category: 'Mobile App',
+      categoryLabel: 'Telemedisin & Reservasi',
+      image: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Aplikasi konsultasi dokter video call HD terenkripsi, tebus resep obat langsung sampai ke rumah, dan riwayat lab digital.',
+      client: 'Klinik Pratama Sahabat Sehat',
+      tech: ['React Native', 'WebRTC', 'FastAPI', 'AWS'],
+      metrics: 'Konsultasi 24/7 • Rating 4.8★ di Playstore',
+      slug: 'pure-balance-fintech',
+    },
+    {
+      id: 11,
+      title: 'KurirKilat Driver Logistics & Live GPS Tracking',
+      serviceType: 'mobile',
+      category: 'Mobile App',
+      categoryLabel: 'Logistik & Pelacakan GPS',
+      image: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Aplikasi khusus driver armada pengiriman barang dengan rute cerdas hemat BBM, bukti serah terima foto + ttd, dan peta GPS realtime.',
+      client: 'PT Kurir Kilat Express',
+      tech: ['Flutter', 'Google Maps SDK', 'MQTT', 'Golang'],
+      metrics: 'Ketepatan Waktu 99.4% • Hemat BBM 18%',
+      slug: 'pure-balance-fintech',
+    },
+    {
+      id: 12,
+      title: 'BelajarPintar Edutech Interactive Learning App',
+      serviceType: 'mobile',
+      category: 'Mobile App',
+      categoryLabel: 'Edutech & Gamifikasi',
+      image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Aplikasi pembelajaran interaktif dengan gamifikasi badge skor, video materi hemat kuota, dan forum diskusi tanya tutor.',
+      client: 'Yayasan Cerdas Generasi Bangsa',
+      tech: ['Flutter', 'Node.js', 'Supabase Realtime'],
+      metrics: '10.000+ Murid Aktif • 98% Retensi Belajar',
+      slug: 'pure-balance-fintech',
+    },
+
+    // --- 04. UI/UX DESIGN & PROTOTYPE ---
+    {
+      id: 13,
+      title: 'Aura Brand Design System & Figma UI Kit',
       serviceType: 'uiux',
       category: 'UI/UX Design',
-      categoryLabel: 'Design System & UI Kit',
+      categoryLabel: 'Design System & Token',
       image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80',
       shortDesc: 'Design system menyeluruh dengan 80+ komponen Figma interaktif, dokumentasi token desain, dan prototipe responsif standar perbankan.',
       client: 'Aura Media Kreasi',
@@ -189,14 +308,49 @@ export default function Home() {
       metrics: 'Dipakai 8 Tim Produk • Aksesibilitas Teruji',
       slug: 'northline-studio-cloud',
     },
+    {
+      id: 14,
+      title: 'Horizon Banking Mobile App Redesign Concept',
+      serviceType: 'uiux',
+      category: 'UI/UX Design',
+      categoryLabel: 'Studi Kasus Perbankan',
+      image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Redesain total antarmuka perbankan digital yang ramah segala usia, navigasi transfer 2 ketukan, dan visualisasi cash flow elegan.',
+      client: 'Bank Horizon Digital',
+      tech: ['Figma', 'Protopie Interactive', 'Usability Testing'],
+      metrics: 'SUS Skor 89/100 (Sangat Mudah) • Clean UI',
+      slug: 'northline-studio-cloud',
+    },
+    {
+      id: 15,
+      title: 'AgriConnect Marketplace Petani UI Case Study',
+      serviceType: 'uiux',
+      category: 'UI/UX Design',
+      categoryLabel: 'Riset Desain Pasar Tani',
+      image: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Riset dan perancangan antarmuka aplikasi jual beli hasil tani langsung dengan tipografi besar kontras tinggi dan ikon mudah dipahami.',
+      client: 'AgriConnect Koperasi Tani',
+      tech: ['Figma UI', 'User Journey Mapping', 'Design Sprint'],
+      metrics: 'Uji Lapangan 100% Petani Paham Penggunaan',
+      slug: 'northline-studio-cloud',
+    },
+    {
+      id: 16,
+      title: 'FlowState SaaS Analytics & Productivity Dashboard',
+      serviceType: 'uiux',
+      category: 'UI/UX Design',
+      categoryLabel: 'Prototipe Dashboard SaaS',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Prototipe dashboard analitik SaaS dengan dark/light theme otomatis, 24 widget data interaktif, dan animasi micro-interactions halus.',
+      client: 'FlowState Technologies',
+      tech: ['Figma', 'Design Systems', 'Micro-interactions'],
+      metrics: '24 Widget Interaktif • Dark/Light Mode',
+      slug: 'northline-studio-cloud',
+    },
   ];
 
-  const filteredProjects = selectedService === 'all'
-    ? allProjects
-    : allProjects.filter((p) => p.serviceType === selectedService || p.category === selectedService);
-
-  // Maximum 4 cards as requested!
-  const displayedProjects = filteredProjects.slice(0, 4);
+  // Strictly maximum 4 projects for the active service
+  const displayedProjects = allProjects.filter((p) => p.serviceType === activeService).slice(0, 4);
 
   // News / Insights (Simplified, High-Value, Non-media blog)
   const newsList = [
@@ -387,179 +541,220 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 3. SERVICE-FIRST INTERACTIVE PORTFOLIO SHOWCASE (Inspired by Murakami Interaction) */}
+      {/* 3. MURAKAMI-INSPIRED SLIDING SERVICE & PORTFOLIO ACCORDION SHOWCASE */}
       <section
         id="portfolio"
         ref={portfolioRef as React.RefObject<HTMLDivElement>}
         className={`section featured-work-section reveal reveal-fade ${portfolioVisible ? 'in-view' : ''}`}
       >
         <div className="container">
-          {/* Header Row */}
+          {/* Section Header */}
           <div className="service-showcase-header">
             <div className="showcase-badge-wrap">
               <span className="badge-tag-pill">
                 <Sparkles size={13} className="text-red inline-icon" />
-                LAYANAN &amp; PORTOFOLIO UNGGULAN
+                INTERAKTIF LAYANAN &amp; KARYA UNGGULAN
               </span>
             </div>
             <h2 className="section-heading-bold">
-              Layanan Berdikari &amp; <span className="hero-cursive-highlight">Karya Nyata</span>
+              Keahlian Berdikari &amp; <span className="hero-cursive-highlight">Karya Nyata</span>
             </h2>
             <p className="section-subtext">
-              Pilih bidang layanan yang Anda butuhkan di bawah ini untuk melihat contoh produk dan studi kasus nyata yang telah kami bangun dengan standar mutu industri.
+              Pilih bidang layanan yang Anda butuhkan di bawah ini. Panel akan bergeser secara dinamis menampilkan portofolio dan studi kasus terbaik di setiap kategori.
             </p>
+
+            {/* Murakami Track Dial / Top Category Shifter Bar */}
+            <div className="murakami-track-nav">
+              {servicesList.map((service) => {
+                const isActive = activeService === service.id;
+                return (
+                  <button
+                    key={service.id}
+                    type="button"
+                    className={`murakami-track-btn ${isActive ? 'is-active' : ''}`}
+                    onClick={() => handleSelectService(service.id)}
+                    aria-label={`Buka layanan ${service.name}`}
+                  >
+                    <span className="track-num">{service.num}</span>
+                    <span className="track-name">{service.name}</span>
+                    {isActive && <span className="track-active-pill">Aktif</span>}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* 1. INITIAL VIEW: Interactive Service Cards / Tabs */}
-          <div className="services-selector-grid">
+          {/* MAIN STAGE: SLIDING ACCORDION PANELS */}
+          <div className="murakami-accordion-stage">
             {servicesList.map((service) => {
-              const isActive = selectedService === service.id;
+              const isExpanded = activeService === service.id;
+
               return (
                 <div
                   key={service.id}
-                  className={`service-select-card ${isActive ? 'is-active' : ''}`}
+                  className={`murakami-pillar ${isExpanded ? 'is-expanded' : 'is-collapsed'}`}
                   onClick={() => {
-                    setSelectedService(service.id);
-                    setAnimKey((prev) => prev + 1);
+                    if (!isExpanded) handleSelectService(service.id);
                   }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Pilih layanan ${service.name}`}
+                  role={isExpanded ? 'region' : 'button'}
+                  tabIndex={isExpanded ? -1 : 0}
+                  aria-label={isExpanded ? `Showcase ${service.name}` : `Klik untuk membuka ${service.name}`}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setSelectedService(service.id);
-                      setAnimKey((prev) => prev + 1);
+                    if (!isExpanded && (e.key === 'Enter' || e.key === ' ')) {
+                      handleSelectService(service.id);
                     }
                   }}
                 >
-                  <div className="service-card-top">
-                    <div className="service-icon-bubble">
-                      {service.icon}
+                  {/* === INACTIVE COLLAPSED PILLAR VIEW === */}
+                  {!isExpanded && (
+                    <div className="collapsed-pillar-content">
+                      <div className="pillar-top-num">
+                        <span className="pillar-index">{service.num}</span>
+                        <div className="pillar-icon-circle">{service.icon}</div>
+                      </div>
+
+                      <div className="pillar-vertical-title-wrap">
+                        <span className="pillar-vertical-title">{service.name}</span>
+                      </div>
+
+                      <div className="pillar-bottom-info">
+                        <span className="pillar-count-tag">4 Proyek</span>
+                        <div className="pillar-click-hint">
+                          <ArrowRight size={14} />
+                        </div>
+                      </div>
                     </div>
-                    <span className="service-badge-pill" style={{ color: service.badgeColor }}>
-                      {service.badge}
-                    </span>
-                  </div>
+                  )}
 
-                  <h3 className="service-card-title">{service.name}</h3>
-                  <p className="service-card-tagline">{service.tagline}</p>
-                  <p className="service-card-desc">{service.desc}</p>
+                  {/* === ACTIVE EXPANDED STAGE VIEW === */}
+                  {isExpanded && (
+                    <div className="expanded-stage-content" key={animKey}>
+                      {/* Active Stage Header */}
+                      <div className="stage-header-row">
+                        <div className="stage-header-left">
+                          <div className="stage-badge-line">
+                            <span className="stage-num-badge">{service.num} / 04</span>
+                            <span className="stage-category-pill" style={{ color: service.badgeColor }}>
+                              {service.badge}
+                            </span>
+                            <span className="stage-highlight-text">{service.highlights}</span>
+                          </div>
+                          <h3 className="stage-title">{service.name}</h3>
+                          <p className="stage-desc">{service.desc}</p>
+                        </div>
 
-                  <div className="service-card-status">
-                    {isActive ? (
-                      <span className="status-indicator active">
-                        <span className="status-dot-pulse"></span>
-                        Sedang Menampilkan
-                      </span>
-                    ) : (
-                      <span className="status-indicator inactive">
-                        Klik untuk Melihat
-                      </span>
-                    )}
-                    <span className="service-card-count">{service.shortName}</span>
-                  </div>
+                        {/* Slider Prev / Next Controls */}
+                        <div className="stage-nav-controls">
+                          <button
+                            type="button"
+                            className="stage-nav-btn prev"
+                            onClick={handlePrevService}
+                            title="Layanan Sebelumnya"
+                            aria-label="Layanan Sebelumnya"
+                          >
+                            <ArrowLeft size={16} />
+                          </button>
+                          <span className="stage-nav-counter">
+                            {service.num} <span className="counter-sep">/</span> 04
+                          </span>
+                          <button
+                            type="button"
+                            className="stage-nav-btn next"
+                            onClick={handleNextService}
+                            title="Layanan Selanjutnya"
+                            aria-label="Layanan Selanjutnya"
+                          >
+                            <ArrowRight size={16} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* 4 Cards Showcase Deck */}
+                      <div className="stage-cards-grid animate-cards-glide">
+                        {displayedProjects.map((item, index) => (
+                          <div
+                            key={`${item.id}-${animKey}`}
+                            className="murakami-project-card"
+                            style={{ animationDelay: `${index * 70}ms` }}
+                            onClick={() => {
+                              window.location.href = `/portfolio-detail.html?slug=${encodeURIComponent(item.slug)}`;
+                            }}
+                          >
+                            {/* Card Media */}
+                            <div className="project-card-media">
+                              <img src={item.image} alt={item.title} className="project-card-img" loading="lazy" />
+                              <div className="project-card-overlay">
+                                <span className="project-overlay-pill">
+                                  <span>Lihat Studi Kasus</span>
+                                  <ExternalLink size={14} />
+                                </span>
+                              </div>
+                              <span className="project-category-chip">{item.categoryLabel}</span>
+                              <span className="project-client-chip">{item.client}</span>
+                            </div>
+
+                            {/* Card Body */}
+                            <div className="project-card-body">
+                              <div className="project-metric-pill">
+                                <Zap size={12} className="text-red" />
+                                <span>{item.metrics}</span>
+                              </div>
+                              <h4 className="project-title">{item.title}</h4>
+                              <p className="project-desc">{item.shortDesc}</p>
+
+                              {/* Tech Stack */}
+                              <div className="project-tech-row">
+                                {item.tech.slice(0, 3).map((t, idx) => (
+                                  <span key={idx} className="tech-badge-item">
+                                    {t}
+                                  </span>
+                                ))}
+                                {item.tech.length > 3 && (
+                                  <span className="tech-badge-item more">+{item.tech.length - 3}</span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Card Footer */}
+                            <div className="project-card-footer">
+                              <span className="footer-action-text">Detail Produk &amp; Demo</span>
+                              <div className="footer-arrow-circle">
+                                <ArrowRight size={15} />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Stage Bottom Action Bar */}
+                      <div className="stage-footer-cta">
+                        <div className="stage-cta-buttons">
+                          <a href="/portfolio.html" className="btn-showcase-primary">
+                            <span>Lihat Seluruh Portofolio &amp; Produk Kami</span>
+                            <div className="btn-circle-icon">
+                              <ArrowRight size={15} />
+                            </div>
+                          </a>
+
+                          <a
+                            href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech,%20saya%20tertarik%20konsultasi%20layanan%20proyek."
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-showcase-secondary"
+                          >
+                            <MessageSquare size={16} className="text-red" />
+                            <span>Konsultasikan Kebutuhan Anda</span>
+                          </a>
+                        </div>
+                        <p className="stage-cta-guarantee">
+                          ✓ Garansi Pemeliharaan Sistem • ✓ 100% Hak Milik Source Code • ✓ Audit Google Lighthouse 95+
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
-          </div>
-
-          {/* 2. SHOWCASE PRODUCTS GRID (MAXIMAL 4 CARDS AS REQUESTED) */}
-          <div className="showcase-results-header">
-            <div className="results-info">
-              <span className="results-caption">
-                Menampilkan <strong>{displayedProjects.length} Proyek Unggulan</strong> untuk kategori{' '}
-                <span className="text-red font-bold">
-                  {servicesList.find((s) => s.id === selectedService)?.name}
-                </span>
-              </span>
-            </div>
-            <a href="/portfolio.html" className="quick-all-link">
-              <span>Buka Galeri Lengkap</span>
-              <ArrowRight size={14} />
-            </a>
-          </div>
-
-          <div key={animKey} className="showcase-cards-grid animate-murakami-grid">
-            {displayedProjects.map((item, index) => (
-              <div
-                key={`${item.id}-${animKey}`}
-                className="product-showcase-card"
-                style={{ animationDelay: `${index * 80}ms` }}
-                onClick={() => {
-                  window.location.href = `/portfolio-detail.html?slug=${encodeURIComponent(item.slug)}`;
-                }}
-              >
-                {/* Media Image with Hover Overlay */}
-                <div className="product-card-media">
-                  <img src={item.image} alt={item.title} className="product-card-img" loading="lazy" />
-                  <div className="product-card-overlay">
-                    <span className="product-overlay-pill">
-                      <span>Buka Studi Kasus</span>
-                      <ExternalLink size={14} />
-                    </span>
-                  </div>
-                  <span className="product-category-chip">{item.categoryLabel}</span>
-                  <span className="product-client-chip">{item.client}</span>
-                </div>
-
-                {/* Card Content */}
-                <div className="product-card-body">
-                  <div className="product-metric-pill">
-                    <Zap size={13} className="text-red" />
-                    <span>{item.metrics}</span>
-                  </div>
-
-                  <h3 className="product-title">{item.title}</h3>
-                  <p className="product-desc">{item.shortDesc}</p>
-
-                  {/* Tech Stack Pills */}
-                  <div className="product-tech-row">
-                    {item.tech.slice(0, 3).map((t, idx) => (
-                      <span key={idx} className="tech-badge-item">
-                        {t}
-                      </span>
-                    ))}
-                    {item.tech.length > 3 && (
-                      <span className="tech-badge-item more">+{item.tech.length - 3}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Card Action Footer */}
-                <div className="product-card-footer">
-                  <span className="footer-action-text">Eksplorasi Detail Produk</span>
-                  <div className="footer-arrow-circle">
-                    <ArrowRight size={16} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 3. PROMINENT BOTTOM CTA BUTTON */}
-          <div className="showcase-bottom-cta">
-            <div className="bottom-cta-inner">
-              <a href="/portfolio.html" className="btn-showcase-primary">
-                <span>Lihat Seluruh Portofolio &amp; Produk Kami</span>
-                <div className="btn-circle-icon">
-                  <ArrowRight size={15} />
-                </div>
-              </a>
-
-              <a
-                href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech,%20saya%20tertarik%20dengan%20layanan%20pembuatan%20website/aplikasi."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-showcase-secondary"
-              >
-                <MessageSquare size={16} className="text-red" />
-                <span>Konsultasikan Kebutuhan Anda</span>
-              </a>
-            </div>
-
-            <p className="bottom-cta-note">
-              ✓ Garansi Pemeliharaan Sistem • ✓ 100% Hak Milik Source Code • ✓ Audit Kecepatan Google Lighthouse 95+
-            </p>
           </div>
         </div>
       </section>
@@ -1204,7 +1399,7 @@ export default function Home() {
 
         .service-showcase-header {
           text-align: center;
-          max-width: 760px;
+          max-width: 820px;
           margin: 0 auto 36px auto;
         }
 
@@ -1218,228 +1413,398 @@ export default function Home() {
           margin: 0 auto;
         }
 
-        /* 1. Services Selector Grid (Murakami Interactive Dial/Tabs) */
-        .services-selector-grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 16px;
-          margin-bottom: 34px;
+        /* Top Murakami Shifter / Track Nav Bar */
+        .murakami-track-nav {
+          display: inline-flex;
+          align-items: center;
+          background: #f1f5f9;
+          padding: 6px;
+          border-radius: 100px;
+          gap: 6px;
+          margin-top: 24px;
+          border: 1px solid #e2e8f0;
+          max-width: 100%;
+          overflow-x: auto;
+          scrollbar-width: none;
         }
 
-        @media (max-width: 1100px) {
-          .services-selector-grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
+        .murakami-track-nav::-webkit-scrollbar {
+          display: none;
         }
 
-        @media (max-width: 768px) {
-          .services-selector-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        .service-select-card {
-          background: #fbfcfd;
-          border: 1.5px solid #e2e8f0;
-          border-radius: 20px;
-          padding: 22px 18px;
+        .murakami-track-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 9px 18px;
+          border-radius: 100px;
+          border: none;
+          background: transparent;
           cursor: pointer;
-          text-align: left;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          font-family: var(--font-heading);
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: #64748b;
+          white-space: nowrap;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .murakami-track-btn:hover {
+          color: #0f172a;
+          background: rgba(255, 255, 255, 0.6);
+        }
+
+        .murakami-track-btn.is-active {
+          background: #ffffff;
+          color: var(--primary);
+          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.15);
+        }
+
+        .track-num {
+          font-family: var(--font-heading);
+          font-size: 0.75rem;
+          font-weight: 800;
+          opacity: 0.7;
+          background: rgba(229, 62, 62, 0.08);
+          color: var(--primary);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+
+        .track-name {
+          letter-spacing: -0.01em;
+        }
+
+        .track-active-pill {
+          font-size: 0.65rem;
+          font-weight: 800;
+          background: var(--primary);
+          color: #ffffff;
+          padding: 1px 7px;
+          border-radius: 100px;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        /* ===== MAIN STAGE: SLIDING ACCORDION PANELS ===== */
+        .murakami-accordion-stage {
+          display: flex;
+          gap: 16px;
+          align-items: stretch;
+          width: 100%;
+          min-height: 680px;
+          margin-bottom: 20px;
+        }
+
+        .murakami-pillar {
+          border-radius: 26px;
+          overflow: hidden;
+          position: relative;
+          transition: flex 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                      border-color 0.3s ease,
+                      box-shadow 0.4s ease,
+                      background-color 0.3s ease;
+        }
+
+        /* Inactive Collapsed Pillar (Stands vertically and slides aside) */
+        .murakami-pillar.is-collapsed {
+          flex: 0 0 88px;
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          cursor: pointer;
           display: flex;
           flex-direction: column;
-          position: relative;
+          align-items: center;
+          justify-content: space-between;
+          padding: 24px 12px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
           user-select: none;
         }
 
-        .service-select-card:hover {
+        .murakami-pillar.is-collapsed:hover {
+          background: #fff9f9;
+          border-color: rgba(229, 62, 62, 0.45);
           transform: translateY(-4px);
-          border-color: rgba(229, 62, 62, 0.4);
-          background: #ffffff;
-          box-shadow: 0 10px 24px rgba(229, 62, 62, 0.08);
+          box-shadow: 0 12px 28px rgba(229, 62, 62, 0.1);
         }
 
-        .service-select-card.is-active {
-          background: #ffffff;
-          border-color: var(--primary);
-          border-width: 2px;
-          transform: translateY(-5px);
-          box-shadow: 0 14px 32px rgba(229, 62, 62, 0.16), 0 2px 6px rgba(0, 0, 0, 0.04);
-        }
-
-        .service-card-top {
+        .collapsed-pillar-content {
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 14px;
+          height: 100%;
+          width: 100%;
         }
 
-        .service-icon-bubble {
-          width: 44px;
-          height: 44px;
-          border-radius: 14px;
-          background: #fff1f2;
+        .pillar-top-num {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .pillar-index {
+          font-family: var(--font-heading);
+          font-size: 1.15rem;
+          font-weight: 900;
+          color: #94a3b8;
+          transition: color 0.25s ease;
+        }
+
+        .murakami-pillar.is-collapsed:hover .pillar-index {
           color: var(--primary);
+        }
+
+        .pillar-icon-circle {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          color: #475569;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+        }
+
+        .murakami-pillar.is-collapsed:hover .pillar-icon-circle {
+          background: var(--primary);
+          color: #ffffff;
+          border-color: var(--primary);
+          transform: scale(1.08);
+          box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+        }
+
+        .pillar-vertical-title-wrap {
+          flex-grow: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px 0;
+        }
+
+        .pillar-vertical-title {
+          writing-mode: vertical-rl;
+          transform: rotate(180deg);
+          font-family: var(--font-heading);
+          font-size: 1rem;
+          font-weight: 800;
+          color: #334155;
+          letter-spacing: 0.03em;
+          white-space: nowrap;
+          transition: color 0.25s ease;
+        }
+
+        .murakami-pillar.is-collapsed:hover .pillar-vertical-title {
+          color: var(--primary);
+        }
+
+        .pillar-bottom-info {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .pillar-count-tag {
+          font-size: 0.68rem;
+          font-weight: 700;
+          color: #64748b;
+          background: #f1f5f9;
+          padding: 3px 8px;
+          border-radius: 100px;
+          white-space: nowrap;
+        }
+
+        .pillar-click-hint {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          color: #94a3b8;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.25s ease;
         }
 
-        .service-select-card.is-active .service-icon-bubble {
+        .murakami-pillar.is-collapsed:hover .pillar-click-hint {
           background: var(--primary);
+          border-color: var(--primary);
           color: #ffffff;
-          box-shadow: 0 4px 12px rgba(229, 62, 62, 0.35);
+          transform: translateX(2px);
         }
 
-        .service-badge-pill {
-          font-size: 0.68rem;
+        /* Active Expanded Stage (Expands wide with portfolio inside) */
+        .murakami-pillar.is-expanded {
+          flex: 1 1 0;
+          background: #ffffff;
+          border: 2px solid rgba(229, 62, 62, 0.3);
+          border-radius: 28px;
+          box-shadow: 0 20px 50px rgba(229, 62, 62, 0.08), 0 4px 18px rgba(0, 0, 0, 0.03);
+          padding: 32px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+
+        .expanded-stage-content {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          animation: murakamiStageFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes murakamiStageFade {
+          from {
+            opacity: 0;
+            transform: translateX(16px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        /* Active Stage Header */
+        .stage-header-row {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          padding-bottom: 20px;
+          border-bottom: 1px solid #f1f5f9;
+          margin-bottom: 24px;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+
+        .stage-header-left {
+          max-width: 680px;
+        }
+
+        .stage-badge-line {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 8px;
+          flex-wrap: wrap;
+        }
+
+        .stage-num-badge {
+          font-family: var(--font-heading);
+          font-size: 0.8rem;
           font-weight: 800;
-          letter-spacing: 0.04em;
+          background: #fff1f2;
+          color: var(--primary);
+          padding: 3px 10px;
+          border-radius: 6px;
+        }
+
+        .stage-category-pill {
+          font-size: 0.72rem;
+          font-weight: 800;
           text-transform: uppercase;
+          letter-spacing: 0.04em;
           background: rgba(15, 23, 42, 0.04);
-          padding: 3px 8px;
+          padding: 3px 10px;
           border-radius: 100px;
         }
 
-        .service-card-title {
-          font-family: var(--font-heading);
-          font-size: 1.05rem;
-          font-weight: 800;
-          color: #0f172a;
-          margin-bottom: 4px;
-          line-height: 1.3;
-        }
-
-        .service-card-tagline {
-          font-size: 0.76rem;
-          font-weight: 700;
-          color: var(--primary);
-          margin-bottom: 8px;
-        }
-
-        .service-card-desc {
-          font-size: 0.8rem;
-          color: #64748b;
-          line-height: 1.45;
-          margin-bottom: 16px;
-          flex-grow: 1;
-        }
-
-        .service-card-status {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-top: 12px;
-          border-top: 1px dashed #e2e8f0;
-          font-size: 0.74rem;
-        }
-
-        .status-indicator {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-weight: 700;
-        }
-
-        .status-indicator.active {
-          color: var(--primary);
-        }
-
-        .status-indicator.inactive {
-          color: #94a3b8;
-        }
-
-        .status-dot-pulse {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: var(--primary);
-          box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7);
-          animation: statusPulse 1.8s infinite;
-        }
-
-        @keyframes statusPulse {
-          0% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7);
-          }
-          70% {
-            transform: scale(1);
-            box-shadow: 0 0 0 8px rgba(229, 62, 62, 0);
-          }
-          100% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(229, 62, 62, 0);
-          }
-        }
-
-        .service-card-count {
-          color: #64748b;
+        .stage-highlight-text {
+          font-size: 0.78rem;
           font-weight: 600;
+          color: #64748b;
         }
 
-        /* 2. Results Header */
-        .showcase-results-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 22px;
-          padding-bottom: 12px;
-          border-bottom: 1px solid #f1f5f9;
-          flex-wrap: wrap;
-          gap: 12px;
+        .stage-title {
+          font-family: var(--font-heading);
+          font-size: 1.55rem;
+          font-weight: 900;
+          color: #0f172a;
+          margin-bottom: 6px;
+          line-height: 1.25;
         }
 
-        .results-info {
+        .stage-desc {
           font-size: 0.9rem;
           color: #475569;
+          line-height: 1.55;
+          margin: 0;
         }
 
-        .quick-all-link {
-          display: inline-flex;
+        /* Prev / Next Shifter Controls */
+        .stage-nav-controls {
+          display: flex;
           align-items: center;
-          gap: 6px;
-          font-size: 0.86rem;
-          font-weight: 700;
-          color: var(--primary);
-          text-decoration: none;
-          transition: gap 0.2s ease;
+          gap: 10px;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          padding: 6px 12px;
+          border-radius: 100px;
+          align-self: flex-start;
         }
 
-        .quick-all-link:hover {
-          gap: 9px;
-          text-decoration: underline;
+        .stage-nav-btn {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: none;
+          background: #ffffff;
+          color: #0f172a;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+          transition: all 0.2s ease;
         }
 
-        /* 3. Showcase Cards Grid (Max 4 Cards) */
-        .showcase-cards-grid {
+        .stage-nav-btn:hover {
+          background: var(--primary);
+          color: #ffffff;
+          transform: scale(1.06);
+        }
+
+        .stage-nav-counter {
+          font-family: var(--font-heading);
+          font-size: 0.82rem;
+          font-weight: 800;
+          color: #0f172a;
+          padding: 0 4px;
+        }
+
+        .stage-nav-counter .counter-sep {
+          color: #94a3b8;
+          font-weight: 400;
+        }
+
+        /* 4 Cards Showcase Deck Grid */
+        .stage-cards-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
-          margin-bottom: 40px;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          margin-bottom: 28px;
         }
 
-        @media (max-width: 1200px) {
-          .showcase-cards-grid {
-            grid-template-columns: repeat(2, 1fr);
+        @media (min-width: 1400px) {
+          .stage-cards-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
           }
         }
 
-        @media (max-width: 640px) {
-          .showcase-cards-grid {
-            grid-template-columns: 1fr;
-          }
+        .animate-cards-glide .murakami-project-card {
+          animation: murakamiCardGlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        .animate-murakami-grid .product-showcase-card {
-          animation: murakamiSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        @keyframes murakamiSlideUp {
+        @keyframes murakamiCardGlide {
           from {
             opacity: 0;
-            transform: translateY(22px) scale(0.97);
+            transform: translateY(18px) scale(0.97);
           }
           to {
             opacity: 1;
@@ -1447,45 +1812,45 @@ export default function Home() {
           }
         }
 
-        .product-showcase-card {
+        .murakami-project-card {
           background: #ffffff;
           border: 1.5px solid #e2e8f0;
-          border-radius: 22px;
+          border-radius: 20px;
           overflow: hidden;
           cursor: pointer;
           transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
           display: flex;
           flex-direction: column;
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
           text-align: left;
           position: relative;
         }
 
-        .product-showcase-card:hover {
-          transform: translateY(-8px) scale(1.015);
+        .murakami-project-card:hover {
+          transform: translateY(-7px) scale(1.015);
           border-color: rgba(229, 62, 62, 0.45);
-          box-shadow: 0 20px 42px rgba(229, 62, 62, 0.12), 0 4px 10px rgba(0, 0, 0, 0.03);
+          box-shadow: 0 16px 36px rgba(229, 62, 62, 0.14), 0 3px 8px rgba(0, 0, 0, 0.04);
         }
 
-        .product-card-media {
+        .project-card-media {
           position: relative;
-          height: 190px;
+          height: 175px;
           overflow: hidden;
           background: #f1f5f9;
         }
 
-        .product-card-img {
+        .project-card-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .product-showcase-card:hover .product-card-img {
+        .murakami-project-card:hover .project-card-img {
           transform: scale(1.08);
         }
 
-        .product-card-overlay {
+        .project-card-overlay {
           position: absolute;
           inset: 0;
           background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.65) 100%);
@@ -1496,117 +1861,117 @@ export default function Home() {
           transition: opacity 0.3s ease;
         }
 
-        .product-showcase-card:hover .product-card-overlay {
+        .murakami-project-card:hover .project-card-overlay {
           opacity: 1;
         }
 
-        .product-overlay-pill {
+        .project-overlay-pill {
           background: rgba(255, 255, 255, 0.96);
           color: #0f172a;
-          padding: 8px 18px;
+          padding: 8px 16px;
           border-radius: 100px;
-          font-size: 0.82rem;
+          font-size: 0.8rem;
           font-weight: 800;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
           box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
           transform: translateY(6px);
           transition: transform 0.3s ease;
         }
 
-        .product-showcase-card:hover .product-overlay-pill {
+        .murakami-project-card:hover .project-overlay-pill {
           transform: translateY(0);
         }
 
-        .product-category-chip {
+        .project-category-chip {
           position: absolute;
-          top: 12px;
-          left: 12px;
-          background: rgba(255, 255, 255, 0.92);
+          top: 10px;
+          left: 10px;
+          background: rgba(255, 255, 255, 0.94);
           backdrop-filter: blur(6px);
           color: var(--primary);
-          font-size: 0.68rem;
+          font-size: 0.65rem;
           font-weight: 800;
-          padding: 3px 10px;
+          padding: 3px 9px;
           border-radius: 100px;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.04em;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .product-client-chip {
+        .project-client-chip {
           position: absolute;
-          bottom: 12px;
-          left: 12px;
-          background: rgba(15, 23, 42, 0.75);
+          bottom: 10px;
+          left: 10px;
+          background: rgba(15, 23, 42, 0.78);
           backdrop-filter: blur(6px);
           color: #ffffff;
-          font-size: 0.68rem;
+          font-size: 0.65rem;
           font-weight: 600;
-          padding: 3px 10px;
-          border-radius: 6px;
+          padding: 2px 8px;
+          border-radius: 5px;
         }
 
-        .product-card-body {
-          padding: 20px;
+        .project-card-body {
+          padding: 18px;
           flex-grow: 1;
           display: flex;
           flex-direction: column;
         }
 
-        .product-metric-pill {
+        .project-metric-pill {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          gap: 5px;
           background: #fff1f2;
           color: #b91c1c;
-          font-size: 0.72rem;
+          font-size: 0.7rem;
           font-weight: 700;
-          padding: 3px 10px;
-          border-radius: 6px;
-          margin-bottom: 10px;
+          padding: 2px 9px;
+          border-radius: 5px;
+          margin-bottom: 8px;
           align-self: flex-start;
         }
 
-        .product-title {
+        .project-title {
           font-family: var(--font-heading);
-          font-size: 1.1rem;
+          font-size: 1.05rem;
           font-weight: 800;
           color: #0f172a;
-          margin-bottom: 8px;
+          margin-bottom: 6px;
           line-height: 1.35;
           transition: color 0.2s ease;
         }
 
-        .product-showcase-card:hover .product-title {
+        .murakami-project-card:hover .project-title {
           color: var(--primary);
         }
 
-        .product-desc {
-          font-size: 0.825rem;
+        .project-desc {
+          font-size: 0.8rem;
           color: #64748b;
           line-height: 1.5;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          margin: 0 0 14px 0;
+          margin: 0 0 12px 0;
           flex-grow: 1;
         }
 
-        .product-tech-row {
+        .project-tech-row {
           display: flex;
-          gap: 6px;
+          gap: 5px;
           flex-wrap: wrap;
         }
 
         .tech-badge-item {
           background: #f1f5f9;
           color: #475569;
-          font-size: 0.7rem;
+          font-size: 0.68rem;
           font-weight: 600;
-          padding: 2px 8px;
+          padding: 2px 7px;
           border-radius: 4px;
         }
 
@@ -1616,8 +1981,8 @@ export default function Home() {
           font-weight: 700;
         }
 
-        .product-card-footer {
-          padding: 14px 20px;
+        .project-card-footer {
+          padding: 12px 18px;
           border-top: 1px solid #f1f5f9;
           display: flex;
           align-items: center;
@@ -1626,19 +1991,19 @@ export default function Home() {
         }
 
         .footer-action-text {
-          font-size: 0.8rem;
+          font-size: 0.78rem;
           font-weight: 700;
           color: #475569;
           transition: color 0.2s ease;
         }
 
-        .product-showcase-card:hover .footer-action-text {
+        .murakami-project-card:hover .footer-action-text {
           color: var(--primary);
         }
 
         .footer-arrow-circle {
-          width: 34px;
-          height: 34px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           background: #ffffff;
           border: 1px solid #e2e8f0;
@@ -1649,26 +2014,28 @@ export default function Home() {
           transition: all 0.25s ease;
         }
 
-        .product-showcase-card:hover .footer-arrow-circle {
+        .murakami-project-card:hover .footer-arrow-circle {
           background: var(--primary);
           border-color: var(--primary);
           color: #ffffff;
           transform: rotate(-35deg);
         }
 
-        /* 4. Bottom Prominent CTA */
-        .showcase-bottom-cta {
-          margin-top: 10px;
+        /* Stage Bottom Action Bar */
+        .stage-footer-cta {
+          margin-top: auto;
+          padding-top: 16px;
+          border-top: 1px solid #f1f5f9;
           text-align: center;
         }
 
-        .bottom-cta-inner {
+        .stage-cta-buttons {
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 16px;
           flex-wrap: wrap;
-          margin-bottom: 14px;
+          margin-bottom: 12px;
         }
 
         .btn-showcase-primary {
@@ -1678,10 +2045,10 @@ export default function Home() {
           background: var(--primary);
           color: #ffffff;
           font-family: var(--font-heading);
-          font-size: 0.975rem;
+          font-size: 0.95rem;
           font-weight: 800;
           text-decoration: none;
-          padding: 14px 28px;
+          padding: 13px 26px;
           border-radius: 100px;
           box-shadow: 0 8px 24px rgba(229, 62, 62, 0.32);
           transition: all 0.25s ease;
@@ -1716,10 +2083,10 @@ export default function Home() {
           border: 1.5px solid #e2e8f0;
           color: #0f172a;
           font-family: var(--font-heading);
-          font-size: 0.95rem;
+          font-size: 0.92rem;
           font-weight: 700;
           text-decoration: none;
-          padding: 13px 24px;
+          padding: 12px 22px;
           border-radius: 100px;
           transition: all 0.25s ease;
         }
@@ -1731,10 +2098,53 @@ export default function Home() {
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
 
-        .bottom-cta-note {
-          font-size: 0.8rem;
+        .stage-cta-guarantee {
+          font-size: 0.78rem;
           color: #94a3b8;
           font-weight: 600;
+          margin: 0;
+        }
+
+        /* ===== Mobile Responsive Adaptation (< 992px) ===== */
+        @media (max-width: 991px) {
+          .murakami-accordion-stage {
+            display: block;
+            min-height: auto;
+          }
+
+          .murakami-pillar.is-collapsed {
+            display: none;
+          }
+
+          .murakami-pillar.is-expanded {
+            padding: 20px 16px;
+            border-radius: 22px;
+          }
+
+          .stage-header-row {
+            flex-direction: column;
+            gap: 14px;
+          }
+
+          .stage-nav-controls {
+            align-self: flex-start;
+          }
+
+          .stage-cards-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .stage-cta-buttons {
+            flex-direction: column;
+            width: 100%;
+          }
+
+          .btn-showcase-primary,
+          .btn-showcase-secondary {
+            width: 100%;
+            justify-content: center;
+          }
         }
 
         /* ===== 4. Services & Packages ===== */
