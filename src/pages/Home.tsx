@@ -16,6 +16,12 @@ import {
   Heart,
   Quote,
   MessageSquare,
+  Globe,
+  Smartphone,
+  Cpu,
+  Palette,
+  Layers,
+  ExternalLink,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -28,8 +34,10 @@ export default function Home() {
   const [faqRef, faqVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  // Portfolio filter state
-  const [portfolioFilter, setPortfolioFilter] = useState<'Semua' | 'E-Commerce' | 'Sistem Web' | 'Mobile App'>('Semua');
+  // Service-First Interactive Showcase state
+  type ServiceType = 'all' | 'web' | 'erp' | 'mobile' | 'uiux';
+  const [selectedService, setSelectedService] = useState<ServiceType>('all');
+  const [animKey, setAnimKey] = useState(0);
 
   // Testimonial slider state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -47,11 +55,66 @@ export default function Home() {
   const [formMessage, setFormMessage] = useState('');
   const [formSent, setFormSent] = useState(false);
 
-  // Data Collections
+  // Berdikari Services Collection (Initial View)
+  const servicesList = [
+    {
+      id: 'all' as ServiceType,
+      name: 'Semua Layanan',
+      shortName: 'Semua Bidang',
+      tagline: 'Katalog Portofolio Terpadu',
+      desc: 'Eksplorasi seluruh karya terbaik dari website modern, mobile app, hingga sistem automasi ERP.',
+      icon: <Layers size={22} />,
+      badge: 'Solusi Lengkap',
+      badgeColor: '#e53e3e',
+    },
+    {
+      id: 'web' as ServiceType,
+      name: 'Website & E-Commerce',
+      shortName: 'Website Kustom',
+      tagline: 'Website Modern & Toko Online',
+      desc: 'Website ultra-responsif, SEO Google teroptimasi, dan integrasi payment gateway otomatis.',
+      icon: <Globe size={22} />,
+      badge: 'Paling Populer',
+      badgeColor: '#e53e3e',
+    },
+    {
+      id: 'erp' as ServiceType,
+      name: 'Sistem Informasi & ERP',
+      shortName: 'Sistem ERP',
+      tagline: 'Otomasi & Manajemen Terpusat',
+      desc: 'Platform ERP pergudangan, sistem antrean, dan manajemen operasional bisnis real-time.',
+      icon: <Cpu size={22} />,
+      badge: 'Efisiensi Tinggi',
+      badgeColor: '#0284c7',
+    },
+    {
+      id: 'mobile' as ServiceType,
+      name: 'Mobile Apps Android & iOS',
+      shortName: 'Mobile App',
+      tagline: 'Aplikasi Smartphone Modern',
+      desc: 'Aplikasi native & Flutter dengan login biometrik, pembayaran QRIS, dan UI responsif.',
+      icon: <Smartphone size={22} />,
+      badge: 'Multiplatform',
+      badgeColor: '#16a34a',
+    },
+    {
+      id: 'uiux' as ServiceType,
+      name: 'UI/UX Design & Prototype',
+      shortName: 'Desain UI/UX',
+      tagline: 'Riset & Desain Antarmuka',
+      desc: 'Prototipe interaktif Figma, rancangan arsitektur informasi, dan sistem desain standar industri.',
+      icon: <Palette size={22} />,
+      badge: 'Eksklusif Figma',
+      badgeColor: '#9333ea',
+    },
+  ];
+
+  // Data Collections with Service References
   const allProjects = [
     {
       id: 1,
       title: 'Bloom & Wild Flora E-Commerce',
+      serviceType: 'web',
       category: 'E-Commerce',
       categoryLabel: 'E-Commerce Platform',
       image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80',
@@ -63,9 +126,10 @@ export default function Home() {
     },
     {
       id: 2,
-      title: 'Northline Studio Cloud & Logistics',
+      title: 'Northline Studio Cloud & Logistics ERP',
+      serviceType: 'erp',
       category: 'Sistem Web',
-      categoryLabel: 'Creative Agency & ERP',
+      categoryLabel: 'Sistem ERP Pergudangan',
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
       shortDesc: 'Sistem ERP terpadu untuk pencatatan pergudangan multi-cabang, inventaris barcode, dan pelaporan keuangan konsolidasi.',
       client: 'Northline Creative Group',
@@ -75,7 +139,8 @@ export default function Home() {
     },
     {
       id: 3,
-      title: 'Pure Balance Fintech & E-Wallet',
+      title: 'Pure Balance Fintech & E-Wallet App',
+      serviceType: 'mobile',
       category: 'Mobile App',
       categoryLabel: 'Fintech & Mobile App',
       image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80',
@@ -88,6 +153,7 @@ export default function Home() {
     {
       id: 4,
       title: 'Medika Farmasi Resep Digital',
+      serviceType: 'erp',
       category: 'Sistem Web',
       categoryLabel: 'Portal Kesehatan Digital',
       image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80',
@@ -97,11 +163,40 @@ export default function Home() {
       metrics: 'Antrean Berkurang 70% • Keamanan Data Medis',
       slug: 'medika-farmasi-digital',
     },
+    {
+      id: 5,
+      title: 'Kriya Nusantara Craft Marketplace',
+      serviceType: 'web',
+      category: 'E-Commerce',
+      categoryLabel: 'Marketplace E-Commerce',
+      image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Marketplace produk kerajinan kriya nusantara dengan integrasi kurir instan, payment gateway, dan manajemen toko multi-vendor.',
+      client: 'PT Kriya Digital Nusantara',
+      tech: ['Next.js', 'PostgreSQL', 'Midtrans Gateway', 'Tailwind CSS'],
+      metrics: '12.000+ Transaksi • Rating Kepuasan 4.9★',
+      slug: 'bloom-wild-flora',
+    },
+    {
+      id: 6,
+      title: 'Aura Brand Design System & UI Kit',
+      serviceType: 'uiux',
+      category: 'UI/UX Design',
+      categoryLabel: 'Design System & UI Kit',
+      image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80',
+      shortDesc: 'Design system menyeluruh dengan 80+ komponen Figma interaktif, dokumentasi token desain, dan prototipe responsif standar perbankan.',
+      client: 'Aura Media Kreasi',
+      tech: ['Figma Pro', 'Design Tokens', 'Storybook', 'WCAG AAA'],
+      metrics: 'Dipakai 8 Tim Produk • Aksesibilitas Teruji',
+      slug: 'northline-studio-cloud',
+    },
   ];
 
-  const filteredProjects = portfolioFilter === 'Semua'
+  const filteredProjects = selectedService === 'all'
     ? allProjects
-    : allProjects.filter((p) => p.category === portfolioFilter);
+    : allProjects.filter((p) => p.serviceType === selectedService || p.category === selectedService);
+
+  // Maximum 4 cards as requested!
+  const displayedProjects = filteredProjects.slice(0, 4);
 
   // News / Insights (Simplified, High-Value, Non-media blog)
   const newsList = [
@@ -292,79 +387,179 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 3. FEATURED WORK / PORTOFOLIO UNGGULAN (Styled like reference image) */}
+      {/* 3. SERVICE-FIRST INTERACTIVE PORTFOLIO SHOWCASE (Inspired by Murakami Interaction) */}
       <section
         id="portfolio"
         ref={portfolioRef as React.RefObject<HTMLDivElement>}
         className={`section featured-work-section reveal reveal-fade ${portfolioVisible ? 'in-view' : ''}`}
       >
         <div className="container">
-          <div className="split-header-row">
-            <div className="split-header-left">
-              <span className="badge-tag-pill">HASIL KARYA PILIHAN</span>
-              <h2 className="section-heading-bold">Koleksi Proyek Terbaru</h2>
-              <p className="section-subtext">
-                Bukan sekadar baris kode — setiap produk kami rancang dengan presisi untuk memecahkan masalah nyata dan memberikan pertumbuhan bisnis terukur bagi mitra kami.
-              </p>
-              <div className="header-action-wrap">
-                <a href="/portfolio.html" className="btn-pill-subtle">
-                  <span>Lihat Semua Portofolio</span>
-                  <ArrowRight size={15} />
-                </a>
-              </div>
+          {/* Header Row */}
+          <div className="service-showcase-header">
+            <div className="showcase-badge-wrap">
+              <span className="badge-tag-pill">
+                <Sparkles size={13} className="text-red inline-icon" />
+                LAYANAN &amp; PORTOFOLIO UNGGULAN
+              </span>
             </div>
-
-            {/* Interactive Category Filter Pills */}
-            <div className="split-header-right">
-              <div className="filter-pill-group">
-                {(['Semua', 'E-Commerce', 'Sistem Web', 'Mobile App'] as const).map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    className={`filter-btn-pill ${portfolioFilter === cat ? 'active' : ''}`}
-                    onClick={() => setPortfolioFilter(cat)}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <h2 className="section-heading-bold">
+              Layanan Berdikari &amp; <span className="hero-cursive-highlight">Karya Nyata</span>
+            </h2>
+            <p className="section-subtext">
+              Pilih bidang layanan yang Anda butuhkan di bawah ini untuk melihat contoh produk dan studi kasus nyata yang telah kami bangun dengan standar mutu industri.
+            </p>
           </div>
 
-          {/* 3 Mockup Preview Cards Grid (Summary) */}
-          <div className="work-cards-grid">
-            {filteredProjects.slice(0, 3).map((item) => (
+          {/* 1. INITIAL VIEW: Interactive Service Cards / Tabs */}
+          <div className="services-selector-grid">
+            {servicesList.map((service) => {
+              const isActive = selectedService === service.id;
+              return (
+                <div
+                  key={service.id}
+                  className={`service-select-card ${isActive ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setSelectedService(service.id);
+                    setAnimKey((prev) => prev + 1);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Pilih layanan ${service.name}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setSelectedService(service.id);
+                      setAnimKey((prev) => prev + 1);
+                    }
+                  }}
+                >
+                  <div className="service-card-top">
+                    <div className="service-icon-bubble">
+                      {service.icon}
+                    </div>
+                    <span className="service-badge-pill" style={{ color: service.badgeColor }}>
+                      {service.badge}
+                    </span>
+                  </div>
+
+                  <h3 className="service-card-title">{service.name}</h3>
+                  <p className="service-card-tagline">{service.tagline}</p>
+                  <p className="service-card-desc">{service.desc}</p>
+
+                  <div className="service-card-status">
+                    {isActive ? (
+                      <span className="status-indicator active">
+                        <span className="status-dot-pulse"></span>
+                        Sedang Menampilkan
+                      </span>
+                    ) : (
+                      <span className="status-indicator inactive">
+                        Klik untuk Melihat
+                      </span>
+                    )}
+                    <span className="service-card-count">{service.shortName}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 2. SHOWCASE PRODUCTS GRID (MAXIMAL 4 CARDS AS REQUESTED) */}
+          <div className="showcase-results-header">
+            <div className="results-info">
+              <span className="results-caption">
+                Menampilkan <strong>{displayedProjects.length} Proyek Unggulan</strong> untuk kategori{' '}
+                <span className="text-red font-bold">
+                  {servicesList.find((s) => s.id === selectedService)?.name}
+                </span>
+              </span>
+            </div>
+            <a href="/portfolio.html" className="quick-all-link">
+              <span>Buka Galeri Lengkap</span>
+              <ArrowRight size={14} />
+            </a>
+          </div>
+
+          <div key={animKey} className="showcase-cards-grid animate-murakami-grid">
+            {displayedProjects.map((item, index) => (
               <div
-                key={item.id}
-                className="work-preview-card"
+                key={`${item.id}-${animKey}`}
+                className="product-showcase-card"
+                style={{ animationDelay: `${index * 80}ms` }}
                 onClick={() => {
                   window.location.href = `/portfolio-detail.html?slug=${encodeURIComponent(item.slug)}`;
                 }}
               >
-                <div className="work-card-media">
-                  <img src={item.image} alt={item.title} className="work-card-img" />
-                  <div className="work-card-overlay">
-                    <span className="work-view-label">Lihat Studi Kasus</span>
+                {/* Media Image with Hover Overlay */}
+                <div className="product-card-media">
+                  <img src={item.image} alt={item.title} className="product-card-img" loading="lazy" />
+                  <div className="product-card-overlay">
+                    <span className="product-overlay-pill">
+                      <span>Buka Studi Kasus</span>
+                      <ExternalLink size={14} />
+                    </span>
                   </div>
-                  <span className="work-category-badge">{item.categoryLabel}</span>
+                  <span className="product-category-chip">{item.categoryLabel}</span>
+                  <span className="product-client-chip">{item.client}</span>
                 </div>
 
-                <div className="work-card-footer">
-                  <div className="work-card-titles">
-                    <h3 className="work-title">{item.title}</h3>
-                    <p className="work-short-desc">{item.shortDesc}</p>
+                {/* Card Content */}
+                <div className="product-card-body">
+                  <div className="product-metric-pill">
+                    <Zap size={13} className="text-red" />
+                    <span>{item.metrics}</span>
                   </div>
-                  <a
-                    href={`/portfolio-detail.html?slug=${encodeURIComponent(item.slug)}`}
-                    className="work-arrow-circle"
-                    aria-label={`Buka ${item.title}`}
-                    onClick={(e) => e.stopPropagation()}
-                  >
+
+                  <h3 className="product-title">{item.title}</h3>
+                  <p className="product-desc">{item.shortDesc}</p>
+
+                  {/* Tech Stack Pills */}
+                  <div className="product-tech-row">
+                    {item.tech.slice(0, 3).map((t, idx) => (
+                      <span key={idx} className="tech-badge-item">
+                        {t}
+                      </span>
+                    ))}
+                    {item.tech.length > 3 && (
+                      <span className="tech-badge-item more">+{item.tech.length - 3}</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Card Action Footer */}
+                <div className="product-card-footer">
+                  <span className="footer-action-text">Eksplorasi Detail Produk</span>
+                  <div className="footer-arrow-circle">
                     <ArrowRight size={16} />
-                  </a>
+                  </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* 3. PROMINENT BOTTOM CTA BUTTON */}
+          <div className="showcase-bottom-cta">
+            <div className="bottom-cta-inner">
+              <a href="/portfolio.html" className="btn-showcase-primary">
+                <span>Lihat Seluruh Portofolio &amp; Produk Kami</span>
+                <div className="btn-circle-icon">
+                  <ArrowRight size={15} />
+                </div>
+              </a>
+
+              <a
+                href="https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech,%20saya%20tertarik%20dengan%20layanan%20pembuatan%20website/aplikasi."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-showcase-secondary"
+              >
+                <MessageSquare size={16} className="text-red" />
+                <span>Konsultasikan Kebutuhan Anda</span>
+              </a>
+            </div>
+
+            <p className="bottom-cta-note">
+              ✓ Garansi Pemeliharaan Sistem • ✓ 100% Hak Milik Source Code • ✓ Audit Kecepatan Google Lighthouse 95+
+            </p>
           </div>
         </div>
       </section>
@@ -1000,112 +1195,300 @@ export default function Home() {
           margin-left: 48px;
         }
 
-        /* ===== 3. Featured Work / Portofolio ===== */
+        /* ===== 3. Service-First Interactive Portfolio Showcase ===== */
         .featured-work-section {
           background: #ffffff;
-          padding: 90px 0;
+          padding: 85px 0 95px 0;
+          position: relative;
         }
 
-        .split-header-row {
+        .service-showcase-header {
+          text-align: center;
+          max-width: 760px;
+          margin: 0 auto 36px auto;
+        }
+
+        .showcase-badge-wrap {
           display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          margin-bottom: 44px;
-          flex-wrap: wrap;
-          gap: 24px;
+          justify-content: center;
+          margin-bottom: 8px;
         }
 
-        .split-header-left {
-          max-width: 600px;
-          text-align: left;
+        .service-showcase-header .section-subtext {
+          margin: 0 auto;
         }
 
-        .header-action-wrap {
-          margin-top: 20px;
-        }
-
-        .filter-pill-group {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-        }
-
-        .filter-btn-pill {
-          background: #ffffff;
-          border: 1.5px solid #e2e8f0;
-          color: #475569;
-          padding: 8px 18px;
-          border-radius: 100px;
-          font-size: 0.85rem;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .filter-btn-pill:hover {
-          border-color: var(--primary);
-          color: var(--primary);
-        }
-
-        .filter-btn-pill.active {
-          background: var(--primary);
-          border-color: var(--primary);
-          color: #ffffff;
-          box-shadow: 0 4px 12px rgba(229, 62, 62, 0.28);
-        }
-
-        .work-cards-grid {
+        /* 1. Services Selector Grid (Murakami Interactive Dial/Tabs) */
+        .services-selector-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 28px;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 16px;
+          margin-bottom: 34px;
         }
 
-        @media (max-width: 991px) {
-          .work-cards-grid {
+        @media (max-width: 1100px) {
+          .services-selector-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .services-selector-grid {
             grid-template-columns: 1fr;
           }
         }
 
-        .work-preview-card {
+        .service-select-card {
+          background: #fbfcfd;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 20px;
+          padding: 22px 18px;
+          cursor: pointer;
+          text-align: left;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          user-select: none;
+        }
+
+        .service-select-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(229, 62, 62, 0.4);
           background: #ffffff;
-          border: 1px solid #e2e8f0;
-          border-radius: 24px;
+          box-shadow: 0 10px 24px rgba(229, 62, 62, 0.08);
+        }
+
+        .service-select-card.is-active {
+          background: #ffffff;
+          border-color: var(--primary);
+          border-width: 2px;
+          transform: translateY(-5px);
+          box-shadow: 0 14px 32px rgba(229, 62, 62, 0.16), 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .service-card-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 14px;
+        }
+
+        .service-icon-bubble {
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+          background: #fff1f2;
+          color: var(--primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.25s ease;
+        }
+
+        .service-select-card.is-active .service-icon-bubble {
+          background: var(--primary);
+          color: #ffffff;
+          box-shadow: 0 4px 12px rgba(229, 62, 62, 0.35);
+        }
+
+        .service-badge-pill {
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          background: rgba(15, 23, 42, 0.04);
+          padding: 3px 8px;
+          border-radius: 100px;
+        }
+
+        .service-card-title {
+          font-family: var(--font-heading);
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #0f172a;
+          margin-bottom: 4px;
+          line-height: 1.3;
+        }
+
+        .service-card-tagline {
+          font-size: 0.76rem;
+          font-weight: 700;
+          color: var(--primary);
+          margin-bottom: 8px;
+        }
+
+        .service-card-desc {
+          font-size: 0.8rem;
+          color: #64748b;
+          line-height: 1.45;
+          margin-bottom: 16px;
+          flex-grow: 1;
+        }
+
+        .service-card-status {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 12px;
+          border-top: 1px dashed #e2e8f0;
+          font-size: 0.74rem;
+        }
+
+        .status-indicator {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-weight: 700;
+        }
+
+        .status-indicator.active {
+          color: var(--primary);
+        }
+
+        .status-indicator.inactive {
+          color: #94a3b8;
+        }
+
+        .status-dot-pulse {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--primary);
+          box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7);
+          animation: statusPulse 1.8s infinite;
+        }
+
+        @keyframes statusPulse {
+          0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7);
+          }
+          70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 8px rgba(229, 62, 62, 0);
+          }
+          100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(229, 62, 62, 0);
+          }
+        }
+
+        .service-card-count {
+          color: #64748b;
+          font-weight: 600;
+        }
+
+        /* 2. Results Header */
+        .showcase-results-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 22px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid #f1f5f9;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .results-info {
+          font-size: 0.9rem;
+          color: #475569;
+        }
+
+        .quick-all-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.86rem;
+          font-weight: 700;
+          color: var(--primary);
+          text-decoration: none;
+          transition: gap 0.2s ease;
+        }
+
+        .quick-all-link:hover {
+          gap: 9px;
+          text-decoration: underline;
+        }
+
+        /* 3. Showcase Cards Grid (Max 4 Cards) */
+        .showcase-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
+          margin-bottom: 40px;
+        }
+
+        @media (max-width: 1200px) {
+          .showcase-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 640px) {
+          .showcase-cards-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .animate-murakami-grid .product-showcase-card {
+          animation: murakamiSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes murakamiSlideUp {
+          from {
+            opacity: 0;
+            transform: translateY(22px) scale(0.97);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        .product-showcase-card {
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 22px;
           overflow: hidden;
           cursor: pointer;
           transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
           display: flex;
           flex-direction: column;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
-        }
-
-        .work-preview-card:hover {
-          transform: translateY(-8px);
-          border-color: rgba(229, 62, 62, 0.35);
-          box-shadow: 0 20px 40px rgba(229, 62, 62, 0.1);
-        }
-
-        .work-card-media {
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+          text-align: left;
           position: relative;
-          height: 230px;
+        }
+
+        .product-showcase-card:hover {
+          transform: translateY(-8px) scale(1.015);
+          border-color: rgba(229, 62, 62, 0.45);
+          box-shadow: 0 20px 42px rgba(229, 62, 62, 0.12), 0 4px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .product-card-media {
+          position: relative;
+          height: 190px;
           overflow: hidden;
           background: #f1f5f9;
         }
 
-        .work-card-img {
+        .product-card-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.6s ease;
+          transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .work-preview-card:hover .work-card-img {
-          transform: scale(1.06);
+        .product-showcase-card:hover .product-card-img {
+          transform: scale(1.08);
         }
 
-        .work-card-overlay {
+        .product-card-overlay {
           position: absolute;
           inset: 0;
-          background: rgba(15, 23, 42, 0.4);
+          background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.65) 100%);
           opacity: 0;
           display: flex;
           align-items: center;
@@ -1113,83 +1496,245 @@ export default function Home() {
           transition: opacity 0.3s ease;
         }
 
-        .work-preview-card:hover .work-card-overlay {
+        .product-showcase-card:hover .product-card-overlay {
           opacity: 1;
         }
 
-        .work-view-label {
-          background: rgba(255, 255, 255, 0.95);
+        .product-overlay-pill {
+          background: rgba(255, 255, 255, 0.96);
           color: #0f172a;
           padding: 8px 18px;
           border-radius: 100px;
           font-size: 0.82rem;
           font-weight: 800;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+          transform: translateY(6px);
+          transition: transform 0.3s ease;
         }
 
-        .work-category-badge {
+        .product-showcase-card:hover .product-overlay-pill {
+          transform: translateY(0);
+        }
+
+        .product-category-chip {
           position: absolute;
-          top: 14px;
-          left: 14px;
+          top: 12px;
+          left: 12px;
           background: rgba(255, 255, 255, 0.92);
           backdrop-filter: blur(6px);
           color: var(--primary);
-          font-size: 0.72rem;
+          font-size: 0.68rem;
           font-weight: 800;
-          padding: 4px 12px;
+          padding: 3px 10px;
           border-radius: 100px;
           text-transform: uppercase;
+          letter-spacing: 0.05em;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .work-card-footer {
-          padding: 24px;
+        .product-client-chip {
+          position: absolute;
+          bottom: 12px;
+          left: 12px;
+          background: rgba(15, 23, 42, 0.75);
+          backdrop-filter: blur(6px);
+          color: #ffffff;
+          font-size: 0.68rem;
+          font-weight: 600;
+          padding: 3px 10px;
+          border-radius: 6px;
+        }
+
+        .product-card-body {
+          padding: 20px;
+          flex-grow: 1;
           display: flex;
+          flex-direction: column;
+        }
+
+        .product-metric-pill {
+          display: inline-flex;
           align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-          text-align: left;
+          gap: 6px;
+          background: #fff1f2;
+          color: #b91c1c;
+          font-size: 0.72rem;
+          font-weight: 700;
+          padding: 3px 10px;
+          border-radius: 6px;
+          margin-bottom: 10px;
+          align-self: flex-start;
         }
 
-        .work-card-titles {
-          flex: 1;
-        }
-
-        .work-title {
-          font-size: 1.18rem;
+        .product-title {
+          font-family: var(--font-heading);
+          font-size: 1.1rem;
           font-weight: 800;
           color: #0f172a;
-          margin-bottom: 6px;
+          margin-bottom: 8px;
+          line-height: 1.35;
+          transition: color 0.2s ease;
         }
 
-        .work-short-desc {
-          font-size: 0.84rem;
+        .product-showcase-card:hover .product-title {
+          color: var(--primary);
+        }
+
+        .product-desc {
+          font-size: 0.825rem;
           color: #64748b;
           line-height: 1.5;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          margin: 0;
+          margin: 0 0 14px 0;
+          flex-grow: 1;
         }
 
-        .work-arrow-circle {
-          width: 40px;
-          height: 40px;
+        .product-tech-row {
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+        }
+
+        .tech-badge-item {
+          background: #f1f5f9;
+          color: #475569;
+          font-size: 0.7rem;
+          font-weight: 600;
+          padding: 2px 8px;
+          border-radius: 4px;
+        }
+
+        .tech-badge-item.more {
+          background: #e2e8f0;
+          color: #334155;
+          font-weight: 700;
+        }
+
+        .product-card-footer {
+          padding: 14px 20px;
+          border-top: 1px solid #f1f5f9;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #fafbfc;
+        }
+
+        .footer-action-text {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #475569;
+          transition: color 0.2s ease;
+        }
+
+        .product-showcase-card:hover .footer-action-text {
+          color: var(--primary);
+        }
+
+        .footer-arrow-circle {
+          width: 34px;
+          height: 34px;
           border-radius: 50%;
-          background: #fff1f2;
-          border: 1px solid #fecdd3;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           color: var(--primary);
           display: flex;
           align-items: center;
           justify-content: center;
-          flex-shrink: 0;
           transition: all 0.25s ease;
-          cursor: pointer;
         }
 
-        .work-preview-card:hover .work-arrow-circle {
+        .product-showcase-card:hover .footer-arrow-circle {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: #ffffff;
+          transform: rotate(-35deg);
+        }
+
+        /* 4. Bottom Prominent CTA */
+        .showcase-bottom-cta {
+          margin-top: 10px;
+          text-align: center;
+        }
+
+        .bottom-cta-inner {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          flex-wrap: wrap;
+          margin-bottom: 14px;
+        }
+
+        .btn-showcase-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
           background: var(--primary);
           color: #ffffff;
-          transform: rotate(-30deg);
+          font-family: var(--font-heading);
+          font-size: 0.975rem;
+          font-weight: 800;
+          text-decoration: none;
+          padding: 14px 28px;
+          border-radius: 100px;
+          box-shadow: 0 8px 24px rgba(229, 62, 62, 0.32);
+          transition: all 0.25s ease;
+        }
+
+        .btn-showcase-primary:hover {
+          background: #c53030;
+          transform: translateY(-2px);
+          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.42);
+        }
+
+        .btn-showcase-primary .btn-circle-icon {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.25s ease;
+        }
+
+        .btn-showcase-primary:hover .btn-circle-icon {
+          transform: translateX(3px);
+        }
+
+        .btn-showcase-secondary {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          color: #0f172a;
+          font-family: var(--font-heading);
+          font-size: 0.95rem;
+          font-weight: 700;
+          text-decoration: none;
+          padding: 13px 24px;
+          border-radius: 100px;
+          transition: all 0.25s ease;
+        }
+
+        .btn-showcase-secondary:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .bottom-cta-note {
+          font-size: 0.8rem;
+          color: #94a3b8;
+          font-weight: 600;
         }
 
         /* ===== 4. Services & Packages ===== */
