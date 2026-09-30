@@ -16,8 +16,6 @@ import {
   Heart,
   Quote,
   MessageSquare,
-  X,
-  ExternalLink,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -30,12 +28,8 @@ export default function Home() {
   const [faqRef, faqVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  // Portfolio filter & modal state
+  // Portfolio filter state
   const [portfolioFilter, setPortfolioFilter] = useState<'Semua' | 'E-Commerce' | 'Sistem Web' | 'Mobile App'>('Semua');
-  const [selectedProject, setSelectedProject] = useState<any | null>(null);
-
-  // News modal state
-  const [selectedNews, setSelectedNews] = useState<any | null>(null);
 
   // Testimonial slider state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -337,18 +331,20 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 3 Mockup Preview Cards Grid (Exactly like reference) */}
+          {/* 3 Mockup Preview Cards Grid (Summary) */}
           <div className="work-cards-grid">
-            {filteredProjects.map((item) => (
+            {filteredProjects.slice(0, 3).map((item) => (
               <div
                 key={item.id}
                 className="work-preview-card"
-                onClick={() => setSelectedProject(item)}
+                onClick={() => {
+                  window.location.href = `/portfolio-detail.html?slug=${encodeURIComponent(item.slug)}`;
+                }}
               >
                 <div className="work-card-media">
                   <img src={item.image} alt={item.title} className="work-card-img" />
                   <div className="work-card-overlay">
-                    <span className="work-view-label">Klik untuk Detail</span>
+                    <span className="work-view-label">Lihat Studi Kasus</span>
                   </div>
                   <span className="work-category-badge">{item.categoryLabel}</span>
                 </div>
@@ -358,13 +354,14 @@ export default function Home() {
                     <h3 className="work-title">{item.title}</h3>
                     <p className="work-short-desc">{item.shortDesc}</p>
                   </div>
-                  <button
-                    type="button"
+                  <a
+                    href={`/portfolio-detail.html?slug=${encodeURIComponent(item.slug)}`}
                     className="work-arrow-circle"
                     aria-label={`Buka ${item.title}`}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <ArrowRight size={16} />
-                  </button>
+                  </a>
                 </div>
               </div>
             ))}
@@ -389,6 +386,12 @@ export default function Home() {
               <p className="packages-subtext">
                 Investasi rasional, transparan tanpa biaya tersembunyi. Solusi tepat untuk setiap tahap pertumbuhan bisnis Anda.
               </p>
+              <div style={{ marginTop: '16px', marginBottom: '20px' }}>
+                <a href="/services.html" className="btn-pill-subtle">
+                  <span>Lihat Seluruh Layanan &amp; Fitur</span>
+                  <ArrowRight size={15} />
+                </a>
+              </div>
               <div className="packages-doodle-arrow">
                 <svg width="45" height="32" viewBox="0 0 50 35" fill="none">
                   <path
@@ -658,7 +661,9 @@ export default function Home() {
               <div
                 key={news.id}
                 className="clean-news-card"
-                onClick={() => setSelectedNews(news)}
+                onClick={() => {
+                  window.location.href = '/news.html';
+                }}
               >
                 <div className="news-meta-top">
                   <span className="news-tag-badge">{news.tag}</span>
@@ -675,10 +680,10 @@ export default function Home() {
                 <p className="news-card-summary">{news.summary}</p>
 
                 <div className="news-card-bottom">
-                  <button type="button" className="btn-read-summary">
-                    <span>Lihat Intisari Cepat</span>
+                  <a href="/news.html" className="btn-read-summary" onClick={(e) => e.stopPropagation()}>
+                    <span>Buka Halaman Berita</span>
                     <ArrowRight size={14} />
-                  </button>
+                  </a>
                 </div>
               </div>
             ))}
@@ -887,129 +892,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MODAL 1: Quick Portfolio Project Preview */}
-      {selectedProject && (
-        <div className="modal-backdrop" onClick={() => setSelectedProject(null)}>
-          <div className="modal-card-box" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="modal-close-btn"
-              onClick={() => setSelectedProject(null)}
-              aria-label="Tutup Detail"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="modal-media-wrap">
-              <img src={selectedProject.image} alt={selectedProject.title} className="modal-banner-img" />
-              <span className="modal-cat-tag">{selectedProject.categoryLabel}</span>
-            </div>
-
-            <div className="modal-body-content">
-              <h3 className="modal-title">{selectedProject.title}</h3>
-              <p className="modal-desc">{selectedProject.shortDesc}</p>
-
-              <div className="modal-meta-grid">
-                <div className="modal-meta-item">
-                  <span className="meta-caption">Mitra Klien</span>
-                  <strong>{selectedProject.client}</strong>
-                </div>
-                <div className="modal-meta-item">
-                  <span className="meta-caption">Pencapaian Kunci</span>
-                  <strong className="text-red">{selectedProject.metrics}</strong>
-                </div>
-              </div>
-
-              <div className="modal-tech-stack">
-                <span className="meta-caption">Teknologi yang Digunakan:</span>
-                <div className="tech-tags-row">
-                  {selectedProject.tech.map((t: string, i: number) => (
-                    <span key={i} className="tech-badge-item">
-                      <Zap size={11} className="text-red" />
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="modal-actions-row">
-                <a
-                  href={`/portfolio-detail.html?slug=${selectedProject.slug}`}
-                  className="btn-modal-primary"
-                >
-                  <span>Buka Halaman Studi Kasus</span>
-                  <ExternalLink size={15} />
-                </a>
-                <a
-                  href={`https://wa.me/6281234567890?text=${encodeURIComponent(
-                    `Halo Berdikari Digital, saya tertarik dengan portofolio ${selectedProject.title}. Bisakah saya membuat sistem serupa?`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-modal-secondary"
-                >
-                  <MessageSquare size={15} />
-                  <span>Konsultasi Proyek Serupa</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL 2: Quick News Summary */}
-      {selectedNews && (
-        <div className="modal-backdrop" onClick={() => setSelectedNews(null)}>
-          <div className="modal-card-box modal-news-box" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="modal-close-btn"
-              onClick={() => setSelectedNews(null)}
-              aria-label="Tutup Wawasan"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="modal-news-header">
-              <span className="modal-cat-tag">{selectedNews.tag}</span>
-              <div className="news-time-wrap">
-                <Calendar size={13} className="text-red" />
-                <span>{selectedNews.date}</span>
-              </div>
-              <h3 className="modal-title">{selectedNews.title}</h3>
-              <p className="modal-desc">{selectedNews.summary}</p>
-            </div>
-
-            <div className="modal-news-body">
-              <h4 className="news-sub-heading">Intisari &amp; Poin Kunci:</h4>
-              <ul className="modal-news-bullets">
-                {selectedNews.bullets.map((b: string, i: number) => (
-                  <li key={i}>
-                    <CheckCircle2 size={16} className="text-red flex-shrink-0" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="news-impact-box">
-                <strong>Dampak Bagi Klien:</strong>
-                <p>{selectedNews.impact}</p>
-              </div>
-
-              <div className="modal-actions-row">
-                <a
-                  href="/contact.html"
-                  className="btn-modal-primary"
-                  onClick={() => setSelectedNews(null)}
-                >
-                  <span>Tanyakan Implementasi ke Sistem Anda</span>
-                  <ArrowRight size={15} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <style>{`
         /* ===== Section Common Styles ===== */

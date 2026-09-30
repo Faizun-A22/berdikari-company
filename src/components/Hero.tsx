@@ -16,9 +16,16 @@ export default function Hero() {
         if (data.hero_badge) setHeroBadge(data.hero_badge);
         if (data.hero_description) setHeroDesc(data.hero_description);
         if (data.hero_title) {
-          const cleanTitle = data.hero_title.replace(/<[^>]*>?/gm, ' ');
-          setHeroTitle1(cleanTitle.substring(0, 30));
-          setHeroTitle2(cleanTitle.substring(30) || 'Yang Menginspirasi & Berdaya');
+          const cleanTitle = data.hero_title.replace(/<[^>]*>?/gm, ' ').trim();
+          const words = cleanTitle.split(/\s+/);
+          if (words.length > 3) {
+            const half = Math.ceil(words.length / 2);
+            setHeroTitle1(words.slice(0, half).join(' '));
+            setHeroTitle2(words.slice(half).join(' '));
+          } else {
+            setHeroTitle1(cleanTitle);
+            setHeroTitle2('Yang Menginspirasi & Berdaya');
+          }
         }
       })
       .catch((err) => console.error('Gagal mengambil config untuk Hero:', err));
@@ -44,7 +51,7 @@ export default function Hero() {
               {heroTitle2}
             </span>
             <span className="hero-sun-doodle" title="Kreatif & Bersinar">
-              <Sparkles size={32} className="sun-sparkle-icon" />
+              <Sparkles size={26} className="sun-sparkle-icon" />
             </span>
           </h1>
 
@@ -53,10 +60,10 @@ export default function Hero() {
 
           {/* CTA Buttons */}
           <div className="hero-actions-row">
-            <a href="#portfolio" className="btn-hero-primary">
+            <a href="/portfolio.html" className="btn-hero-primary">
               <span>Lihat Portofolio</span>
               <div className="btn-circle-arrow">
-                <ArrowRight size={15} />
+                <ArrowRight size={14} />
               </div>
             </a>
             <a
@@ -66,7 +73,7 @@ export default function Hero() {
               className="btn-hero-secondary"
             >
               <div className="btn-wa-icon">
-                <MessageSquare size={16} />
+                <MessageSquare size={15} />
               </div>
               <span>Konsultasi WhatsApp</span>
             </a>
@@ -74,7 +81,7 @@ export default function Hero() {
 
           {/* Playful Handwritten Doodle Note with Arrow */}
           <div className="hero-doodle-note">
-            <svg className="doodle-curve-arrow" width="46" height="34" viewBox="0 0 50 35" fill="none">
+            <svg className="doodle-curve-arrow" width="38" height="26" viewBox="0 0 50 35" fill="none">
               <path
                 d="M5 25C15 32 35 30 42 12M42 12L34 14M42 12L44 22"
                 stroke="#e53e3e"
@@ -89,16 +96,16 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right Column: Creative Visual with Organic Blob & Floating Badges */}
+        {/* Right Column: Creative Visual with Compact Photo & Floating Badges */}
         <div className="hero-visual-col">
           <div className="hero-visual-stage">
             {/* Organic Soft Crimson/Coral Blob Background */}
             <div className="organic-blob-shape"></div>
 
-            {/* Main Hero Photo: Smiling Professional Engineer / Specialist */}
+            {/* Main Hero Photo: Compact & Proportional */}
             <div className="hero-image-wrapper">
               <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=80"
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&auto=format&fit=crop&q=80"
                 alt="Berdikari Digital Specialist"
                 className="hero-person-img"
               />
@@ -107,7 +114,7 @@ export default function Hero() {
             {/* Floating Badge 1: 8+ Years of Experience */}
             <div className="floating-badge badge-experience animate-float">
               <div className="badge-heart-icon">
-                <Heart size={16} fill="#e53e3e" color="#e53e3e" />
+                <Heart size={14} fill="#e53e3e" color="#e53e3e" />
               </div>
               <div className="badge-text-group">
                 <strong className="badge-number">8+ Tahun</strong>
@@ -115,20 +122,10 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Floating Badge 2: Coffee Mug Sticker */}
-            <div className="floating-badge badge-coffee animate-float-delay-1">
-              <div className="coffee-icon">☕</div>
-              <div className="badge-text-group">
-                <span className="badge-coffee-quote">
-                  "Ide hebat bermula dari secangkir kopi hangat."
-                </span>
-              </div>
-            </div>
-
-            {/* Floating Badge 3: Lighthouse Speed 95+ */}
-            <div className="floating-badge badge-speed animate-float-delay-2">
+            {/* Floating Badge 2: Lighthouse Speed 95+ */}
+            <div className="floating-badge badge-speed animate-float-delay-1">
               <div className="badge-zap-icon">
-                <Zap size={16} />
+                <Zap size={14} />
               </div>
               <div className="badge-text-group">
                 <strong className="badge-number">Skor 95+</strong>
@@ -140,19 +137,19 @@ export default function Hero() {
       </div>
 
       <style>{`
-        /* ===== Hero Section Canvas ===== */
+        /* ===== Hero Section Canvas (Tight & Proportional Spacing) ===== */
         .hero-creative-section {
           position: relative;
-          padding-top: 140px;
-          padding-bottom: 70px;
+          padding-top: 96px !important;
+          padding-bottom: 36px;
           background: #ffffff;
           overflow: hidden;
         }
 
         .hero-grid-container {
           display: grid;
-          grid-template-columns: 1.15fr 0.95fr;
-          gap: 40px;
+          grid-template-columns: 1.25fr 0.85fr;
+          gap: 32px;
           align-items: center;
         }
 
@@ -164,44 +161,44 @@ export default function Hero() {
         }
 
         .hero-badge-wrap {
-          margin-bottom: 20px;
+          margin-bottom: 10px;
         }
 
         .hero-pill-badge {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
+          gap: 7px;
           background: #fff1f2;
           border: 1px solid #fecdd3;
           color: var(--primary);
-          padding: 6px 16px;
+          padding: 5px 14px;
           border-radius: 100px;
-          font-size: 0.76rem;
+          font-size: 0.74rem;
           font-weight: 800;
-          letter-spacing: 0.06em;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
         }
 
         .hero-badge-dot {
-          width: 8px;
-          height: 8px;
+          width: 7px;
+          height: 7px;
           border-radius: 50%;
           background: #22c55e;
-          box-shadow: 0 0 8px #22c55e;
+          box-shadow: 0 0 6px #22c55e;
         }
 
         .hero-headline {
-          font-size: 3.35rem;
+          font-size: 2.7rem;
           font-weight: 900;
           color: #0f172a;
-          line-height: 1.16;
-          letter-spacing: -0.03em;
-          margin-bottom: 20px;
+          line-height: 1.2;
+          letter-spacing: -0.025em;
+          margin-bottom: 14px;
         }
 
         .hero-cursive-highlight {
           font-family: var(--font-cursive);
-          font-size: 1.18em;
+          font-size: 1.15em;
           color: var(--primary);
           display: inline-block;
           font-weight: 700;
@@ -211,7 +208,7 @@ export default function Hero() {
 
         .sun-sparkle-icon {
           color: #f59e0b;
-          margin-left: 10px;
+          margin-left: 8px;
           vertical-align: middle;
           animation: sparkleGlow 3s ease-in-out infinite;
         }
@@ -222,47 +219,47 @@ export default function Hero() {
         }
 
         .hero-description {
-          font-size: 1.05rem;
+          font-size: 0.95rem;
           color: #475569;
-          line-height: 1.68;
-          margin-bottom: 32px;
-          max-width: 540px;
+          line-height: 1.65;
+          margin-bottom: 22px;
+          max-width: 520px;
         }
 
         /* ===== Hero Action Buttons ===== */
         .hero-actions-row {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 14px;
           flex-wrap: wrap;
-          margin-bottom: 28px;
+          margin-bottom: 20px;
         }
 
         .btn-hero-primary {
           display: inline-flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
           background: var(--primary);
           color: #ffffff;
-          padding: 13px 16px 13px 26px;
+          padding: 11px 14px 11px 22px;
           border-radius: 100px;
           font-family: var(--font-heading);
           font-weight: 700;
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           text-decoration: none;
-          box-shadow: 0 8px 24px rgba(229, 62, 62, 0.28);
+          box-shadow: 0 6px 20px rgba(229, 62, 62, 0.25);
           transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .btn-hero-primary:hover {
           background: #dc2626;
           transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.38);
+          box-shadow: 0 10px 25px rgba(229, 62, 62, 0.35);
         }
 
         .btn-circle-arrow {
-          width: 32px;
-          height: 32px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           background: rgba(255, 255, 255, 0.25);
           display: flex;
@@ -272,21 +269,21 @@ export default function Hero() {
         }
 
         .btn-hero-primary:hover .btn-circle-arrow {
-          transform: translateX(4px);
+          transform: translateX(3px);
         }
 
         .btn-hero-secondary {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
           background: #ffffff;
           border: 1.5px solid #e2e8f0;
           color: #1e293b;
-          padding: 13px 24px;
+          padding: 11px 20px;
           border-radius: 100px;
           font-family: var(--font-heading);
           font-weight: 700;
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           text-decoration: none;
           transition: all 0.25s ease;
         }
@@ -308,7 +305,7 @@ export default function Hero() {
         .hero-doodle-note {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
         }
 
         .doodle-curve-arrow {
@@ -317,13 +314,13 @@ export default function Hero() {
 
         .doodle-note-text {
           font-family: var(--font-cursive);
-          font-size: 1.25rem;
+          font-size: 1.15rem;
           font-weight: 700;
           color: #334155;
           line-height: 1.2;
         }
 
-        /* ===== Right Column: Visual Stage ===== */
+        /* ===== Right Column: Compact Visual Stage ===== */
         .hero-visual-col {
           display: flex;
           justify-content: center;
@@ -334,46 +331,40 @@ export default function Hero() {
         .hero-visual-stage {
           position: relative;
           width: 100%;
-          max-width: 480px;
-          height: 480px;
+          max-width: 360px;
+          height: 290px;
           display: flex;
           justify-content: center;
           align-items: center;
         }
 
-        /* Organic Smooth Crimson/Coral Blob */
+        /* Organic Soft Crimson/Coral Blob */
         .organic-blob-shape {
           position: absolute;
-          width: 440px;
-          height: 440px;
+          width: 310px;
+          height: 270px;
           background: linear-gradient(135deg, #fee2e2 0%, #fecaca 50%, #fca5a5 100%);
           border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%;
           animation: morphBlob 14s ease-in-out infinite alternate;
           z-index: 1;
-          box-shadow: 0 20px 60px rgba(229, 62, 62, 0.12);
+          box-shadow: 0 14px 40px rgba(229, 62, 62, 0.1);
         }
 
         @keyframes morphBlob {
-          0% {
-            border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%;
-          }
-          50% {
-            border-radius: 40% 60% 35% 65% / 60% 40% 70% 30%;
-          }
-          100% {
-            border-radius: 50% 50% 40% 60% / 45% 55% 50% 50%;
-          }
+          0% { border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%; }
+          50% { border-radius: 40% 60% 35% 65% / 60% 40% 70% 30%; }
+          100% { border-radius: 50% 50% 40% 60% / 45% 55% 50% 50%; }
         }
 
         .hero-image-wrapper {
           position: relative;
-          width: 380px;
-          height: 420px;
-          border-radius: 36px;
+          width: 290px;
+          height: 250px;
+          border-radius: 22px;
           overflow: hidden;
           z-index: 2;
-          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
-          border: 4px solid #ffffff;
+          box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+          border: 3px solid #ffffff;
         }
 
         .hero-person-img {
@@ -388,31 +379,31 @@ export default function Hero() {
           transform: scale(1.04);
         }
 
-        /* ===== Floating Badges ===== */
+        /* ===== Compact Floating Badges ===== */
         .floating-badge {
           position: absolute;
-          background: rgba(255, 255, 255, 0.95);
+          background: rgba(255, 255, 255, 0.96);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           border: 1px solid rgba(229, 62, 62, 0.15);
-          border-radius: 18px;
-          padding: 12px 18px;
+          border-radius: 14px;
+          padding: 8px 14px;
           display: flex;
           align-items: center;
-          gap: 12px;
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+          gap: 10px;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
           z-index: 3;
         }
 
         /* Badge 1: Experience (Top Right) */
         .badge-experience {
-          top: 20px;
-          right: -15px;
+          top: -8px;
+          right: -8px;
         }
 
         .badge-heart-icon {
-          width: 34px;
-          height: 34px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           background: #fee2e2;
           display: flex;
@@ -428,46 +419,27 @@ export default function Hero() {
 
         .badge-number {
           font-family: var(--font-heading);
-          font-size: 1.15rem;
+          font-size: 1rem;
           font-weight: 900;
           color: #0f172a;
           line-height: 1.1;
         }
 
         .badge-label {
-          font-size: 0.72rem;
+          font-size: 0.68rem;
           color: #64748b;
           font-weight: 700;
         }
 
-        /* Badge 2: Coffee (Bottom Center/Left) */
-        .badge-coffee {
-          bottom: 25px;
-          left: -20px;
-          max-width: 230px;
-        }
-
-        .coffee-icon {
-          font-size: 1.5rem;
-        }
-
-        .badge-coffee-quote {
-          font-family: var(--font-cursive);
-          font-size: 1rem;
-          font-weight: 700;
-          color: #334155;
-          line-height: 1.25;
-        }
-
-        /* Badge 3: Speed (Bottom Right) */
+        /* Badge 2: Speed (Bottom Left) */
         .badge-speed {
-          bottom: -15px;
-          right: 10px;
+          bottom: -10px;
+          left: -8px;
         }
 
         .badge-zap-icon {
-          width: 32px;
-          height: 32px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           background: #fef08a;
           color: #b45309;
@@ -479,8 +451,8 @@ export default function Hero() {
         /* Responsive Breakpoints */
         @media (max-width: 991px) {
           .hero-creative-section {
-            padding-top: 110px;
-            padding-bottom: 50px;
+            padding-top: 90px !important;
+            padding-bottom: 30px;
           }
 
           .hero-grid-container {
@@ -507,56 +479,57 @@ export default function Hero() {
           }
 
           .hero-visual-stage {
-            max-width: 400px;
-            height: 400px;
+            max-width: 320px;
+            height: 270px;
           }
 
           .organic-blob-shape {
-            width: 360px;
-            height: 360px;
+            width: 280px;
+            height: 250px;
           }
 
           .hero-image-wrapper {
-            width: 300px;
-            height: 350px;
+            width: 260px;
+            height: 230px;
           }
 
           .badge-experience {
             right: 0;
-            top: 10px;
+            top: -5px;
           }
 
-          .badge-coffee {
+          .badge-speed {
             left: 0;
+            bottom: -5px;
           }
         }
 
         @media (max-width: 576px) {
           .hero-headline {
-            font-size: 2.2rem;
+            font-size: 2.1rem;
           }
 
           .hero-visual-stage {
-            max-width: 320px;
-            height: 320px;
+            max-width: 280px;
+            height: 240px;
           }
 
           .organic-blob-shape {
-            width: 280px;
-            height: 280px;
+            width: 250px;
+            height: 220px;
           }
 
           .hero-image-wrapper {
-            width: 240px;
-            height: 280px;
+            width: 230px;
+            height: 200px;
           }
 
           .floating-badge {
-            padding: 8px 12px;
+            padding: 6px 10px;
           }
 
           .badge-number {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
           }
         }
       `}</style>

@@ -34,15 +34,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isHomePage = typeof window !== 'undefined' && 
-    (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/'));
-
   const navLinks = [
-    { name: 'Beranda', to: isHomePage ? '#home' : '/index.html' },
-    { name: 'Layanan', to: isHomePage ? '#services' : '/services.html' },
-    { name: 'Portofolio', to: isHomePage ? '#portfolio' : '/portfolio.html' },
-    { name: 'Paket Harga', to: isHomePage ? '#pricing' : '/index.html#pricing' },
-    { name: 'Kabar & Wawasan', to: isHomePage ? '#news' : '/news.html' },
+    { name: 'Beranda', to: '/index.html' },
+    { name: 'Layanan', to: '/services.html' },
+    { name: 'Portofolio', to: '/portfolio.html' },
+    { name: 'Berita', to: '/news.html' },
     { name: 'Tentang Kami', to: '/about.html' },
   ];
 
