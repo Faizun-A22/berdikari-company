@@ -23,6 +23,8 @@ else
     curl -4 -sSL "https://raw.githubusercontent.com/Faizun-A22/berdikari-company/main/src/components/Portfolio.tsx?v=$TS" -o src/components/Portfolio.tsx
     curl -4 -sSL "https://raw.githubusercontent.com/Faizun-A22/berdikari-company/main/src/components/NewsSection.tsx?v=$TS" -o src/components/NewsSection.tsx
     curl -4 -sSL "https://raw.githubusercontent.com/Faizun-A22/berdikari-company/main/src/pages/NewsPage.tsx?v=$TS" -o src/pages/NewsPage.tsx
+    curl -4 -sSL "https://raw.githubusercontent.com/Faizun-A22/berdikari-company/main/src/index.css?v=$TS" -o src/index.css
+    curl -4 -sSL "https://raw.githubusercontent.com/Faizun-A22/berdikari-company/main/index.html?v=$TS" -o index.html
 fi
 
 echo "===> Membersihkan cache build lama..."
