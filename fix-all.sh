@@ -7,12 +7,10 @@ echo "=========================================="
 
 cd /var/www/berdikari-company
 
-# 1. Pastikan folder dist ada dan sudah di-build
-if [ ! -f "dist/index.html" ]; then
-    echo "===> Membangun frontend Vite..."
-    rm -rf dist node_modules/.vite
-    npm run build
-fi
+# 1. Pastikan folder dist di-build ulang dengan kode terbaru
+echo "===> Membangun frontend Vite terbaru..."
+rm -rf dist node_modules/.vite
+npm run build
 
 chown -R www-data:www-data dist 2>/dev/null || true
 chmod -R 755 dist 2>/dev/null || true
