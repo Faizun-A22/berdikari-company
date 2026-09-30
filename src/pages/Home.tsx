@@ -20,7 +20,6 @@ import {
   Smartphone,
   Cpu,
   Palette,
-  X,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -33,20 +32,33 @@ export default function Home() {
   const [faqRef, faqVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  // Service-First Interactive Showcase state & Modal Popup
+  // In-Page Sliding Service Showcase state (No modal, smooth card slide)
   type ServiceType = 'web' | 'erp' | 'mobile' | 'uiux';
-  const [activeModalService, setActiveModalService] = useState<ServiceType | null>(null);
+  const [selectedService, setSelectedService] = useState<ServiceType | null>(null);
+  const [isReturning, setIsReturning] = useState(false);
 
-  // Close modal when Escape key is pressed
+  const handleOpenService = (id: ServiceType) => {
+    setSelectedService(id);
+  };
+
+  const handleBackToServices = () => {
+    setIsReturning(true);
+    setTimeout(() => {
+      setSelectedService(null);
+      setIsReturning(false);
+    }, 280);
+  };
+
+  // Close back to all services when Escape key is pressed
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setActiveModalService(null);
+      if (e.key === 'Escape' && selectedService) {
+        handleBackToServices();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [selectedService]);
 
   // Testimonial slider state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -544,7 +556,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 3. KOTAK-KOTAK LAYANAN & MODAL PORTOFOLIO INTERAKTIF (Pinterest Inspired) */}
+      {/* 3. IN-PAGE SLIDING SERVICE & PORTFOLIO SHOWCASE (No Modal, Smooth Card Slide) */}
       <section
         id="portfolio"
         ref={portfolioRef as React.RefObject<HTMLDivElement>}
@@ -563,203 +575,253 @@ export default function Home() {
               Layanan Utama &amp; <span className="hero-cursive-highlight">Karya Nyata</span>
             </h2>
             <p className="section-subtext">
-              Pilih dan klik salah satu kotak layanan di bawah ini. Modal interaktif akan terbuka menampilkan ringkasan portofolio mini dan studi kasus terbaik di setiap bidang.
+              {selectedService
+                ? 'Berikut portofolio pilihan untuk layanan ini. Klik tombol "Kembali" untuk melihat kembali seluruh kotak layanan.'
+                : 'Pilih dan klik salah satu kotak layanan di bawah ini. Kartu akan bergeser mulus ke samping dan menampilkan daftar portofolio terkait.'}
             </p>
           </div>
 
-          {/* KOTAK-KOTAK LAYANAN (4 Grid Boxes) */}
-          <div className="service-boxes-grid">
-            {servicesList.map((service) => (
-              <div
-                key={service.id}
-                className="service-box-card"
-                onClick={() => setActiveModalService(service.id)}
-                role="button"
-                tabIndex={0}
-                aria-label={`Buka portofolio layanan ${service.name}`}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    setActiveModalService(service.id);
-                  }
-                }}
-              >
-                {/* Top Number & Tag */}
-                <div className="box-top-row">
-                  <span className="box-num-badge">{service.num}</span>
-                  <span className="box-badge-tag" style={{ color: service.badgeColor }}>
-                    {service.badge}
-                  </span>
-                </div>
-
-                {/* Icon Bubble */}
-                <div className="box-icon-wrap">
-                  {service.icon}
-                </div>
-
-                {/* Title & Tagline */}
-                <h3 className="box-title">{service.name}</h3>
-                <p className="box-tagline">{service.tagline}</p>
-                <p className="box-desc">{service.desc}</p>
-
-                {/* Bullets */}
-                <ul className="box-bullets">
-                  {service.bullets.map((b, idx) => (
-                    <li key={idx}>
-                      <CheckCircle2 size={13} className="text-red flex-shrink-0" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Box Footer Button */}
-                <div className="box-action-footer">
-                  <span className="box-action-text">Lihat Portofolio</span>
-                  <div className="box-action-arrow">
-                    <ArrowRight size={15} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* BOTTOM REDIRECT TO FULL PORTFOLIO */}
-          <div className="service-boxes-bottom">
-            <a href="/portfolio.html" className="btn-showcase-primary">
-              <span>Buka Seluruh Portofolio &amp; Katalog Lengkap</span>
-              <div className="btn-circle-icon">
-                <ArrowRight size={15} />
-              </div>
-            </a>
-            <p className="boxes-bottom-sub">
-              ✓ Garansi Pemeliharaan Sistem • ✓ 100% Hak Milik Source Code • ✓ Audit Google Lighthouse 95+
-            </p>
-          </div>
-        </div>
-
-        {/* MODAL OVERLAY (Smooth Popup with Mini-Portfolio Cards) */}
-        {activeModalService && (() => {
-          const currentService = servicesList.find((s) => s.id === activeModalService) || servicesList[0];
-          const modalProjects = allProjects.filter((p) => p.serviceType === activeModalService).slice(0, 4);
-
-          return (
-            <div
-              className="service-modal-backdrop"
-              onClick={() => setActiveModalService(null)}
-              role="dialog"
-              aria-modal="true"
-            >
-              <div
-                className="service-modal-dialog"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Modal Header */}
-                <div className="modal-header">
-                  <div className="modal-header-info">
-                    <div className="modal-icon-bubble">
-                      {currentService.icon}
-                    </div>
-                    <div>
-                      <div className="modal-badge-row">
-                        <span className="modal-num-tag">{currentService.num}</span>
-                        <span className="modal-category-tag">{currentService.name}</span>
-                        <span className="modal-count-pill">4 Portofolio Terpilih</span>
-                      </div>
-                      <h3 className="modal-title">{currentService.tagline}</h3>
-                      <p className="modal-subtitle">
-                        Klik kartu portofolio kecil di bawah untuk diarahkan ke halaman portofolio kami:
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Close Button */}
-                  <button
-                    type="button"
-                    className="modal-close-btn"
-                    onClick={() => setActiveModalService(null)}
-                    aria-label="Tutup Modal"
+          {/* SLIDING STAGE CONTAINER */}
+          <div className={`sliding-showcase-container ${selectedService ? 'is-service-active' : 'is-default-grid'}`}>
+            {/* VIEW 1: 4 SERVICE BOXES (When not selected) */}
+            {!selectedService ? (
+              <div className={`service-boxes-row ${isReturning ? 'animate-boxes-return' : 'animate-boxes-entry'}`}>
+                {servicesList.map((service) => (
+                  <div
+                    key={service.id}
+                    className="service-box-card"
+                    onClick={() => handleOpenService(service.id)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Buka portofolio ${service.name}`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        handleOpenService(service.id);
+                      }
+                    }}
                   >
-                    <X size={20} />
-                  </button>
-                </div>
+                    {/* Top Number & Tag */}
+                    <div className="box-top-row">
+                      <span className="box-num-badge">{service.num}</span>
+                      <span className="box-badge-tag" style={{ color: service.badgeColor }}>
+                        {service.badge}
+                      </span>
+                    </div>
 
-                {/* Modal Body: 4 Mini Portfolio Cards */}
-                <div className="modal-body">
-                  <div className="mini-cards-grid">
-                    {modalProjects.map((item, index) => (
-                      <div
-                        key={item.id}
-                        className="mini-portfolio-card"
-                        style={{ animationDelay: `${index * 60}ms` }}
-                        onClick={() => {
-                          // Mengarahkan ke navigasi portfolio sesuai instruksi!
-                          window.location.href = '/portfolio.html';
-                        }}
-                        title={`Buka ${item.title} di halaman portofolio`}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            window.location.href = '/portfolio.html';
-                          }
-                        }}
+                    {/* Icon Bubble */}
+                    <div className="box-icon-wrap">
+                      {service.icon}
+                    </div>
+
+                    {/* Title & Tagline */}
+                    <h3 className="box-title">{service.name}</h3>
+                    <p className="box-tagline">{service.tagline}</p>
+                    <p className="box-desc">{service.desc}</p>
+
+                    {/* Bullets */}
+                    <ul className="box-bullets">
+                      {service.bullets.map((b, idx) => (
+                        <li key={idx}>
+                          <CheckCircle2 size={13} className="text-red flex-shrink-0" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Box Footer Button */}
+                    <div className="box-action-footer">
+                      <span className="box-action-text">Lihat Portofolio</span>
+                      <div className="box-action-arrow">
+                        <ArrowRight size={15} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* VIEW 2: SLIDING PORTFOLIO STAGE (When service is selected) */
+              (() => {
+                const activeData = servicesList.find((s) => s.id === selectedService) || servicesList[0];
+                const activeProjects = allProjects.filter((p) => p.serviceType === selectedService).slice(0, 4);
+
+                return (
+                  <div className={`service-shifted-stage ${isReturning ? 'animate-shift-out' : 'animate-shift-in'}`}>
+                    {/* Top Action & Navigation Bar */}
+                    <div className="shifted-stage-topbar">
+                      <button
+                        type="button"
+                        className="btn-back-services"
+                        onClick={handleBackToServices}
+                        aria-label="Kembali ke semua layanan"
                       >
-                        {/* Thumbnail Image */}
-                        <div className="mini-card-thumb-wrap">
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="mini-card-img"
-                            loading="lazy"
-                          />
-                          <span className="mini-card-category-badge">{item.categoryLabel}</span>
+                        <ArrowLeft size={16} />
+                        <span>Kembali ke Pilihan Layanan</span>
+                      </button>
+
+                      {/* Quick Selector for Other Services */}
+                      <div className="shifted-quick-tabs">
+                        <span className="quick-tabs-label">Pindah Layanan:</span>
+                        {servicesList.map((s) => (
+                          <button
+                            key={s.id}
+                            type="button"
+                            className={`quick-service-pill ${selectedService === s.id ? 'is-active' : ''}`}
+                            onClick={() => setSelectedService(s.id)}
+                          >
+                            <span>{s.num}. {s.shortName}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Main Split: Left Anchor + Right Portfolio Deck */}
+                    <div className="shifted-stage-content">
+                      {/* Left: Active Service Anchor Info */}
+                      <div className="shifted-service-sidebar">
+                        <div className="sidebar-badge-row">
+                          <span className="sidebar-num">{activeData.num}</span>
+                          <span className="sidebar-badge" style={{ color: activeData.badgeColor }}>
+                            {activeData.badge}
+                          </span>
                         </div>
 
-                        {/* Content */}
-                        <div className="mini-card-info">
-                          <div className="mini-card-metric-pill">
-                            <Zap size={11} className="text-red" />
-                            <span>{item.metrics}</span>
-                          </div>
+                        <div className="sidebar-icon-wrap">
+                          {activeData.icon}
+                        </div>
 
-                          <h4 className="mini-card-title">{item.title}</h4>
-                          <p className="mini-card-desc">{item.shortDesc}</p>
+                        <h3 className="sidebar-title">{activeData.name}</h3>
+                        <p className="sidebar-tagline">{activeData.tagline}</p>
+                        <p className="sidebar-desc">{activeData.desc}</p>
 
-                          <div className="mini-card-bottom-row">
-                            <span className="mini-card-client">{item.client}</span>
-                            <span className="mini-card-link-prompt">
-                              <span>Buka di Portofolio</span>
-                              <ArrowRight size={13} />
-                            </span>
+                        <div className="sidebar-highlights-box">
+                          <span className="highlights-caption">Keunggulan Standar:</span>
+                          <ul className="sidebar-bullet-list">
+                            {activeData.bullets.map((b, idx) => (
+                              <li key={idx}>
+                                <CheckCircle2 size={13} className="text-red flex-shrink-0" />
+                                <span>{b}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <a
+                          href={`https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech,%20saya%20tertarik%20dengan%20layanan%20${encodeURIComponent(activeData.name)}.`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-sidebar-consult"
+                        >
+                          <MessageSquare size={15} className="text-red" />
+                          <span>Konsultasi Layanan Ini</span>
+                        </a>
+                      </div>
+
+                      {/* Right: 4 Portfolio Cards (Slided in) */}
+                      <div className="shifted-portfolio-deck">
+                        <div className="deck-header">
+                          <div className="deck-header-left">
+                            <h4 className="deck-title">Portofolio &amp; Karya Pilihan</h4>
+                            <p className="deck-sub">
+                              Klik kartu mana saja di bawah untuk diarahkan langsung ke halaman portofolio kami:
+                            </p>
                           </div>
+                          <span className="deck-count-tag">4 Proyek Unggulan</span>
+                        </div>
+
+                        {/* 4 Mini Cards Grid */}
+                        <div className="shifted-cards-grid">
+                          {activeProjects.map((item, index) => (
+                            <div
+                              key={item.id}
+                              className="shifted-project-card"
+                              style={{ animationDelay: `${index * 70}ms` }}
+                              onClick={() => {
+                                // Mengarahkan ke navigasi portfolio sesuai permintaan!
+                                window.location.href = '/portfolio.html';
+                              }}
+                              role="button"
+                              tabIndex={0}
+                              title={`Buka ${item.title} di halaman portofolio`}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  window.location.href = '/portfolio.html';
+                                }
+                              }}
+                            >
+                              {/* Media Thumbnail */}
+                              <div className="shifted-card-media">
+                                <img
+                                  src={item.image}
+                                  alt={item.title}
+                                  className="shifted-card-img"
+                                  loading="lazy"
+                                />
+                                <span className="shifted-card-category">{item.categoryLabel}</span>
+                              </div>
+
+                              {/* Card Content */}
+                              <div className="shifted-card-body">
+                                <div className="shifted-metric-pill">
+                                  <Zap size={11} className="text-red" />
+                                  <span>{item.metrics}</span>
+                                </div>
+
+                                <h5 className="shifted-card-title">{item.title}</h5>
+                                <p className="shifted-card-desc">{item.shortDesc}</p>
+
+                                <div className="shifted-card-footer">
+                                  <span className="shifted-card-client">{item.client}</span>
+                                  <span className="shifted-card-cta">
+                                    <span>Buka di Portofolio</span>
+                                    <ArrowRight size={13} />
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Deck Bottom CTA Bar */}
+                        <div className="deck-bottom-actions">
+                          <a href="/portfolio.html" className="btn-showcase-primary">
+                            <span>Buka Seluruh Katalog Portofolio (Halaman Portofolio)</span>
+                            <div className="btn-circle-icon">
+                              <ArrowRight size={15} />
+                            </div>
+                          </a>
+
+                          <button
+                            type="button"
+                            className="btn-showcase-secondary"
+                            onClick={handleBackToServices}
+                          >
+                            <ArrowLeft size={15} />
+                            <span>Kembali ke Pilihan Layanan</span>
+                          </button>
                         </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
+                );
+              })()
+            )}
+          </div>
 
-                {/* Modal Footer */}
-                <div className="modal-footer">
-                  <div className="modal-footer-actions">
-                    <a href="/portfolio.html" className="btn-modal-primary">
-                      <span>Buka Halaman Navigasi Portofolio Lengkap</span>
-                      <ArrowRight size={15} />
-                    </a>
-
-                    <a
-                      href={`https://wa.me/6281234567890?text=Halo%20Berdikari%20Tech,%20saya%20tertarik%20dengan%20layanan%20${encodeURIComponent(currentService.name)}.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-modal-secondary"
-                    >
-                      <MessageSquare size={15} className="text-red" />
-                      <span>Konsultasikan Kebutuhan Anda</span>
-                    </a>
-                  </div>
+          {/* BOTTOM REDIRECT WHEN IN DEFAULT VIEW */}
+          {!selectedService && (
+            <div className="service-boxes-bottom">
+              <a href="/portfolio.html" className="btn-showcase-primary">
+                <span>Buka Seluruh Portofolio &amp; Katalog Lengkap</span>
+                <div className="btn-circle-icon">
+                  <ArrowRight size={15} />
                 </div>
-              </div>
+              </a>
+              <p className="boxes-bottom-sub">
+                ✓ Garansi Pemeliharaan Sistem • ✓ 100% Hak Milik Source Code • ✓ Audit Google Lighthouse 95+
+              </p>
             </div>
-          );
-        })()}
+          )}
+        </div>
       </section>
 
       {/* 4. SERVICES & PACKAGES (Styled like reference image) */}
@@ -1416,15 +1478,25 @@ export default function Home() {
           margin: 0 auto;
         }
 
-        /* ===== KOTAK-KOTAK LAYANAN (4 Grid Boxes) ===== */
+        /* ===== KOTAK-KOTAK LAYANAN (In-Page Sliding Showcase) ===== */
+        .sliding-showcase-container {
+          position: relative;
+          width: 100%;
+          min-height: 480px;
+          margin-bottom: 40px;
+          transition: min-height 0.3s ease;
+        }
+
+        .service-boxes-row,
         .service-boxes-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 24px;
-          margin-bottom: 40px;
+          width: 100%;
         }
 
         @media (max-width: 1200px) {
+          .service-boxes-row,
           .service-boxes-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
@@ -1432,9 +1504,41 @@ export default function Home() {
         }
 
         @media (max-width: 640px) {
+          .service-boxes-row,
           .service-boxes-grid {
             grid-template-columns: 1fr;
             gap: 16px;
+          }
+        }
+
+        /* Entry & Return animations for the 4 service boxes */
+        .animate-boxes-entry {
+          animation: boxesEntrySlide 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .animate-boxes-return {
+          animation: boxesReturnSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes boxesEntrySlide {
+          from {
+            opacity: 0;
+            transform: translateY(24px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes boxesReturnSlide {
+          from {
+            opacity: 0;
+            transform: translateX(-40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
           }
         }
 
@@ -1615,73 +1719,175 @@ export default function Home() {
           margin-top: 12px;
         }
 
-        /* ===== MODAL OVERLAY & POPUP (Pinterest Inspired) ===== */
-        .service-modal-backdrop {
-          position: fixed;
-          inset: 0;
-          z-index: 99999;
-          background: rgba(15, 23, 42, 0.65);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-          animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        @keyframes modalFadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        .service-modal-dialog {
-          background: #ffffff;
-          border-radius: 28px;
+        /* ===== IN-PAGE SLIDING SERVICE & PORTFOLIO SHOWCASE ===== */
+        .service-shifted-stage {
           width: 100%;
-          max-width: 860px;
-          max-height: 90vh;
-          overflow-y: auto;
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(229, 62, 62, 0.15);
-          display: flex;
-          flex-direction: column;
-          animation: modalPopIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
           text-align: left;
         }
 
-        @keyframes modalPopIn {
-          from {
+        .animate-shift-in {
+          animation: stageShiftIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .animate-shift-out {
+          animation: stageShiftOut 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes stageShiftIn {
+          0% {
             opacity: 0;
-            transform: scale(0.92) translateY(24px);
+            transform: translateX(45px);
           }
-          to {
+          100% {
             opacity: 1;
-            transform: scale(1) translateY(0);
+            transform: translateX(0);
           }
         }
 
-        /* Modal Header */
-        .modal-header {
+        @keyframes stageShiftOut {
+          0% {
+            opacity: 1;
+            transform: translateX(0);
+          }
+          100% {
+            opacity: 0;
+            transform: translateX(45px);
+          }
+        }
+
+        /* Top Bar: Return Button & Quick Service Pills */
+        .shifted-stage-topbar {
           display: flex;
-          align-items: flex-start;
+          align-items: center;
           justify-content: space-between;
-          padding: 24px 28px 20px 28px;
-          border-bottom: 1px solid #f1f5f9;
-          background: linear-gradient(180deg, #fffafa 0%, #ffffff 100%);
           gap: 16px;
+          margin-bottom: 24px;
+          flex-wrap: wrap;
         }
 
-        .modal-header-info {
+        .btn-back-services {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          color: #0f172a;
+          font-family: var(--font-heading);
+          font-size: 0.88rem;
+          font-weight: 700;
+          padding: 10px 20px;
+          border-radius: 100px;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .btn-back-services:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+          background: #fff1f2;
+          transform: translateX(-4px);
+          box-shadow: 0 6px 16px rgba(229, 62, 62, 0.15);
+        }
+
+        .shifted-quick-tabs {
           display: flex;
-          align-items: flex-start;
-          gap: 16px;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
         }
 
-        .modal-icon-bubble {
+        .quick-tabs-label {
+          font-size: 0.78rem;
+          font-weight: 700;
+          color: #64748b;
+          margin-right: 4px;
+        }
+
+        .quick-service-pill {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 100px;
+          padding: 6px 14px;
+          font-size: 0.78rem;
+          font-weight: 700;
+          color: #475569;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }
+
+        .quick-service-pill:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+          background: #fffafa;
+        }
+
+        .quick-service-pill.is-active {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: #ffffff;
+          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.28);
+        }
+
+        /* Split Layout: Sidebar + Portfolio Deck */
+        .shifted-stage-content {
+          display: grid;
+          grid-template-columns: 340px 1fr;
+          gap: 28px;
+          align-items: stretch;
+        }
+
+        @media (max-width: 991px) {
+          .shifted-stage-content {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+        }
+
+        /* Left: Service Sidebar Anchor */
+        .shifted-service-sidebar {
+          background: linear-gradient(180deg, #fffafa 0%, #ffffff 100%);
+          border: 1.5px solid rgba(229, 62, 62, 0.25);
+          border-radius: 24px;
+          padding: 28px 24px;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.07);
+          position: sticky;
+          top: 100px;
+          height: fit-content;
+        }
+
+        .sidebar-badge-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+
+        .sidebar-num {
+          font-family: var(--font-heading);
+          font-size: 0.8rem;
+          font-weight: 800;
+          background: #fff1f2;
+          color: var(--primary);
+          padding: 3px 10px;
+          border-radius: 6px;
+        }
+
+        .sidebar-badge {
+          font-size: 0.72rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          background: #f8fafc;
+          padding: 4px 10px;
+          border-radius: 6px;
+          border: 1px solid #e2e8f0;
+        }
+
+        .sidebar-icon-wrap {
           width: 52px;
           height: 52px;
           border-radius: 16px;
@@ -1690,181 +1896,241 @@ export default function Home() {
           display: flex;
           align-items: center;
           justify-content: center;
-          flex-shrink: 0;
-          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.2);
+          margin-bottom: 18px;
+          box-shadow: 0 4px 14px rgba(229, 62, 62, 0.18);
         }
 
-        .modal-badge-row {
-          display: flex;
-          align-items: center;
-          gap: 8px;
+        .sidebar-title {
+          font-family: var(--font-heading);
+          font-size: 1.35rem;
+          font-weight: 800;
+          color: #0f172a;
           margin-bottom: 6px;
+          line-height: 1.25;
+        }
+
+        .sidebar-tagline {
+          font-size: 0.82rem;
+          font-weight: 700;
+          color: var(--primary);
+          margin-bottom: 12px;
+        }
+
+        .sidebar-desc {
+          font-size: 0.85rem;
+          color: #64748b;
+          line-height: 1.55;
+          margin-bottom: 20px;
+        }
+
+        .sidebar-highlights-box {
+          background: #ffffff;
+          border: 1px solid #f1f5f9;
+          border-radius: 16px;
+          padding: 16px;
+          margin-bottom: 22px;
+        }
+
+        .highlights-caption {
+          display: block;
+          font-size: 0.72rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: #94a3b8;
+          margin-bottom: 10px;
+        }
+
+        .sidebar-bullet-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 9px;
+        }
+
+        .sidebar-bullet-list li {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          font-size: 0.8rem;
+          color: #334155;
+          line-height: 1.4;
+          font-weight: 500;
+        }
+
+        .btn-sidebar-consult {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          color: #0f172a;
+          font-family: var(--font-heading);
+          font-size: 0.86rem;
+          font-weight: 700;
+          text-decoration: none;
+          padding: 12px 16px;
+          border-radius: 12px;
+          transition: all 0.25s ease;
+          margin-top: auto;
+        }
+
+        .btn-sidebar-consult:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+          background: #fff1f2;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(229, 62, 62, 0.12);
+        }
+
+        /* Right: Portfolio Deck */
+        .shifted-portfolio-deck {
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 24px;
+          padding: 28px 26px;
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04);
+          display: flex;
+          flex-direction: column;
+        }
+
+        .deck-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 16px;
+          margin-bottom: 22px;
+          padding-bottom: 16px;
+          border-bottom: 1px solid #f1f5f9;
           flex-wrap: wrap;
         }
 
-        .modal-num-tag {
-          font-family: var(--font-heading);
-          font-size: 0.75rem;
-          font-weight: 800;
-          background: #fff1f2;
-          color: var(--primary);
-          padding: 2px 7px;
-          border-radius: 5px;
-        }
-
-        .modal-category-tag {
-          font-size: 0.8rem;
-          font-weight: 800;
-          color: #0f172a;
-        }
-
-        .modal-count-pill {
-          font-size: 0.68rem;
-          font-weight: 700;
-          color: #0284c7;
-          background: #f0f9ff;
-          padding: 2px 8px;
-          border-radius: 100px;
-        }
-
-        .modal-title {
+        .deck-title {
           font-family: var(--font-heading);
           font-size: 1.25rem;
           font-weight: 800;
           color: #0f172a;
-          margin-bottom: 4px;
+          margin: 0 0 4px 0;
         }
 
-        .modal-subtitle {
-          font-size: 0.84rem;
+        .deck-sub {
+          font-size: 0.85rem;
           color: #64748b;
           margin: 0;
           line-height: 1.45;
         }
 
-        .modal-close-btn {
-          width: 38px;
-          height: 38px;
-          border-radius: 50%;
-          border: 1px solid #e2e8f0;
-          background: #ffffff;
-          color: #64748b;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          flex-shrink: 0;
-          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .modal-close-btn:hover {
-          background: #fee2e2;
+        .deck-count-tag {
+          font-size: 0.72rem;
+          font-weight: 800;
           color: var(--primary);
-          border-color: #fca5a5;
-          transform: rotate(90deg);
+          background: #fff1f2;
+          padding: 4px 12px;
+          border-radius: 100px;
+          border: 1px solid rgba(229, 62, 62, 0.15);
+          white-space: nowrap;
         }
 
-        /* Modal Body: Mini Portfolio Cards */
-        .modal-body {
-          padding: 24px 28px;
-          flex-grow: 1;
-        }
-
-        .mini-cards-grid {
+        /* 4 Portfolio Cards Grid */
+        .shifted-cards-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 16px;
+          gap: 18px;
+          margin-bottom: 24px;
         }
 
-        @media (max-width: 768px) {
-          .mini-cards-grid {
+        @media (max-width: 680px) {
+          .shifted-cards-grid {
             grid-template-columns: 1fr;
+            gap: 16px;
           }
         }
 
-        .mini-portfolio-card {
-          display: flex;
-          gap: 14px;
+        /* Individual Compact Portfolio Card */
+        .shifted-project-card {
           background: #f8fafc;
           border: 1.5px solid #e2e8f0;
           border-radius: 18px;
-          padding: 14px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          animation: miniCardSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation: cardSlideInRight 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
           text-align: left;
         }
 
-        @keyframes miniCardSlideUp {
-          from {
+        @keyframes cardSlideInRight {
+          0% {
             opacity: 0;
-            transform: translateY(14px);
+            transform: translateX(35px);
           }
-          to {
+          100% {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
           }
         }
 
-        .mini-portfolio-card:hover {
+        .shifted-project-card:hover {
           background: #ffffff;
-          border-color: rgba(229, 62, 62, 0.45);
-          transform: translateY(-4px);
-          box-shadow: 0 10px 24px rgba(229, 62, 62, 0.12), 0 2px 6px rgba(0, 0, 0, 0.02);
+          border-color: rgba(229, 62, 62, 0.5);
+          transform: translateY(-6px);
+          box-shadow: 0 16px 36px rgba(229, 62, 62, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
         }
 
-        .mini-card-thumb-wrap {
-          width: 95px;
-          height: 95px;
-          border-radius: 12px;
-          overflow: hidden;
+        .shifted-card-media {
           position: relative;
+          width: 100%;
+          height: 150px;
+          overflow: hidden;
           background: #e2e8f0;
-          flex-shrink: 0;
         }
 
-        .mini-card-img {
+        .shifted-card-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           transition: transform 0.4s ease;
         }
 
-        .mini-portfolio-card:hover .mini-card-img {
-          transform: scale(1.08);
+        .shifted-project-card:hover .shifted-card-img {
+          transform: scale(1.07);
         }
 
-        .mini-card-category-badge {
+        .shifted-card-category {
           position: absolute;
-          bottom: 4px;
-          left: 4px;
-          background: rgba(15, 23, 42, 0.8);
+          bottom: 8px;
+          left: 8px;
+          background: rgba(15, 23, 42, 0.82);
           backdrop-filter: blur(4px);
           color: #ffffff;
-          font-size: 0.58rem;
+          font-size: 0.66rem;
           font-weight: 700;
-          padding: 2px 6px;
-          border-radius: 4px;
+          padding: 3px 8px;
+          border-radius: 5px;
         }
 
-        .mini-card-info {
+        .shifted-card-body {
+          padding: 16px 18px;
           display: flex;
           flex-direction: column;
           flex-grow: 1;
-          min-width: 0;
         }
 
-        .mini-card-metric-pill {
+        .shifted-metric-pill {
           display: inline-flex;
           align-items: center;
-          gap: 4px;
+          gap: 5px;
           background: #fff1f2;
           color: #b91c1c;
-          font-size: 0.65rem;
-          font-weight: 700;
-          padding: 2px 7px;
-          border-radius: 4px;
-          margin-bottom: 6px;
+          font-size: 0.67rem;
+          font-weight: 800;
+          padding: 3px 8px;
+          border-radius: 5px;
+          margin-bottom: 8px;
           align-self: flex-start;
           white-space: nowrap;
           overflow: hidden;
@@ -1872,54 +2138,56 @@ export default function Home() {
           max-width: 100%;
         }
 
-        .mini-card-title {
+        .shifted-card-title {
           font-family: var(--font-heading);
-          font-size: 0.92rem;
+          font-size: 0.95rem;
           font-weight: 800;
           color: #0f172a;
-          margin-bottom: 4px;
-          line-height: 1.3;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          transition: color 0.2s ease;
-        }
-
-        .mini-portfolio-card:hover .mini-card-title {
-          color: var(--primary);
-        }
-
-        .mini-card-desc {
-          font-size: 0.74rem;
-          color: #64748b;
-          line-height: 1.4;
+          margin: 0 0 6px 0;
+          line-height: 1.35;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          margin: 0 0 8px 0;
+          transition: color 0.2s ease;
+        }
+
+        .shifted-project-card:hover .shifted-card-title {
+          color: var(--primary);
+        }
+
+        .shifted-card-desc {
+          font-size: 0.77rem;
+          color: #64748b;
+          line-height: 1.45;
+          margin: 0 0 12px 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
           flex-grow: 1;
         }
 
-        .mini-card-bottom-row {
+        .shifted-card-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-size: 0.7rem;
-          padding-top: 6px;
+          font-size: 0.73rem;
+          padding-top: 10px;
           border-top: 1px dashed #e2e8f0;
+          margin-top: auto;
         }
 
-        .mini-card-client {
+        .shifted-card-client {
           color: #94a3b8;
           font-weight: 600;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 110px;
+          max-width: 130px;
         }
 
-        .mini-card-link-prompt {
+        .shifted-card-cta {
           display: inline-flex;
           align-items: center;
           gap: 4px;
@@ -1928,29 +2196,25 @@ export default function Home() {
           transition: gap 0.2s ease;
         }
 
-        .mini-portfolio-card:hover .mini-card-link-prompt {
+        .shifted-project-card:hover .shifted-card-cta {
           gap: 7px;
         }
 
-        /* Modal Footer */
-        .modal-footer {
-          padding: 18px 28px 24px 28px;
-          border-top: 1px solid #f1f5f9;
-          background: #fafbfc;
-        }
-
-        .modal-footer-actions {
+        /* Bottom Deck Actions */
+        .deck-bottom-actions {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 14px;
+          gap: 16px;
+          padding-top: 18px;
+          border-top: 1px solid #f1f5f9;
           flex-wrap: wrap;
         }
 
-        .btn-modal-primary {
+        .btn-showcase-primary {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
+          gap: 12px;
           background: var(--primary);
           color: #ffffff;
           font-family: var(--font-heading);
@@ -1959,37 +2223,37 @@ export default function Home() {
           text-decoration: none;
           padding: 12px 24px;
           border-radius: 100px;
-          box-shadow: 0 6px 18px rgba(229, 62, 62, 0.3);
+          box-shadow: 0 8px 20px rgba(229, 62, 62, 0.25);
           transition: all 0.25s ease;
         }
 
-        .btn-modal-primary:hover {
+        .btn-showcase-primary:hover {
           background: #c53030;
           transform: translateY(-2px);
-          box-shadow: 0 10px 24px rgba(229, 62, 62, 0.4);
+          box-shadow: 0 12px 28px rgba(229, 62, 62, 0.35);
         }
 
-        .btn-modal-secondary {
+        .btn-showcase-secondary {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: #ffffff;
-          border: 1.5px solid #e2e8f0;
-          color: #0f172a;
+          background: #f8fafc;
+          border: 1.5px solid #cbd5e1;
+          color: #334155;
           font-family: var(--font-heading);
           font-size: 0.88rem;
           font-weight: 700;
-          text-decoration: none;
           padding: 11px 20px;
           border-radius: 100px;
+          cursor: pointer;
           transition: all 0.25s ease;
         }
 
-        .btn-modal-secondary:hover {
+        .btn-showcase-secondary:hover {
           border-color: var(--primary);
           color: var(--primary);
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+          background: #fff1f2;
+          transform: translateX(-3px);
         }
 
         /* ===== 4. Services & Packages ===== */
