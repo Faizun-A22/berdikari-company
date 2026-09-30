@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Hero from '../components/Hero';
 import {
   ArrowRight,
@@ -32,33 +32,61 @@ export default function Home() {
   const [faqRef, faqVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  // In-Page Sliding Service Showcase state (No modal, smooth card slide)
+  // In-Page Sliding Service Showcase state (No modal, ultra-smooth card slide)
   type ServiceType = 'web' | 'erp' | 'mobile' | 'uiux';
   const [selectedService, setSelectedService] = useState<ServiceType | null>(null);
   const [isReturning, setIsReturning] = useState(false);
+  const showcaseStageRef = useRef<HTMLDivElement | null>(null);
 
   const handleOpenService = (id: ServiceType) => {
     setSelectedService(id);
   };
 
   const handleBackToServices = () => {
+    if (isReturning) return;
     setIsReturning(true);
     setTimeout(() => {
       setSelectedService(null);
       setIsReturning(false);
-    }, 280);
+    }, 320);
   };
 
-  // Close back to all services when Escape key is pressed
+  // Close back to all services when clicking outside the active stage or pressing Escape
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && selectedService) {
+    if (!selectedService) return;
+
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        showcaseStageRef.current &&
+        target &&
+        !showcaseStageRef.current.contains(target)
+      ) {
         handleBackToServices();
       }
     };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleBackToServices();
+      }
+    };
+
+    // Slight delay before registering pointerdown to avoid instant trigger on card click
+    const timer = setTimeout(() => {
+      document.addEventListener('mousedown', handlePointerDown);
+      document.addEventListener('touchstart', handlePointerDown, { passive: true });
+    }, 60);
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedService]);
+
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedService, isReturning]);
 
   // Testimonial slider state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -645,18 +673,26 @@ export default function Home() {
                 const activeProjects = allProjects.filter((p) => p.serviceType === selectedService).slice(0, 4);
 
                 return (
-                  <div className={`service-shifted-stage ${isReturning ? 'animate-shift-out' : 'animate-shift-in'}`}>
+                  <div
+                    ref={showcaseStageRef}
+                    className={`service-shifted-stage ${isReturning ? 'animate-shift-out' : 'animate-shift-in'}`}
+                  >
                     {/* Top Action & Navigation Bar */}
                     <div className="shifted-stage-topbar">
-                      <button
-                        type="button"
-                        className="btn-back-services"
-                        onClick={handleBackToServices}
-                        aria-label="Kembali ke semua layanan"
-                      >
-                        <ArrowLeft size={16} />
-                        <span>Kembali ke Pilihan Layanan</span>
-                      </button>
+                      <div className="topbar-left-group">
+                        <button
+                          type="button"
+                          className="btn-back-services"
+                          onClick={handleBackToServices}
+                          aria-label="Kembali ke semua layanan"
+                        >
+                          <ArrowLeft size={16} />
+                          <span>Kembali ke Pilihan Layanan</span>
+                        </button>
+                        <span className="topbar-click-hint">
+                          💡 Klik di luar kartu untuk kembali
+                        </span>
+                      </div>
 
                       {/* Quick Selector for Other Services */}
                       <div className="shifted-quick-tabs">
@@ -1484,7 +1520,13 @@ export default function Home() {
           width: 100%;
           min-height: 480px;
           margin-bottom: 40px;
-          transition: min-height 0.3s ease;
+          transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .sliding-showcase-container.is-service-active {
+          background: radial-gradient(circle at 50% 10%, rgba(229, 62, 62, 0.035) 0%, transparent 70%);
+          border-radius: 32px;
+          padding: 8px 4px;
         }
 
         .service-boxes-row,
@@ -1511,34 +1553,36 @@ export default function Home() {
           }
         }
 
-        /* Entry & Return animations for the 4 service boxes */
-        .animate-boxes-entry {
-          animation: boxesEntrySlide 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
+        /* Entry & Return animations with Staggered Wave (Ultra Smooth) */
+        .animate-boxes-entry .service-box-card:nth-child(1) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.04s both; }
+        .animate-boxes-entry .service-box-card:nth-child(2) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.09s both; }
+        .animate-boxes-entry .service-box-card:nth-child(3) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.14s both; }
+        .animate-boxes-entry .service-box-card:nth-child(4) { animation: boxCardEntry 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.19s both; }
 
-        .animate-boxes-return {
-          animation: boxesReturnSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
+        .animate-boxes-return .service-box-card:nth-child(1) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.03s both; }
+        .animate-boxes-return .service-box-card:nth-child(2) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.08s both; }
+        .animate-boxes-return .service-box-card:nth-child(3) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.13s both; }
+        .animate-boxes-return .service-box-card:nth-child(4) { animation: boxCardReturn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.18s both; }
 
-        @keyframes boxesEntrySlide {
-          from {
+        @keyframes boxCardEntry {
+          0% {
             opacity: 0;
-            transform: translateY(24px) scale(0.98);
+            transform: translate3d(0, 28px, 0) scale(0.97);
           }
-          to {
+          100% {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translate3d(0, 0, 0) scale(1);
           }
         }
 
-        @keyframes boxesReturnSlide {
-          from {
+        @keyframes boxCardReturn {
+          0% {
             opacity: 0;
-            transform: translateX(-40px);
+            transform: translate3d(-35px, 0, 0) scale(0.97);
           }
-          to {
+          100% {
             opacity: 1;
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0) scale(1);
           }
         }
 
@@ -1550,17 +1594,18 @@ export default function Home() {
           display: flex;
           flex-direction: column;
           cursor: pointer;
-          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
           box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
           position: relative;
           user-select: none;
           text-align: left;
+          will-change: transform, box-shadow, border-color;
         }
 
         .service-box-card:hover {
-          transform: translateY(-8px);
+          transform: translate3d(0, -9px, 0);
           border-color: rgba(229, 62, 62, 0.5);
-          box-shadow: 0 18px 40px rgba(229, 62, 62, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+          box-shadow: 0 22px 48px -12px rgba(229, 62, 62, 0.16), 0 3px 8px rgba(0, 0, 0, 0.04);
         }
 
         .box-top-row {
@@ -1606,7 +1651,7 @@ export default function Home() {
           align-items: center;
           justify-content: center;
           margin-bottom: 16px;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .service-box-card:hover .box-icon-wrap {
@@ -1723,35 +1768,36 @@ export default function Home() {
         .service-shifted-stage {
           width: 100%;
           text-align: left;
+          will-change: transform, opacity;
         }
 
         .animate-shift-in {
-          animation: stageShiftIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation: stageShiftIn 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
         }
 
         .animate-shift-out {
-          animation: stageShiftOut 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation: stageShiftOut 0.32s cubic-bezier(0.19, 1, 0.22, 1) both;
         }
 
         @keyframes stageShiftIn {
           0% {
             opacity: 0;
-            transform: translateX(45px);
+            transform: translate3d(45px, 0, 0);
           }
           100% {
             opacity: 1;
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
           }
         }
 
         @keyframes stageShiftOut {
           0% {
             opacity: 1;
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
           }
           100% {
             opacity: 0;
-            transform: translateX(45px);
+            transform: translate3d(45px, 0, 0);
           }
         }
 
@@ -1763,6 +1809,26 @@ export default function Home() {
           gap: 16px;
           margin-bottom: 24px;
           flex-wrap: wrap;
+        }
+
+        .topbar-left-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .topbar-click-hint {
+          font-size: 0.76rem;
+          color: #94a3b8;
+          font-weight: 600;
+          background: #f8fafc;
+          border: 1px dashed #cbd5e1;
+          padding: 5px 12px;
+          border-radius: 100px;
+          display: inline-flex;
+          align-items: center;
+          user-select: none;
         }
 
         .btn-back-services {
@@ -1778,7 +1844,7 @@ export default function Home() {
           padding: 10px 20px;
           border-radius: 100px;
           cursor: pointer;
-          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
         }
 
@@ -1786,7 +1852,7 @@ export default function Home() {
           border-color: var(--primary);
           color: var(--primary);
           background: #fff1f2;
-          transform: translateX(-4px);
+          transform: translate3d(-4px, 0, 0);
           box-shadow: 0 6px 16px rgba(229, 62, 62, 0.15);
         }
 
@@ -1813,7 +1879,7 @@ export default function Home() {
           font-weight: 700;
           color: #475569;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.25s ease;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
         }
 
@@ -1821,6 +1887,7 @@ export default function Home() {
           border-color: var(--primary);
           color: var(--primary);
           background: #fffafa;
+          transform: translateY(-1px);
         }
 
         .quick-service-pill.is-active {
@@ -1847,16 +1914,29 @@ export default function Home() {
 
         /* Left: Service Sidebar Anchor */
         .shifted-service-sidebar {
-          background: linear-gradient(180deg, #fffafa 0%, #ffffff 100%);
+          background: linear-gradient(180deg, #ffffff 0%, #fffafa 100%);
           border: 1.5px solid rgba(229, 62, 62, 0.25);
-          border-radius: 24px;
-          padding: 28px 24px;
+          border-radius: 26px;
+          padding: 30px 26px;
           display: flex;
           flex-direction: column;
-          box-shadow: 0 12px 30px rgba(229, 62, 62, 0.07);
+          box-shadow: 0 16px 45px rgba(229, 62, 62, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02);
           position: sticky;
           top: 100px;
           height: fit-content;
+          will-change: transform, opacity;
+          animation: sidebarSlideIn 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
+        }
+
+        @keyframes sidebarSlideIn {
+          0% {
+            opacity: 0;
+            transform: translate3d(-30px, 0, 0);
+          }
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+          }
         }
 
         .sidebar-badge-row {
@@ -1990,11 +2070,24 @@ export default function Home() {
         .shifted-portfolio-deck {
           background: #ffffff;
           border: 1.5px solid #e2e8f0;
-          border-radius: 24px;
-          padding: 28px 26px;
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04);
+          border-radius: 26px;
+          padding: 30px 28px;
+          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
           display: flex;
           flex-direction: column;
+          will-change: transform, opacity;
+          animation: deckSlideIn 0.55s cubic-bezier(0.19, 1, 0.22, 1) 0.05s both;
+        }
+
+        @keyframes deckSlideIn {
+          0% {
+            opacity: 0;
+            transform: translate3d(35px, 0, 0);
+          }
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+          }
         }
 
         .deck-header {
@@ -2049,68 +2142,78 @@ export default function Home() {
           }
         }
 
-        /* Individual Compact Portfolio Card */
+        /* Individual Compact Portfolio Card with Staggered Slide In */
         .shifted-project-card {
-          background: #f8fafc;
-          border: 1.5px solid #e2e8f0;
-          border-radius: 18px;
+          background: #ffffff;
+          border: 1.5px solid #edf2f7;
+          border-radius: 20px;
           overflow: hidden;
           display: flex;
           flex-direction: column;
           cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          animation: cardSlideInRight 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+          transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1);
           text-align: left;
+          position: relative;
+          will-change: transform, box-shadow, border-color;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
         }
+
+        .shifted-cards-grid .shifted-project-card:nth-child(1) { animation: cardSlideInRight 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.06s both; }
+        .shifted-cards-grid .shifted-project-card:nth-child(2) { animation: cardSlideInRight 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.12s both; }
+        .shifted-cards-grid .shifted-project-card:nth-child(3) { animation: cardSlideInRight 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.18s both; }
+        .shifted-cards-grid .shifted-project-card:nth-child(4) { animation: cardSlideInRight 0.52s cubic-bezier(0.19, 1, 0.22, 1) 0.24s both; }
 
         @keyframes cardSlideInRight {
           0% {
             opacity: 0;
-            transform: translateX(35px);
+            transform: translate3d(35px, 0, 0) scale(0.98);
           }
           100% {
             opacity: 1;
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0) scale(1);
           }
         }
 
         .shifted-project-card:hover {
           background: #ffffff;
           border-color: rgba(229, 62, 62, 0.5);
-          transform: translateY(-6px);
-          box-shadow: 0 16px 36px rgba(229, 62, 62, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+          transform: translate3d(0, -7px, 0);
+          box-shadow: 0 20px 42px rgba(229, 62, 62, 0.13), 0 4px 10px rgba(0, 0, 0, 0.03);
         }
 
         .shifted-card-media {
           position: relative;
           width: 100%;
-          height: 150px;
+          height: 155px;
           overflow: hidden;
-          background: #e2e8f0;
+          background: #f1f5f9;
         }
 
         .shifted-card-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.4s ease;
+          transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .shifted-project-card:hover .shifted-card-img {
-          transform: scale(1.07);
+          transform: scale(1.08);
         }
 
         .shifted-card-category {
           position: absolute;
-          bottom: 8px;
-          left: 8px;
-          background: rgba(15, 23, 42, 0.82);
-          backdrop-filter: blur(4px);
+          bottom: 10px;
+          left: 10px;
+          background: rgba(15, 23, 42, 0.85);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           color: #ffffff;
-          font-size: 0.66rem;
-          font-weight: 700;
-          padding: 3px 8px;
-          border-radius: 5px;
+          font-size: 0.67rem;
+          font-weight: 800;
+          letter-spacing: 0.03em;
+          padding: 4px 10px;
+          border-radius: 6px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .shifted-card-body {
@@ -2126,21 +2229,22 @@ export default function Home() {
           gap: 5px;
           background: #fff1f2;
           color: #b91c1c;
-          font-size: 0.67rem;
+          font-size: 0.68rem;
           font-weight: 800;
-          padding: 3px 8px;
-          border-radius: 5px;
-          margin-bottom: 8px;
+          padding: 4px 9px;
+          border-radius: 6px;
+          margin-bottom: 9px;
           align-self: flex-start;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           max-width: 100%;
+          border: 1px solid rgba(229, 62, 62, 0.15);
         }
 
         .shifted-card-title {
           font-family: var(--font-heading);
-          font-size: 0.95rem;
+          font-size: 0.96rem;
           font-weight: 800;
           color: #0f172a;
           margin: 0 0 6px 0;
@@ -2193,11 +2297,11 @@ export default function Home() {
           gap: 4px;
           font-weight: 800;
           color: var(--primary);
-          transition: gap 0.2s ease;
+          transition: gap 0.25s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .shifted-project-card:hover .shifted-card-cta {
-          gap: 7px;
+          gap: 8px;
         }
 
         /* Bottom Deck Actions */
