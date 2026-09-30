@@ -61,39 +61,20 @@ server {
 }
 EOF
 
-ln -sf /etc/nginx/sites-available/berdikari /etc/nginx/sites-enabled/default 2>/dev/null || true
-ln -sf /etc/nginx/sites-available/berdikari /etc/nginx/sites-enabled/berdikari 2>/dev/null || true
+# Hapus file ganda di sites-enabled agar tidak bentrok duplicate default_server
+rm -f /etc/nginx/sites-enabled/*
+ln -sf /etc/nginx/sites-available/berdikari /etc/nginx/sites-enabled/berdikari
 
-# 4. Jika Caddy terpasang di VPS, siapkan Caddyfile dan hentikan jika bentrok
-if command -v caddy &> /dev/null || systemctl list-unit-files | grep -q caddy; then
-    echo "===> Caddy terdeteksi di VPS, menyiapkan konfigurasi Caddy..."
-    mkdir -p /etc/caddy
-    cat << 'EOF' > /etc/caddy/Caddyfile
-berdignus.my.id, :80 {
-    root * /var/www/berdikari-company/dist
-    file_server
-    try_files {path} /index.html
+# 4. Hentikan Caddy jika berjalan di VPS agar tidak merebut port 80 dari Nginx
+systemctl stop caddy 2>/dev/null || true
+systemctl disable caddy 2>/dev/null || true
+pkill -9 caddy 2>/dev/null || true
 
-    handle /api/* {
-        reverse_proxy localhost:3000
-    }
-
-    handle /uploads/* {
-        reverse_proxy localhost:3000
-    }
-}
-EOF
-fi
-
-# 5. Uji dan restart web server
+# 5. Uji dan restart Nginx
 echo "===> Menguji konfigurasi Nginx..."
-if nginx -t 2>/dev/null; then
-    systemctl restart nginx
-    echo "[OK] Nginx berhasil di-restart dan aktif!"
-else
-    echo "[INFO] Nginx tidak dapat di-start, mencoba restart Caddy..."
-    systemctl restart caddy 2>/dev/null || true
-fi
+nginx -t
+systemctl restart nginx
+echo "[OK] Nginx berhasil di-restart dan melayani port 80!"
 
 echo "=========================================="
 echo "HASIL TES RESPON LOKAL:"
